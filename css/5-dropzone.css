@@ -1,0 +1,124 @@
+.drop-zone {
+    width: 350px;
+    height: 350px;
+    border: 3px dashed var(--header-border);
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    cursor: pointer;
+    position: relative;
+    background-color: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 4px 15px var(--shadow-color);
+    overflow: hidden;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.drop-zone.dragover {
+    border-color: transparent;
+    background-color: var(--glass-hover);
+}
+
+.drop-zone.processing {
+    border-color: transparent !important;
+    animation: pulse-bg 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.drop-zone.active {
+    width: 100%;
+    height: 80px;
+    border: none;
+    background-color: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    padding: 0;
+    cursor: default;
+    margin-bottom: 5px;
+}
+
+.text-container h2 {
+    font-size: 1.8rem;
+    color: var(--text-color);
+    margin: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.text-container p {
+    color: var(--text-muted);
+    margin-top: 10px;
+    font-size: 1rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    line-height: 1.5;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.drop-emoji-large {
+    font-size: 3.5rem;
+    display: block;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.drop-emoji-large:hover {
+    transform: scale(1.15) rotate(-5deg);
+}
+
+.drop-zone.dragover .drop-emoji-large {
+    pointer-events: none;
+}
+
+.file-info-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.badge-data {
+    background-color: var(--primary-color);
+    color: #ffffff !important;
+    padding: 10px 30px;
+    border-radius: 50px;
+    font-size: 1.35rem;
+    font-weight: 800;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.25);
+    margin: 0 auto;
+    letter-spacing: 0.5px;
+}
+
+.file-info-subtitle {
+    font-size: 1rem;
+    color: var(--primary-color);
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+@media (max-width: 768px) {
+    .drop-zone {
+        width: 100%;
+        height: 280px;
+    }
+
+    .drop-emoji-large {
+        font-size: 2.8rem;
+    }
+
+    .text-container h2 {
+        font-size: 1.5rem;
+    }
+}

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sangue</title>
+    
+    <link rel="stylesheet" href="css/1-variaveis.css">
+    <link rel="stylesheet" href="css/2-layout.css">
+    <link rel="stylesheet" href="css/3-header.css">
+    <link rel="stylesheet" href="css/5-dropzone.css">
+    <link rel="stylesheet" href="css/6-cards.css">
+    <link rel="stylesheet" href="css/7-botoes.css">
+    <link rel="stylesheet" href="css/9-animacoes.css">
+    <link rel="stylesheet" href="css/10-login.css">
+    <link rel="stylesheet" href="css/11-termos.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+    <div class="mouse-shadow" id="mouseShadow"></div>
+
+    <header class="app-header" id="appHeader">
+        <h1 id="appTitle" class="animated-brand-text">Sangue</h1>
+        
+        <div id="welcomeMsg" class="welcome-msg">Bem-vindo(a)! ✨</div>
+        
+        <div class="header-center-area" id="headerCenterArea">
+            <div class="header-divider left-divider"></div>
+            <div class="header-divider right-divider"></div>
+        </div>
+
+        <div class="header-actions" id="headerActions">
+            <button id="btnTheme" class="icon-btn" title="Alternar Tema">☀️</button>
+            <button id="btnTermos" class="icon-btn" title="Termos de Uso">⚖️</button>
+            <button id="btnSair" class="icon-btn hide-until-login" title="Sair do Sistema">⏻</button>
+        </div>
+    </header>
+
+    <div id="loginWrapper" class="login-wrapper">
+        <div class="login-card">
+            <h2 class="form-title">Acesso ao Sistema</h2>
+            <p class="form-subtitle">Insira as suas credenciais para entrar.</p>
+            
+            <div class="form-group">
+                <label>Usuário</label>
+                <input type="text" id="inputUsuario" placeholder="nome ou documento" maxlength="20" autocomplete="off" oninput="this.value = this.value.toLowerCase().replace(/\s/g, '')">
+            </div>
+            <div class="form-group">
+                <label>Senha</label>
+                <input type="password" id="inputSenha" placeholder="••••••" maxlength="6" autocomplete="new-password" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+            </div>
+            
+            <button id="btnEntrar" class="login-btn-submit">Entrar</button>
+            
+            <div class="esqueci-container">
+                <button id="btnEsqueci" class="btn-esqueci">Esqueci a senha</button>
+                <div id="balaoEsqueci" class="balao-esqueci">
+                    Esqueceu a senha? Pergunte ao Cassiano! 😂<br><br>Somos pobres e não temos recursos para essa função! 💸💸
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container app-hidden" id="appContainer">
+        <div class="left-panel" id="leftPanel">
+            <div id="dropZone" class="drop-zone">
+                <div class="text-container">
+                    <h2 id="dropTitle">
+                        <span class="drop-emoji-large" id="dropEmojiIcon" title="Clique para selecionar o arquivo">📄</span>
+                        Solte o PDF
+                    </h2>
+                    <p id="dropSubtitle">Arraste o agendamento para cá ou clique no documento</p>
+                </div>
+                <input type="file" id="fileInput" accept="application/pdf" style="display: none;">
+            </div>
+            
+            <div id="painelAcoes" class="painel-acoes app-hidden">
+                <hr class="separador-painel">
+                
+                <div id="resumoPacientes" class="pacientes-destaque">Pacientes: 0</div>
+                <button id="btnOrdenar" class="btn-ordenar" title="Mudar ordem da lista">🔄 Ordem: Padrão</button>
+                
+                <hr class="separador-painel">
+
+                <div class="contadores-individuais">
+                    <div class="cont-item tubo-hover">
+                        <div class="cont-nome">🟡 Amarelo/Verm:</div>
+                        <div class="cont-acoes">
+                            <button class="btn-lote" onclick="alterarTodos('amarelo', -1)">-</button>
+                            <span>Todos</span>
+                            <button class="btn-lote" onclick="alterarTodos('amarelo', 1)">+</button>
+                        </div>
+                        <strong id="total-amarelo">0</strong>
+                    </div>
+                    <div class="cont-item tubo-hover">
+                        <div class="cont-nome">🟣 Roxo:</div>
+                        <div class="cont-acoes">
+                            <button class="btn-lote" onclick="alterarTodos('roxo', -1)">-</button>
+                            <span>Todos</span>
+                            <button class="btn-lote" onclick="alterarTodos('roxo', 1)">+</button>
+                        </div>
+                        <strong id="total-roxo">0</strong>
+                    </div>
+                    <div class="cont-item tubo-hover">
+                        <div class="cont-nome">⚪ Cinza:</div>
+                        <div class="cont-acoes">
+                            <button class="btn-lote" onclick="alterarTodos('cinza', -1)">-</button>
+                            <span>Todos</span>
+                            <button class="btn-lote" onclick="alterarTodos('cinza', 1)">+</button>
+                        </div>
+                        <strong id="total-cinza">0</strong>
+                    </div>
+                    <div class="cont-item tubo-hover">
+                        <div class="cont-nome">🔵 Azul:</div>
+                        <div class="cont-acoes">
+                            <button class="btn-lote" onclick="alterarTodos('azul', -1)">-</button>
+                            <span>Todos</span>
+                            <button class="btn-lote" onclick="alterarTodos('azul', 1)">+</button>
+                        </div>
+                        <strong id="total-azul">0</strong>
+                    </div>
+                    <div class="cont-item tubo-hover">
+                        <div class="cont-nome">🧪 Frasco:</div>
+                        <div class="cont-acoes">
+                            <button class="btn-lote" onclick="alterarTodos('frasco', -1)">-</button>
+                            <span>Todos</span>
+                            <button class="btn-lote" onclick="alterarTodos('frasco', 1)">+</button>
+                        </div>
+                        <strong id="total-frasco">0</strong>
+                    </div>
+                </div>
+
+                <hr class="separador-painel">
+                
+                <h3 id="contadorTotal" class="contador-total">Total: 0</h3>
+                
+                <div class="botoes-fixos">
+                    <button id="btnImprimir" class="btn-enviar">Imprimir Etiquetas</button>
+                    <button id="btnExcluir" class="btn-excluir">Excluir</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="contentArea" class="content-area"></div>
+    </div>
+
+    <div id="termosOverlay" class="termos-overlay">
+        <button class="btn-fechar-overlay" id="btnFecharTermos" title="Fechar">✖</button>
+        <div class="termos-cards-wrapper">
+            <div class="termo-card">
+                <h3 class="termo-title">🔒 TERMOS DE USO</h3>
+                <div class="termo-text">
+                    <hr>
+                    <h4>1. Natureza do Software</h4>
+                    <p>O Sangue é uma aplicação que opera exclusivamente rodando no seu computador.</p>
+                    <p>Todos os dados inseridos são lidos em tempo real e descartados quando a aba é fechada ou o arquivo é excluído.</p>
+                    <hr>
+                    <h4>2. Responsabilidade do Utilizador</h4>
+                    <p>É da responsabilidade do utilizador garantir que as etiquetas geradas pertencem aos pacientes corretos e que a triagem respeita os padrões exigidos.</p>
+                    <hr>
+                    <h4>3. Isenção de Garantias</h4>
+                    <p>O Software é fornecido para auxiliar a produtividade. O utilizador deve conferir as informações extraídas do PDF antes da impressão.</p>
+                </div>
+            </div>
+            
+            <div class="termo-card">
+                <h3 class="termo-title">🛡️ POLÍTICA DE PRIVACIDADE</h3>
+                <div class="termo-text">
+                    <hr>
+                    <h4>1. Princípio Fundamental</h4>
+                    <p>O Sangue foi desenvolvido com o princípio de privacidade total:</p>
+                    <ul>
+                        <li>Nenhum dado é coletado, armazenado ou transmitido remotamente.</li>
+                        <li>Tudo o que o sistema lê do PDF permanece apenas na memória viva do seu dispositivo.</li>
+                    </ul>
+                    <hr>
+                    <h4>2. Segurança dos Dados</h4>
+                    <p>Como o processamento é 100% local, a segurança das informações médicas depende diretamente da proteção do seu computador.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/A-estado.js"></script>
+    <script src="js/B-tema.js"></script>
+    <script src="js/C-interface.js"></script>
+    <script src="js/D-pdf.js"></script>
+    <script src="js/E-botoes.js"></script>
+    <script src="js/F-animacoes.js"></script>
+    <script src="js/H-usuarios.js"></script>
+    <script src="js/I-gerarpdf.js"></script>
+    <script src="js/G-login.js"></script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+.card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 14px 25px;
+    border-radius: 50px;
+    box-shadow: 0 4px 10px var(--shadow-color);
+    border: 1px solid var(--glass-border);
+    opacity: 0;
+    transform: translateY(30px);
+    animation: slideUp 0.5s ease forwards;
+    transition: transform 0.4s ease, opacity 0.4s ease, background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.card.removing {
+    transform: translateX(-50px) !important;
+    opacity: 0 !important;
+}
+
+.card-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-color);
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 15px;
+}
+
+.patient-dob {
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+.seletores-container {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.seletor {
+    display: flex;
+    align-items: center;
+    background: transparent;
+    border: 2px solid var(--header-border);
+    border-radius: 50px;
+    padding: 6px 12px;
+    transition: border-color 0.3s, color 0.3s;
+    color: var(--text-color);
+}
+
+.seletor-emoji {
+    font-size: 1.2rem;
+    margin-right: 6px;
+}
+
+.seletor span.valor {
+    margin: 0 10px;
+    font-weight: 800;
+    font-size: 1.3rem;
+    min-width: 20px;
+    text-align: center;
+}
+
+.seletor button {
+    background: transparent;
+    border: none;
+    color: inherit;
+    font-size: 1.4rem;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: transform 0.2s;
+    font-weight: bold;
+}
+
+.seletor button:hover {
+    transform: scale(1.3);
+}
+
+.seletor.amarelo:hover { border-color: var(--tubo-amarelo); }
+.seletor.roxo:hover { border-color: #7C3AED; }
+.seletor.cinza:hover { border-color: #4B5563; }
+.seletor.azul:hover { border-color: #2563EB; }
+.seletor.frasco:hover { border-color: #059669; }
+
+.card-add {
+    border: 2px dashed var(--primary-color);
+    background-color: transparent;
+    cursor: pointer;
+    justify-content: center;
+    color: var(--primary-color);
+    font-size: 1.25rem;
+    font-weight: 700;
+    box-shadow: none;
+}
+
+.card-add:hover {
+    background-color: rgba(37, 99, 235, 0.06);
+    transform: scale(1.015);
+}
+
+.card-form-mode {
+    border: 2px solid var(--primary-color);
+    background-color: var(--glass-bg);
+    justify-content: space-between;
+    cursor: default;
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.15);
+    transform: scale(1.01);
+}
+
+.form-inputs {
+    display: flex;
+    gap: 15px;
+    flex-grow: 1;
+    margin-right: 20px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards 0.1s;
+}
+
+.form-inputs input {
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: 2px solid var(--header-border);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-size: 1.15rem;
+    font-weight: 600;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.form-inputs input::placeholder {
+    color: var(--text-muted);
+    font-weight: 500;
+    opacity: 0.6;
+}
+
+.form-inputs input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15), inset 0 2px 4px rgba(0,0,0,0.02);
+    transform: translateY(-2px);
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards 0.2s;
+}
+
+.btn-action {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    color: white;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 10px var(--shadow-color);
+}
+
+.btn-salvar { background-color: #10B981; }
+.btn-salvar:hover { background-color: #059669; transform: scale(1.15) rotate(5deg); box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3); }
+
+.btn-cancelar { background-color: #EF4444; }
+.btn-cancelar:hover { background-color: #DC2626; transform: scale(1.15) rotate(-5deg); box-shadow: 0 6px 15px rgba(239, 68, 68, 0.3); }
+
+.alphabet-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin: 15px 0 5px 0;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUp 0.5s ease forwards;
+}
+
+.alphabet-divider::before,
+.alphabet-divider::after {
+    content: "";
+    flex-grow: 1;
+    height: 2px;
+    border-top: 2px dashed var(--header-border);
+    margin: 0 20px;
+    opacity: 0.6;
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+@media (max-width: 992px) {
+    .card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+        padding: 20px;
+        border-radius: 30px;
+    }
+
+    .card-name {
+        width: 100%;
+        white-space: normal;
+    }
+
+    .seletores-container {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .card-form-mode {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .form-inputs {
+        flex-direction: column;
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .form-inputs input {
+        width: 100% !important;
+    }
+
+    .form-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
