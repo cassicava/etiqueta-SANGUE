@@ -10,11 +10,15 @@
     margin-top: 100px;
     padding: 20px;
     gap: 40px;
-    align-items: stretch;
+    align-items: center;
     justify-content: center;
     transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     z-index: 10;
+}
+
+.app-container.active-layout {
+    align-items: stretch;
 }
 
 .left-panel {
@@ -23,7 +27,7 @@
     align-items: center;
     justify-content: center;
     gap: 20px;
-    height: 100%;
+    height: 350px;
     width: 350px;
     background: transparent;
     border-radius: 30px;
@@ -40,30 +44,39 @@
     border: 1px solid var(--glass-border);
     padding: 25px;
     justify-content: flex-start;
+    height: 100%;
 }
 
-.content-area {
+.right-panel {
     width: 0;
     height: calc(100vh - 100px - 40px);
     opacity: 0;
     transform: translateX(30px);
-    overflow-x: hidden !important;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-grow: 0;
+}
+
+.right-panel.active {
+    width: 100%;
+    flex-grow: 1;
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.content-area {
+    width: 100%;
+    flex-grow: 1;
+    overflow-x: hidden !important; 
     overflow-y: auto;
     scrollbar-gutter: stable;
     display: flex;
     flex-direction: column;
     gap: 15px;
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
-    mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
-}
-
-.content-area.active {
-    width: 100%;
-    flex-grow: 1;
-    opacity: 1;
-    transform: translateX(0);
-    padding: 20px 10px 20px 0; 
+    padding: 5px 15px 40px 15px; 
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 95%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 0%, black 95%, transparent 100%);
 }
 
 .content-area::-webkit-scrollbar {
@@ -87,12 +100,16 @@
     .app-container {
         flex-direction: column;
         height: calc(100vh - 100px);
-        overflow-y: auto; /* Permite fazer scroll no contentor todo no telemóvel */
+        overflow-y: auto;
         overflow-x: hidden;
         align-items: center;
         justify-content: flex-start;
         gap: 20px;
-        padding-bottom: 40px; /* Dá um respiro no fundo da página */
+        padding-bottom: 40px;
+    }
+
+    .app-container.active-layout {
+        align-items: center;
     }
 
     .app-container::-webkit-scrollbar {
@@ -110,24 +127,24 @@
         width: 100%;
         max-width: 500px;
         height: auto;
-        flex-shrink: 0; /* Impede que o painel seja esmagado */
-    }
-
-    .left-panel.active {
-        padding: 20px; /* Reduz ligeiramente o padding para poupar espaço */
-    }
-
-    .content-area {
-        width: 100%;
-        max-width: 500px;
-        height: auto;
-        overflow-y: visible; /* A rolagem agora é feita pelo app-container */
-        -webkit-mask-image: none;
-        mask-image: none;
         flex-shrink: 0;
     }
 
-    .content-area.active {
-        padding: 10px 0 40px 0;
+    .left-panel.active {
+        padding: 20px;
+    }
+
+    .right-panel {
+        width: 100%;
+        max-width: 500px;
+        height: auto;
+        flex-shrink: 0;
+    }
+
+    .content-area {
+        overflow-y: visible;
+        -webkit-mask-image: none;
+        mask-image: none;
+        padding: 5px 0 40px 0;
     }
 }

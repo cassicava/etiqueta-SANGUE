@@ -1,6 +1,5 @@
 ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-    dropZone.addEventListener(eventName, preventDefaults, false);
-    document.body.addEventListener(eventName, preventDefaults, false);
+    window.addEventListener(eventName, preventDefaults, false);
 });
 
 function preventDefaults(e) {
@@ -8,12 +7,17 @@ function preventDefaults(e) {
     e.stopPropagation();
 }
 
-dropZone.addEventListener('dragover', () => {
+dropZone.addEventListener('dragenter', (e) => {
     if (hasDocument) return;
     dropZone.classList.add('dragover');
 });
 
-dropZone.addEventListener('dragleave', () => {
+dropZone.addEventListener('dragover', (e) => {
+    if (hasDocument) return;
+    dropZone.classList.add('dragover');
+});
+
+dropZone.addEventListener('dragleave', (e) => {
     if (hasDocument) return;
     dropZone.classList.remove('dragover');
 });
@@ -25,9 +29,13 @@ dropZone.addEventListener('drop', (e) => {
     }
     
     dropZone.classList.remove('dragover');
-    const files = e.dataTransfer.files;
     
-    if(files.length > 0 && files[0].type === "application/pdf") {
+    let files = null;
+    if (e.dataTransfer && e.dataTransfer.files) {
+        files = e.dataTransfer.files;
+    }
+    
+    if(files && files.length > 0 && files[0].type === "application/pdf") {
         hasDocument = true;
         iniciarProcessamentoAnimacao(files[0]);
     } else {
@@ -37,9 +45,9 @@ dropZone.addEventListener('drop', (e) => {
 
 const fileInput = document.getElementById('fileInput');
 
-document.addEventListener('click', (e) => {
-    if (e.target && e.target.id === 'dropEmojiIcon') {
-        if (hasDocument || dropZone.classList.contains('dragover')) return;
+dropZone.addEventListener('click', (e) => {
+    if (hasDocument || dropZone.classList.contains('dragover')) return;
+    if (e.target !== fileInput) {
         fileInput.click();
     }
 });
@@ -71,3 +79,17 @@ btnImprimir.addEventListener('click', () => {
 if (document.getElementById('btnOrdenar')) {
     document.getElementById('btnOrdenar').addEventListener('click', window.alternarOrdem);
 }
+
+const tubosHover = document.querySelectorAll('.cont-item[data-tubo]');
+
+tubosHover.forEach(item => {
+    item.addEventListener('mouseenter', () => {
+        const tipo = item.getAttribute('data-tubo');
+        contentArea.classList.add(`hover-${tipo}`);
+    });
+    
+    item.addEventListener('mouseleave', () => {
+        const tipo = item.getAttribute('data-tubo');
+        contentArea.classList.remove(`hover-${tipo}`);
+    });
+});

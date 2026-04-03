@@ -162,9 +162,10 @@
 
 .botoes-fixos {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    flex-direction: row;
+    gap: 15px;
     margin-top: auto;
+    align-items: center;
 }
 
 .btn-enviar {
@@ -175,7 +176,7 @@
     padding: 14px 28px;
     font-weight: bold;
     font-size: 1.15rem;
-    width: 100%;
+    flex-grow: 1;
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -191,36 +192,42 @@
     background-color: transparent;
     color: var(--btn-excluir-color);
     border: 2px solid var(--btn-excluir-color);
-    border-radius: 50px;
-    padding: 14px 28px;
-    width: 100%;
+    border-radius: 50%;
+    width: 55px;
+    height: 55px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-weight: bold;
-    font-size: 1.15rem;
+    font-size: 1.5rem;
     cursor: pointer;
     transition: all 0.3s ease;
+    flex-shrink: 0;
 }
 
 .btn-excluir:hover {
-    background-color: var(--btn-excluir-color);
-    color: #ffffff;
+    background-color: var(--error-bg);
+    color: var(--btn-excluir-color);
     box-shadow: 0 4px 12px var(--shadow-color);
+    transform: scale(1.1) rotate(-10deg);
 }
 
-/* ========================================= */
-/* AJUSTES RESPONSIVOS PARA ECRÃS PEQUENOS   */
-/* ========================================= */
 @media (max-width: 992px) {
     .botoes-fixos {
         flex-direction: row;
-        justify-content: space-between;
-        width: 100%;
+        gap: 15px;
     }
 
-    .btn-enviar, .btn-excluir {
-        width: 48%; /* Lado a lado! */
+    .btn-enviar {
+        width: auto;
+        font-size: 1.1rem;
         padding: 12px 0;
-        font-size: 1rem;
-        text-align: center;
+    }
+
+    .btn-excluir {
+        width: 50px;
+        height: 50px;
     }
 
     .cont-item {

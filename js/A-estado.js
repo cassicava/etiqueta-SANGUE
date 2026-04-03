@@ -24,7 +24,7 @@ let state = {
 
 let processInterval;
 let hasDocument = false;
-let ordemAtual = 'padrao';
+let ordemAtual = 'alfabetica';
 
 let clicksNeeded = Math.floor(Math.random() * 11) + 10;
 let currentClicks = 0;

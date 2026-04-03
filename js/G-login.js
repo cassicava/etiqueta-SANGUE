@@ -24,6 +24,9 @@
     if (sessaoExpiraEm && now < parseInt(sessaoExpiraEm)) {
         localStorage.setItem('lf_sessao_expira_sangue', now + (TEMPO_SESSAO_MINUTOS * 60 * 1000));
         
+        const generoSalvo = localStorage.getItem('lf_genero_usuario') || 'M';
+        welcomeMsg.innerText = generoSalvo === 'F' ? 'Bem-vinda! ✨' : 'Bem-vindo! ✨';
+
         appHeader.style.transition = 'none';
         headerActions.style.transition = 'none'; 
         
@@ -74,6 +77,9 @@
 
         if (usuarioValido && senhaTem6Digitos) {
             localStorage.setItem('lf_sessao_expira_sangue', Date.now() + (TEMPO_SESSAO_MINUTOS * 60 * 1000));
+            localStorage.setItem('lf_genero_usuario', usuarioValido.genero);
+
+            welcomeMsg.innerText = usuarioValido.genero === 'F' ? 'Bem-vinda! ✨' : 'Bem-vindo! ✨';
 
             loginWrapper.style.opacity = '0';
             loginWrapper.style.pointerEvents = 'none';
@@ -114,6 +120,7 @@
     if (btnSair) {
         btnSair.addEventListener('click', () => {
             localStorage.removeItem('lf_sessao_expira_sangue');
+            localStorage.removeItem('lf_genero_usuario');
             
             appContainer.classList.add('app-hidden');
             if (typeof resetarInterface === 'function') resetarInterface();

@@ -39,7 +39,7 @@
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    font-size: 4.2rem; 
+    font-size: 4.8rem; 
     margin: 0;
     pointer-events: none;
     transition: all 1.2s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -58,13 +58,13 @@
 }
 
 .app-header.move-top #appTitle {
-    font-size: 2.3rem; 
+    font-size: 2.8rem; 
 }
 
 .app-header.logged-in #appTitle {
     left: 40px;
     transform: translate(0, -50%);
-    font-size: 1.9rem; 
+    font-size: 2.3rem; 
     pointer-events: auto;
     cursor: pointer;
 }
@@ -113,6 +113,15 @@
     opacity: 1;
     pointer-events: auto;
     transform: translate(-50%, -50%) scale(1);
+}
+
+.header-data {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--text-color);
+    margin: 0 15px;
+    white-space: nowrap;
+    transition: color 0.4s ease;
 }
 
 .header-divider {
@@ -188,15 +197,15 @@
     }
 
     #appTitle {
-        font-size: 3rem;
+        font-size: 3.4rem;
     }
 
     .app-header.move-top #appTitle {
-        font-size: 1.6rem;
+        font-size: 2rem;
     }
 
     .app-header.logged-in #appTitle {
-        font-size: 1.4rem;
+        font-size: 1.6rem;
         left: 20px;
     }
 

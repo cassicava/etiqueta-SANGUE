@@ -30,6 +30,7 @@
         
         <div class="header-center-area" id="headerCenterArea">
             <div class="header-divider left-divider"></div>
+            <span id="headerDataArquivo" class="header-data"></span>
             <div class="header-divider right-divider"></div>
         </div>
 
@@ -47,11 +48,11 @@
             
             <div class="form-group">
                 <label>Usuário</label>
-                <input type="text" id="inputUsuario" placeholder="nome ou documento" maxlength="20" autocomplete="off" oninput="this.value = this.value.toLowerCase().replace(/\s/g, '')">
+                <input type="text" id="inputUsuario" placeholder="nome ou documento" maxlength="20" autocomplete="off" data-lpignore="true" data-form-type="other" readonly onfocus="this.removeAttribute('readonly');" oninput="this.value = this.value.toLowerCase().replace(/\s/g, '')">
             </div>
             <div class="form-group">
                 <label>Senha</label>
-                <input type="password" id="inputSenha" placeholder="••••••" maxlength="6" autocomplete="new-password" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                <input type="password" id="inputSenha" placeholder="••••••" maxlength="6" autocomplete="new-password" data-lpignore="true" data-form-type="other" readonly onfocus="this.removeAttribute('readonly');" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
             </div>
             
             <button id="btnEntrar" class="login-btn-submit">Entrar</button>
@@ -79,15 +80,13 @@
             </div>
             
             <div id="painelAcoes" class="painel-acoes app-hidden">
-                <hr class="separador-painel">
-                
                 <div id="resumoPacientes" class="pacientes-destaque">Pacientes: 0</div>
-                <button id="btnOrdenar" class="btn-ordenar" title="Mudar ordem da lista">🔄 Ordem: Padrão</button>
+                <button id="btnOrdenar" class="btn-ordenar" title="Mudar ordem da lista">🔤 Ordem: Alfabética</button>
                 
                 <hr class="separador-painel">
 
                 <div class="contadores-individuais">
-                    <div class="cont-item tubo-hover">
+                    <div class="cont-item tubo-hover" data-tubo="amarelo">
                         <div class="cont-nome">🟡 Amarelo/Verm:</div>
                         <div class="cont-acoes">
                             <button class="btn-lote" onclick="alterarTodos('amarelo', -1)">-</button>
@@ -96,7 +95,7 @@
                         </div>
                         <strong id="total-amarelo">0</strong>
                     </div>
-                    <div class="cont-item tubo-hover">
+                    <div class="cont-item tubo-hover" data-tubo="roxo">
                         <div class="cont-nome">🟣 Roxo:</div>
                         <div class="cont-acoes">
                             <button class="btn-lote" onclick="alterarTodos('roxo', -1)">-</button>
@@ -105,7 +104,7 @@
                         </div>
                         <strong id="total-roxo">0</strong>
                     </div>
-                    <div class="cont-item tubo-hover">
+                    <div class="cont-item tubo-hover" data-tubo="cinza">
                         <div class="cont-nome">⚪ Cinza:</div>
                         <div class="cont-acoes">
                             <button class="btn-lote" onclick="alterarTodos('cinza', -1)">-</button>
@@ -114,7 +113,7 @@
                         </div>
                         <strong id="total-cinza">0</strong>
                     </div>
-                    <div class="cont-item tubo-hover">
+                    <div class="cont-item tubo-hover" data-tubo="azul">
                         <div class="cont-nome">🔵 Azul:</div>
                         <div class="cont-acoes">
                             <button class="btn-lote" onclick="alterarTodos('azul', -1)">-</button>
@@ -123,7 +122,7 @@
                         </div>
                         <strong id="total-azul">0</strong>
                     </div>
-                    <div class="cont-item tubo-hover">
+                    <div class="cont-item tubo-hover" data-tubo="frasco">
                         <div class="cont-nome">🧪 Frasco:</div>
                         <div class="cont-acoes">
                             <button class="btn-lote" onclick="alterarTodos('frasco', -1)">-</button>
@@ -134,18 +133,20 @@
                     </div>
                 </div>
 
+                <h3 id="contadorTotal" class="contador-total">Total: 0</h3>
                 <hr class="separador-painel">
                 
-                <h3 id="contadorTotal" class="contador-total">Total: 0</h3>
-                
                 <div class="botoes-fixos">
-                    <button id="btnImprimir" class="btn-enviar">Imprimir Etiquetas</button>
-                    <button id="btnExcluir" class="btn-excluir">Excluir</button>
+                    <button id="btnExcluir" class="btn-excluir" title="Excluir">🗑️</button>
+                    <button id="btnImprimir" class="btn-enviar">Imprimir 🖨️</button>
                 </div>
             </div>
         </div>
         
-        <div id="contentArea" class="content-area"></div>
+        <div id="rightPanel" class="right-panel">
+            <div id="legendaContainer" class="legenda-wrapper"></div>
+            <div id="contentArea" class="content-area"></div>
+        </div>
     </div>
 
     <div id="termosOverlay" class="termos-overlay">
