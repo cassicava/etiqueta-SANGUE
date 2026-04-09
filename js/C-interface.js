@@ -70,14 +70,10 @@ function mostrarInfoArquivo() {
             document.getElementById('headerCenterArea').classList.add('active');
             
             painelAcoes.classList.remove('app-hidden');
+            contentArea.classList.add('active');
             
-            document.getElementById('rightPanel').classList.add('active');
-            
-            if (ordemAtual === 'alfabetica') {
-                state.pacientes.sort((a, b) => a.nome.localeCompare(b.nome));
-            }
-            
-            renderizarLista(true);
+            state.pacientes.sort((a, b) => a.nome.localeCompare(b.nome));
+            renderizarLista();
             
             painelAcoes.style.opacity = '1';
             painelAcoes.style.transform = 'translateY(0)';
@@ -127,22 +123,36 @@ function gerarHTMLCardPaciente(item) {
     `;
 }
 
-function renderizarLista(animar = true) {
+function adicionarCardNovoPaciente(delayIndex) {
+    const addCard = document.createElement('div');
+    addCard.className = 'card card-add';
+    addCard.id = 'addPatientCard';
+    addCard.style.animationDelay = `${delayIndex * 0.03}s`;
+    addCard.innerHTML = `<span>➕ Novo Paciente</span>`;
+    addCard.onclick = () => mostrarFormularioNovoPaciente();
+    contentArea.appendChild(addCard);
+}
+
+function calcularPosicaoLetraFixa() {
+    const legendWrap = document.querySelector('.legenda-wrapper');
+    if (legendWrap) {
+        const stickyOffset = legendWrap.offsetHeight - 1; 
+        document.querySelectorAll('.alphabet-divider').forEach(div => {
+            div.style.top = `${stickyOffset}px`;
+        });
+    }
+}
+
+window.addEventListener('resize', calcularPosicaoLetraFixa);
+
+function renderizarLista() {
     contentArea.innerHTML = '';
     
-    document.getElementById('legendaContainer').innerHTML = `
+    const headerLegenda = document.createElement('div');
+    headerLegenda.className = 'legenda-wrapper';
+    headerLegenda.innerHTML = `
         <div class="legenda-fixa">
-            <div class="novo-paciente-container">
-                <button id="btnAbrirFormNovo" class="btn-novo-paciente" onclick="mostrarFormularioNovoPaciente()">➕ Novo Paciente</button>
-                <div id="formNovoPaciente" class="form-novo-paciente-inline">
-                    <input type="text" id="novoNome" class="input-novo" placeholder="Nome do paciente" maxlength="40" autocomplete="off" style="flex-grow: 1;">
-                    <input type="text" id="novaData" class="input-novo" placeholder="DD/MM/AAAA" maxlength="10" oninput="mascaraData(this)" autocomplete="off" style="width: 150px; text-align: center;">
-                    <div class="form-actions">
-                        <button class="btn-action btn-cancelar" onclick="cancelarNovoPaciente()" title="Cancelar">✖</button>
-                        <button class="btn-action btn-salvar" onclick="salvarNovoPaciente()" title="Salvar">✔</button>
-                    </div>
-                </div>
-            </div>
+            <div style="flex-grow: 1; padding-right: 15px;"></div>
             <div class="seletores-container">
                 <div class="leg-item">🟡 Ama/Ver</div>
                 <div class="leg-item">🟣 Roxo</div>
@@ -153,27 +163,26 @@ function renderizarLista(animar = true) {
         </div>
         <div class="legenda-linha"></div>
     `;
+    contentArea.appendChild(headerLegenda);
 
     let lastLetter = '';
     let visualIndex = 0;
 
     state.pacientes.forEach(item => {
-        if (ordemAtual === 'alfabetica') {
-            const currentLetter = item.nome.trim().charAt(0).toUpperCase();
-            if (currentLetter !== lastLetter) {
-                const divider = document.createElement('div');
-                divider.className = 'alphabet-divider';
-                divider.style.animationDelay = animar ? `${visualIndex * 0.02}s` : '0s';
-                divider.innerHTML = `<span>${currentLetter}</span>`;
-                contentArea.appendChild(divider);
-                lastLetter = currentLetter;
-                visualIndex++;
-            }
+        const currentLetter = item.nome.trim().charAt(0).toUpperCase();
+        if (currentLetter !== lastLetter) {
+            const divider = document.createElement('div');
+            divider.className = 'alphabet-divider';
+            divider.style.animationDelay = `${visualIndex * 0.03}s`;
+            divider.innerHTML = `<span>${currentLetter}</span>`;
+            contentArea.appendChild(divider);
+            lastLetter = currentLetter;
+            visualIndex++;
         }
 
         const card = document.createElement('div');
         card.className = 'card';
-        card.style.animationDelay = animar ? `${visualIndex * 0.02}s` : '0s';
+        card.style.animationDelay = `${visualIndex * 0.03}s`;
         card.id = `paciente-${item.id}`;
         card.innerHTML = gerarHTMLCardPaciente(item);
         contentArea.appendChild(card);
@@ -181,7 +190,10 @@ function renderizarLista(animar = true) {
         visualIndex++;
     });
 
+    adicionarCardNovoPaciente(visualIndex);
     atualizarContador();
+
+    requestAnimationFrame(calcularPosicaoLetraFixa);
 }
 
 window.mascaraData = function(input) {
@@ -213,45 +225,41 @@ function isDataValida(dataStr) {
 }
 
 window.mostrarFormularioNovoPaciente = function() {
-    const btn = document.getElementById('btnAbrirFormNovo');
-    const form = document.getElementById('formNovoPaciente');
+    const addCard = document.getElementById('addPatientCard');
+    addCard.className = 'card card-form-mode';
+    addCard.onclick = null;
+
+    addCard.innerHTML = `
+        <div class="form-inputs">
+            <input type="text" id="novoNome" placeholder="Nome completo do paciente" maxlength="40" autocomplete="off" style="flex-grow: 1;">
+            <input type="text" id="novaData" placeholder="DD/MM/AAAA" maxlength="10" oninput="mascaraData(this)" autocomplete="off" style="width: 190px; text-align: center;">
+        </div>
+        <div class="form-actions">
+            <button class="btn-action btn-cancelar" onclick="cancelarNovoPaciente()" title="Cancelar">✖</button>
+            <button class="btn-action btn-salvar" onclick="salvarNovoPaciente()" title="Salvar">✔</button>
+        </div>
+    `;
+
+    setTimeout(() => document.getElementById('novoNome').focus(), 100);
+
+    document.getElementById('novoNome').addEventListener('keydown', (e) => {
+        if(e.key === 'Enter') document.getElementById('novaData').focus();
+        if(e.key === 'Escape') cancelarNovoPaciente();
+    });
     
-    if(btn) btn.classList.add('hide');
-    if(form) form.classList.add('open');
-
-    setTimeout(() => {
-        const nomeInput = document.getElementById('novoNome');
-        if(nomeInput) nomeInput.focus();
-    }, 150);
-
-    const nomeInput = document.getElementById('novoNome');
-    const dataInput = document.getElementById('novaData');
-
-    if(nomeInput) {
-        nomeInput.addEventListener('keydown', (e) => {
-            if(e.key === 'Enter') dataInput.focus();
-            if(e.key === 'Escape') cancelarNovoPaciente();
-        });
-    }
-    
-    if(dataInput) {
-        dataInput.addEventListener('keydown', (e) => {
-            if(e.key === 'Enter') salvarNovoPaciente();
-            if(e.key === 'Escape') cancelarNovoPaciente();
-        });
-    }
+    document.getElementById('novaData').addEventListener('keydown', (e) => {
+        if(e.key === 'Enter') salvarNovoPaciente();
+        if(e.key === 'Escape') cancelarNovoPaciente();
+    });
 }
 
 window.cancelarNovoPaciente = function() {
-    const form = document.getElementById('formNovoPaciente');
-    const btn = document.getElementById('btnAbrirFormNovo');
-    const nome = document.getElementById('novoNome');
-    const data = document.getElementById('novaData');
-
-    if(form) form.classList.remove('open');
-    if(btn) btn.classList.remove('hide');
-    if(nome) nome.value = '';
-    if(data) data.value = '';
+    const addCard = document.getElementById('addPatientCard');
+    addCard.className = 'card card-add';
+    addCard.innerHTML = `<span>➕ Novo Paciente</span>`;
+    setTimeout(() => {
+        addCard.onclick = () => mostrarFormularioNovoPaciente();
+    }, 50);
 }
 
 window.salvarNovoPaciente = function() {
@@ -299,51 +307,12 @@ window.salvarNovoPaciente = function() {
     state.pacientes.push(novoPaciente);
     document.getElementById('resumoPacientes').innerText = `Pacientes: ${state.pacientes.length}`;
 
-    if (ordemAtual === 'alfabetica') {
-        state.pacientes.sort((a, b) => a.nome.localeCompare(b.nome));
-        renderizarLista(false); 
-    } else {
-        cancelarNovoPaciente();
-
-        const cardContainer = document.createElement('div');
-        cardContainer.className = 'card';
-        cardContainer.style.animationDelay = '0s'; 
-        cardContainer.id = `paciente-${novoPaciente.id}`;
-        cardContainer.innerHTML = gerarHTMLCardPaciente(novoPaciente);
-        contentArea.appendChild(cardContainer);
-
-        atualizarContador();
-    }
+    state.pacientes.sort((a, b) => a.nome.localeCompare(b.nome));
+    renderizarLista();
 
     setTimeout(() => {
-        if (ordemAtual !== 'alfabetica') {
-            contentArea.scrollTop = contentArea.scrollHeight;
-        }
+        contentArea.scrollTop = contentArea.scrollHeight;
     }, 50);
-}
-
-window.alternarOrdem = function() {
-    const cards = Array.from(contentArea.children);
-    
-    cards.forEach(card => {
-        card.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
-        card.style.transform = 'scale(0.95)';
-        card.style.opacity = '0';
-    });
-
-    setTimeout(() => {
-        if (ordemAtual === 'padrao') {
-            state.pacientes.sort((a, b) => a.nome.localeCompare(b.nome));
-            ordemAtual = 'alfabetica';
-            document.getElementById('btnOrdenar').innerHTML = '🔤 Ordem: Alfabética';
-        } else {
-            state.pacientes.sort((a, b) => a.id - b.id);
-            ordemAtual = 'padrao';
-            document.getElementById('btnOrdenar').innerHTML = '🔄 Ordem: Padrão';
-        }
-        
-        renderizarLista(true);
-    }, 300);
 }
 
 function resetarInterface() {
@@ -361,16 +330,12 @@ function resetarInterface() {
         appContainer.classList.remove('active-layout');
         leftPanel.classList.remove('active');
         dropZone.classList.remove('active', 'processing', 'error-state', 'success', 'app-hidden');
+        contentArea.classList.remove('active');
         
-        document.getElementById('rightPanel').classList.remove('active');
         contentArea.innerHTML = '';
         
         state.pacientes = [];
         state.dataArquivo = "--/--/----";
-        ordemAtual = 'alfabetica';
-        if(document.getElementById('btnOrdenar')) {
-            document.getElementById('btnOrdenar').innerHTML = '🔤 Ordem: Alfabética';
-        }
         
         atualizarContador();
 

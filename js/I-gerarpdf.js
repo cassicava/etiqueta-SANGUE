@@ -8,7 +8,13 @@ window.gerarEtiquetasPDF = function() {
     }
 
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: [195, 305] });
+    const cfg = configImpresso;
+    
+    const doc = new jsPDF({ 
+        orientation: 'p', 
+        unit: 'mm', 
+        format: [cfg.pageWidth, cfg.pageHeight] 
+    });
 
     let etiquetas = [];
     
@@ -33,16 +39,7 @@ window.gerarEtiquetasPDF = function() {
         });
     });
 
-    const marginX = 12; 
-    const marginY = 1; 
-    const labelW = 89; 
-    const labelH = 23; 
-    const gapX = 2; 
-    const gapY = 2.25; 
-    const padding = 4.5; 
-
-    const labelsPorColuna = 12;
-    const labelsPorPagina = 24;
+    const labelsPorPagina = cfg.cols * cfg.rows;
 
     etiquetas.forEach((etiq, index) => {
         const itemPage = index % labelsPorPagina;
@@ -51,32 +48,33 @@ window.gerarEtiquetasPDF = function() {
             doc.addPage();
         }
 
-        const col = Math.floor(itemPage / labelsPorColuna);
-        const row = itemPage % labelsPorColuna;
+        const col = Math.floor(itemPage / cfg.rows);
+        const row = itemPage % cfg.rows;
 
-        const x = marginX + col * (labelW + gapX);
-        const y = marginY + row * (labelH + gapY);
+        const x = cfg.marginLeft + col * (cfg.labelWidth + cfg.gapX);
+        const y = cfg.marginTop + row * (cfg.labelHeight + cfg.gapY);
 
-        doc.setFontSize(10);
+        doc.setFontSize(cfg.fontName);
         doc.setFont("helvetica", "bold");
         doc.setTextColor(0, 0, 0);
 
-        let linhasNome = doc.splitTextToSize(etiq.paciente, labelW - padding * 2 - 8);
+        let linhasNome = doc.splitTextToSize(etiq.paciente, cfg.labelWidth - cfg.labelMarginLeft - cfg.labelMarginRight - 8);
         if (linhasNome.length > 2) linhasNome = linhasNome.slice(0, 2);
 
         linhasNome.forEach((linha, i) => {
-            doc.text(linha, x + padding, y + padding + 3 + (i * 4));
+            const ajusteLinhaY = cfg.fontName * 0.35;
+            doc.text(linha, x + cfg.labelMarginLeft, y + cfg.labelMarginTop + ajusteLinhaY + (i * ajusteLinhaY * 1.2));
         });
 
-        doc.setFontSize(9);
+        doc.setFontSize(cfg.fontDob);
         doc.setFont("helvetica", "normal");
         doc.setTextColor(80, 80, 80);
-        doc.text(etiq.nascimento, x + padding, y + labelH - padding);
+        doc.text(etiq.nascimento, x + cfg.labelMarginLeft, y + cfg.labelHeight - cfg.labelMarginBottom);
 
-        doc.setFontSize(6);
+        doc.setFontSize(cfg.fontType);
         doc.setFont("helvetica", "bold");
         doc.setTextColor(etiq.tuboCor[0], etiq.tuboCor[1], etiq.tuboCor[2]);
-        doc.text(etiq.tuboNome, x + labelW - padding - 1.5, y + labelH - padding, { angle: 90 });
+        doc.text(etiq.tuboNome, x + cfg.labelWidth - cfg.labelMarginRight - 1.5, y + cfg.labelHeight - cfg.labelMarginBottom, { angle: 90 });
     });
 
     window.open(URL.createObjectURL(doc.output("blob")));

@@ -76,10 +76,6 @@ btnImprimir.addEventListener('click', () => {
     }
 });
 
-if (document.getElementById('btnOrdenar')) {
-    document.getElementById('btnOrdenar').addEventListener('click', window.alternarOrdem);
-}
-
 const tubosHover = document.querySelectorAll('.cont-item[data-tubo]');
 
 tubosHover.forEach(item => {

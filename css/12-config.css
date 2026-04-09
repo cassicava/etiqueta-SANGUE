@@ -1,0 +1,296 @@
+.config-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); 
+    backdrop-filter: blur(10px); 
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.config-overlay:not(.app-hidden) {
+    opacity: 1;
+    visibility: visible;
+}
+
+.config-modal {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr 1.8fr;
+    gap: 30px;
+    width: 100%;
+    max-width: 1400px; 
+    height: 95vh;
+    background-color: var(--modal-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 30px;
+    padding: 30px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    overflow: hidden;
+    
+    transform: scale(0.9);
+    transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.config-overlay:not(.app-hidden) .config-modal {
+    animation: modalPopIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1.2) forwards;
+}
+
+.config-overlay.hiding {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease 0.1s, visibility 0.5s ease 0.1s;
+}
+
+.config-overlay.hiding .config-modal {
+    animation: modalPopOut 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+@keyframes modalPopIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.9) translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes modalPopOut {
+    0% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.9) translateY(30px);
+    }
+}
+
+.config-coluna {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+    padding-right: 10px;
+    height: 100%;
+}
+
+.config-titulo {
+    font-size: 1.4rem;
+    color: var(--primary-color);
+    margin: 0;
+    border-bottom: 2px dashed var(--header-border);
+    padding-bottom: 10px;
+    text-align: center; 
+    flex-shrink: 0;
+}
+
+.config-grupo {
+    background-color: var(--bg-color);
+    padding: 15px;
+    border-radius: 20px;
+    border: 1px solid var(--header-border);
+    display: flex; 
+    flex-direction: column;
+    align-items: center; 
+    flex-shrink: 0;
+}
+
+.config-grupo h4 {
+    margin: 0 0 10px 0;
+    font-size: 1rem;
+    color: var(--text-color);
+    text-align: center; 
+    width: 100%;
+}
+
+.config-grupo-linha {
+    display: flex;
+    gap: 15px;
+    justify-content: center; 
+    width: 100%;
+}
+
+.config-input-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    flex: 1;
+    max-width: 130px; 
+}
+
+.config-input-box label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+    font-weight: 600;
+    text-align: center; 
+}
+
+.config-input-box input {
+    width: 100%; 
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--header-border);
+    background-color: var(--modal-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    font-weight: bold;
+    outline: none;
+    transition: all 0.3s ease;
+    text-align: center; 
+}
+
+.config-input-box input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+@keyframes pulse-error-cfg {
+    0% { border-color: var(--header-border); background-color: var(--modal-bg); box-shadow: none; }
+    50% { border-color: var(--btn-excluir-color); background-color: var(--error-bg); box-shadow: 0 0 10px rgba(229, 62, 62, 0.3); }
+    100% { border-color: var(--header-border); background-color: var(--modal-bg); box-shadow: none; }
+}
+
+.input-error-pulse {
+    animation: pulse-error-cfg 1.5s infinite;
+}
+
+.preview-container {
+    background-color: var(--bg-color);
+    padding: 20px;
+    border-radius: 20px;
+    border: 1px solid var(--header-border);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 0;
+}
+
+.preview-page-wrapper {
+    width: 100%;
+    height: 100%;
+    background-color: #e2e8f0;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    padding: 10px;
+}
+
+#previewPage {
+    background-color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.prev-grid-item {
+    position: absolute;
+    border: 1px dashed var(--primary-color);
+    background-color: rgba(37, 99, 235, 0.1);
+}
+
+.preview-label-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 5px;
+    padding: 10px;
+}
+
+#previewLabel {
+    background-color: #ffffff;
+    border: 1px solid #cbd5e0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    position: relative;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+#prevName {
+    position: absolute;
+    color: #000;
+    font-family: helvetica, arial, sans-serif;
+    font-weight: bold;
+    line-height: 1.2;
+}
+
+#prevDob {
+    position: absolute;
+    color: #505050;
+    font-family: helvetica, arial, sans-serif;
+}
+
+#prevType {
+    position: absolute;
+    color: #e11d48;
+    font-family: helvetica, arial, sans-serif;
+    font-weight: bold;
+    transform: rotate(90deg);
+    transform-origin: right bottom;
+    right: 0;
+    bottom: 0;
+}
+
+.config-botoes {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    width: 100%;
+    flex-shrink: 0;
+}
+
+.btn-cancelar-cfg, .btn-salvar-cfg {
+    padding: 14px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1;
+    border: none;
+}
+
+.btn-cancelar-cfg {
+    background-color: transparent;
+    border: 2px solid var(--btn-excluir-color);
+    color: var(--btn-excluir-color);
+}
+
+.btn-cancelar-cfg:hover {
+    background-color: var(--error-bg);
+}
+
+.btn-salvar-cfg {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-salvar-cfg:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+}
+
+@media (max-width: 992px) {
+    .config-modal {
+        grid-template-columns: 1fr;
+        height: auto;
+        max-height: 95vh;
+    }
+    .preview-container {
+        min-height: 400px;
+    }
+}
