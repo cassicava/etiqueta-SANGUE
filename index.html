@@ -59,10 +59,10 @@
             
             <button id="btnEntrar" class="login-btn-submit">Entrar</button>
             
-            <div class=\"esqueci-container\">
+            <div class="esqueci-container">
                 <button id="btnEsqueci" class="btn-esqueci">Esqueci a senha</button>
                 <div id="balaoEsqueci" class="balao-esqueci">
-                    Esqueceu a senha? Pergunte ao Cassiano! 😂<br><br>Somos pobres e não temos recursos para essa função! 💸💸
+                    Esqueceu a senha? <br> Pergunte ao Cassiano!
                 </div>
             </div>
         </div>
@@ -186,7 +186,7 @@
 
     <div id="configPrintOverlay" class="config-overlay app-hidden">
         <div class="config-modal">
-            <div class="config-coluna">
+            <div class="config-coluna col-folha">
                 <h3 class="config-titulo">📄 Folha</h3>
                 
                 <div class="config-grupo">
@@ -256,7 +256,7 @@
                 </div>
             </div>
 
-            <div class="config-coluna">
+            <div class="config-coluna col-etiqueta">
                 <h3 class="config-titulo">🏷️ Etiqueta</h3>
                 
                 <div class="config-grupo">
@@ -272,32 +272,7 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="config-grupo">
-                    <h4>Margens Internas (cm)</h4>
-                    <div class="config-grupo-linha">
-                        <div class="config-input-box">
-                            <label>Superior (cm)</label>
-                            <input type="number" id="cfgLabelMarginTop" step="0.1" min="0">
-                        </div>
-                        <div class="config-input-box">
-                            <label>Inferior (cm)</label>
-                            <input type="number" id="cfgLabelMarginBottom" step="0.1" min="0">
-                        </div>
-                    </div>
-                    <div class="config-grupo-linha" style="margin-top: 10px;">
-                        <div class="config-input-box">
-                            <label>Esquerda (cm)</label>
-                            <input type="number" id="cfgLabelMarginLeft" step="0.1" min="0">
-                        </div>
-                        <div class="config-input-box">
-                            <label>Direita (cm)</label>
-                            <input type="number" id="cfgLabelMarginRight" step="0.1" min="0">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="config-grupo">
+<div class="config-grupo">
                     <h4>Tamanhos de Fonte (pt)</h4>
                     <div class="config-grupo-linha">
                         <div class="config-input-box">
@@ -314,21 +289,75 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="config-grupo preview-label-box" style="margin-top: auto;">
-                    <h4>Preview Individual</h4>
-                    <div class="preview-label-wrapper">
-                        <div id="previewLabel">
-                            <div id="prevName">NOME DO PACIENTE COMPLETO</div>
-                            <div id="prevDob">01/01/1990</div>
-                            <div id="prevType">AMARELO</div>
+                <div class="config-grupo">
+                    <h4>Margens Internas (Limites) em cm</h4>
+                    <div class="config-grupo-linha">
+                        <div class="config-input-box">
+                            <label>Superior</label>
+                            <input type="number" id="cfgPadTop" step="0.1" min="0">
+                        </div>
+                        <div class="config-input-box">
+                            <label>Inferior</label>
+                            <input type="number" id="cfgPadBottom" step="0.1" min="0">
+                        </div>
+                    </div>
+                    <div class="config-grupo-linha" style="margin-top: 10px;">
+                        <div class="config-input-box">
+                            <label>Esquerda</label>
+                            <input type="number" id="cfgPadLeft" step="0.1" min="0">
+                        </div>
+                        <div class="config-input-box">
+                            <label>Direita</label>
+                            <input type="number" id="cfgPadRight" step="0.1" min="0">
                         </div>
                     </div>
                 </div>
+
+                <div class="config-grupo">
+                    <h4>Posicionamento Individual</h4>
+                    <div class="pos-controls-container">
+                        <div class="dpad-wrapper">
+                            <span class="dpad-label">Nome</span>
+                            <div class="dpad">
+                                <button class="dpad-btn dpad-up" data-target="Name" data-axis="Y" data-dir="-1">▲</button>
+                                <button class="dpad-btn dpad-left" data-target="Name" data-axis="X" data-dir="-1">◀</button>
+                                <button class="dpad-btn dpad-right" data-target="Name" data-axis="X" data-dir="1">▶</button>
+                                <button class="dpad-btn dpad-down" data-target="Name" data-axis="Y" data-dir="1">▼</button>
+                            </div>
+                        </div>
+                        <div class="dpad-wrapper">
+                            <span class="dpad-label">Data Nasc.</span>
+                            <div class="dpad">
+                                <button class="dpad-btn dpad-up" data-target="Dob" data-axis="Y" data-dir="-1">▲</button>
+                                <button class="dpad-btn dpad-left" data-target="Dob" data-axis="X" data-dir="-1">◀</button>
+                                <button class="dpad-btn dpad-right" data-target="Dob" data-axis="X" data-dir="1">▶</button>
+                                <button class="dpad-btn dpad-down" data-target="Dob" data-axis="Y" data-dir="1">▼</button>
+                            </div>
+                        </div>
+                        <div class="dpad-wrapper">
+                            <span class="dpad-label">Cor/Tubo</span>
+                            <div class="dpad">
+                                <button class="dpad-btn dpad-up" data-target="Type" data-axis="Y" data-dir="-1">▲</button>
+                                <button class="dpad-btn dpad-left" data-target="Type" data-axis="X" data-dir="-1">◀</button>
+                                <button class="dpad-btn dpad-right" data-target="Type" data-axis="X" data-dir="1">▶</button>
+                                <button class="dpad-btn dpad-down" data-target="Type" data-axis="Y" data-dir="1">▼</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="hidden" id="cfgPosNameX">
+                    <input type="hidden" id="cfgPosNameY">
+                    <input type="hidden" id="cfgPosDobX">
+                    <input type="hidden" id="cfgPosDobY">
+                    <input type="hidden" id="cfgPosTypeX">
+                    <input type="hidden" id="cfgPosTypeY">
+                </div>
+
+                
             </div>
 
-            <div class="config-coluna">
-                <h3 class="config-titulo">👁️ Preview da Folha</h3>
+            <div class="config-coluna col-preview">
+                <h3 class="config-titulo">👁️ Preview da Folha e Etiqueta</h3>
                 
                 <div class="preview-container">
                     <div id="previewPageWrapper" class="preview-page-wrapper">
@@ -336,6 +365,20 @@
                     </div>
                 </div>
 
+                <div class="preview-label-box">
+                    <div class="preview-label-wrapper">
+                        <div id="previewLabel">
+                            <div id="prevPaddingBox"></div>
+                            <div id="prevName">MARIA APARECIDA SILVA SANTOS</div>
+                            <div id="prevDob">01/01/1990</div>
+                            <div id="prevType">AMARELO</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-botoes">
+                <hr class="separador-botoes-config">
                 <div class="config-botoes">
                     <button id="btnFecharConfig" class="btn-cancelar-cfg">Cancelar</button>
                     <button id="btnSalvarConfig" class="btn-salvar-cfg">Salvar Configurações</button>

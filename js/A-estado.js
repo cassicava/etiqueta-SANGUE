@@ -16,7 +16,6 @@ const mouseShadow = document.getElementById('mouseShadow');
 const appTitle = document.getElementById('appTitle');
 const btnTheme = document.getElementById('btnTheme');
 const btnOrdenar = document.getElementById('btnOrdenar');
-
 const btnConfigPrint = document.getElementById('btnConfigPrint');
 const configPrintOverlay = document.getElementById('configPrintOverlay');
 
@@ -38,13 +37,19 @@ let configImpresso = {
     marginRight: 3,
     labelWidth: 89,
     labelHeight: 23,
-    labelMarginTop: 4.5,
-    labelMarginBottom: 4.5,
-    labelMarginLeft: 4.5,
-    labelMarginRight: 4.5,
+    padTop: 0.3,
+    padBottom: 0.3,
+    padLeft: 0.3,
+    padRight: 0.3,
     fontName: 10,
     fontDob: 9,
-    fontType: 6
+    fontType: 9,
+    posNameX: 3.0,
+    posNameY: 3.0,
+    posDobX: 3.0,
+    posDobY: 19.0,
+    posTypeX: 45.0,
+    posTypeY: 19.0
 };
 
 let processInterval;

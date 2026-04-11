@@ -25,17 +25,20 @@
 .config-modal {
     display: grid;
     grid-template-columns: 1fr 1.1fr 1.8fr;
-    gap: 30px;
+    grid-template-rows: 1fr auto;
+    grid-template-areas: 
+        "folha etiqueta preview"
+        "botoes botoes preview";
+    gap: 15px 30px;
     width: 100%;
-    max-width: 1400px; 
+    max-width: 1600px; 
     height: 95vh;
     background-color: var(--modal-bg);
     border: 1px solid var(--glass-border);
     border-radius: 30px;
-    padding: 30px;
+    padding: 20px 25px;
     box-shadow: 0 20px 50px rgba(0,0,0,0.3);
     overflow: hidden;
-    
     transform: scale(0.9);
     transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
@@ -55,50 +58,56 @@
 }
 
 @keyframes modalPopIn {
-    0% {
-        opacity: 0;
-        transform: scale(0.9) translateY(30px);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-    }
+    0% { opacity: 0; transform: scale(0.9) translateY(30px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 @keyframes modalPopOut {
-    0% {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-    }
-    100% {
-        opacity: 0;
-        transform: scale(0.9) translateY(30px);
-    }
+    0% { opacity: 1; transform: scale(1) translateY(0); }
+    100% { opacity: 0; transform: scale(0.9) translateY(30px); }
 }
 
 .config-coluna {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
     overflow-y: auto;
-    padding-right: 10px;
-    height: 100%;
+    padding-right: 5px;
+}
+
+.col-folha { grid-area: folha; }
+.col-etiqueta { grid-area: etiqueta; }
+
+.col-preview { 
+    grid-area: preview; 
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.col-botoes {
+    grid-area: botoes;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 5px;
 }
 
 .config-titulo {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     color: var(--primary-color);
     margin: 0;
     border-bottom: 2px dashed var(--header-border);
-    padding-bottom: 10px;
+    padding-bottom: 5px;
     text-align: center; 
     flex-shrink: 0;
 }
 
 .config-grupo {
     background-color: var(--bg-color);
-    padding: 15px;
-    border-radius: 20px;
+    padding: 10px 15px;
+    border-radius: 15px;
     border: 1px solid var(--header-border);
     display: flex; 
     flex-direction: column;
@@ -107,8 +116,8 @@
 }
 
 .config-grupo h4 {
-    margin: 0 0 10px 0;
-    font-size: 1rem;
+    margin: 0 0 8px 0;
+    font-size: 0.95rem;
     color: var(--text-color);
     text-align: center; 
     width: 100%;
@@ -116,7 +125,7 @@
 
 .config-grupo-linha {
     display: flex;
-    gap: 15px;
+    gap: 12px;
     justify-content: center; 
     width: 100%;
 }
@@ -130,24 +139,24 @@
 }
 
 .config-input-box label {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--text-muted);
-    margin-bottom: 5px;
+    margin-bottom: 4px;
     font-weight: 600;
     text-align: center; 
 }
 
 .config-input-box input {
     width: 100%; 
-    padding: 8px 12px;
+    padding: 6px 10px;
     border-radius: 8px;
     border: 1px solid var(--header-border);
     background-color: var(--modal-bg);
     color: var(--text-color);
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: bold;
     outline: none;
-    transition: all 0.3s ease;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
     text-align: center; 
 }
 
@@ -155,6 +164,60 @@
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
+
+.pos-controls-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+    margin-top: 2px;
+}
+
+.dpad-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.dpad-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.dpad {
+    display: grid;
+    grid-template-columns: 26px 26px 26px;
+    grid-template-rows: 26px 26px 26px;
+    gap: 3px;
+}
+
+.dpad-btn {
+    border-radius: 6px;
+    border: 1px solid var(--header-border);
+    background: var(--modal-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    transition: background 0.1s, transform 0.1s;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.dpad-btn:active {
+    background: var(--primary-color);
+    color: white;
+    transform: scale(0.9);
+}
+
+.dpad-up { grid-column: 2; grid-row: 1; }
+.dpad-left { grid-column: 1; grid-row: 2; }
+.dpad-right { grid-column: 3; grid-row: 2; }
+.dpad-down { grid-column: 2; grid-row: 3; }
 
 @keyframes pulse-error-cfg {
     0% { border-color: var(--header-border); background-color: var(--modal-bg); box-shadow: none; }
@@ -168,8 +231,8 @@
 
 .preview-container {
     background-color: var(--bg-color);
-    padding: 20px;
-    border-radius: 20px;
+    padding: 15px;
+    border-radius: 15px;
     border: 1px solid var(--header-border);
     flex-grow: 1;
     display: flex;
@@ -203,12 +266,28 @@
     background-color: rgba(37, 99, 235, 0.1);
 }
 
-.preview-label-wrapper {
-    width: 100%;
+.preview-label-box {
+    background-color: var(--bg-color);
+    border-radius: 15px;
+    border: 1px solid var(--header-border);
+    padding: 10px;
     display: flex;
     justify-content: center;
-    margin-top: 5px;
-    padding: 10px;
+    align-items: center;
+    height: 200px;
+    min-height: 200px;
+    flex-shrink: 0;
+}
+
+.preview-label-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    padding: 0;
+    position: relative;
 }
 
 #previewLabel {
@@ -216,45 +295,62 @@
     border: 1px solid #cbd5e0;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     position: relative;
-    transition: all 0.3s ease;
     overflow: hidden;
 }
 
-#prevName {
+#prevPaddingBox {
     position: absolute;
-    color: #000;
+    border: 2px dashed rgba(160, 174, 192, 0.8);
+    pointer-events: none;
+    z-index: 1;
+}
+
+#prevName, #prevDob, #prevType {
+    position: absolute;
     font-family: helvetica, arial, sans-serif;
+    z-index: 2;
+}
+
+#prevName {
+    color: #000;
     font-weight: bold;
     line-height: 1.2;
+    border: 1px dashed rgba(37, 99, 235, 0.8);
+    overflow: hidden;
+    word-wrap: break-word;
 }
 
 #prevDob {
-    position: absolute;
     color: #505050;
-    font-family: helvetica, arial, sans-serif;
+    line-height: 1;
+    border: 1px dashed rgba(37, 99, 235, 0.8);
+    white-space: nowrap;
 }
 
 #prevType {
-    position: absolute;
     color: #e11d48;
-    font-family: helvetica, arial, sans-serif;
     font-weight: bold;
-    transform: rotate(90deg);
-    transform-origin: right bottom;
-    right: 0;
-    bottom: 0;
+    line-height: 1;
+    border: 1px dashed rgba(225, 29, 72, 0.8);
+    white-space: nowrap;
+}
+
+.separador-botoes-config {
+    border: none;
+    border-top: 1px dashed var(--header-border);
+    width: 100%;
+    margin: 5px 0 15px 0;
 }
 
 .config-botoes {
     display: flex;
-    gap: 15px;
-    margin-top: 20px;
+    gap: 25px;
     width: 100%;
-    flex-shrink: 0;
+    max-width: 600px;
 }
 
 .btn-cancelar-cfg, .btn-salvar-cfg {
-    padding: 14px;
+    padding: 10px 20px;
     border-radius: 50px;
     font-size: 1.1rem;
     font-weight: bold;
@@ -287,10 +383,16 @@
 @media (max-width: 992px) {
     .config-modal {
         grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        grid-template-areas: 
+            "folha"
+            "etiqueta"
+            "preview"
+            "botoes";
         height: auto;
         max-height: 95vh;
     }
     .preview-container {
-        min-height: 400px;
+        min-height: 350px;
     }
 }

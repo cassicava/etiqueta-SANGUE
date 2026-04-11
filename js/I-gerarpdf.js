@@ -40,6 +40,7 @@ window.gerarEtiquetasPDF = function() {
     });
 
     const labelsPorPagina = cfg.cols * cfg.rows;
+    const pt2mm = 0.3527;
 
     etiquetas.forEach((etiq, index) => {
         const itemPage = index % labelsPorPagina;
@@ -54,27 +55,30 @@ window.gerarEtiquetasPDF = function() {
         const x = cfg.marginLeft + col * (cfg.labelWidth + cfg.gapX);
         const y = cfg.marginTop + row * (cfg.labelHeight + cfg.gapY);
 
+        const fnNameMm = cfg.fontName * pt2mm;
+        const fnDobMm = cfg.fontDob * pt2mm;
+        const fnTypeMm = cfg.fontType * pt2mm;
+
         doc.setFontSize(cfg.fontName);
         doc.setFont("helvetica", "bold");
         doc.setTextColor(0, 0, 0);
 
-        let linhasNome = doc.splitTextToSize(etiq.paciente, cfg.labelWidth - cfg.labelMarginLeft - cfg.labelMarginRight - 8);
+        let linhasNome = doc.splitTextToSize(etiq.paciente, cfg.labelWidth - cfg.padRight - cfg.posNameX);
         if (linhasNome.length > 2) linhasNome = linhasNome.slice(0, 2);
 
         linhasNome.forEach((linha, i) => {
-            const ajusteLinhaY = cfg.fontName * 0.35;
-            doc.text(linha, x + cfg.labelMarginLeft, y + cfg.labelMarginTop + ajusteLinhaY + (i * ajusteLinhaY * 1.2));
+            doc.text(linha, x + cfg.posNameX, y + cfg.posNameY + (i * fnNameMm), { baseline: 'top' });
         });
 
         doc.setFontSize(cfg.fontDob);
         doc.setFont("helvetica", "normal");
         doc.setTextColor(80, 80, 80);
-        doc.text(etiq.nascimento, x + cfg.labelMarginLeft, y + cfg.labelHeight - cfg.labelMarginBottom);
+        doc.text(etiq.nascimento, x + cfg.posDobX, y + cfg.posDobY, { baseline: 'top' });
 
         doc.setFontSize(cfg.fontType);
         doc.setFont("helvetica", "bold");
         doc.setTextColor(etiq.tuboCor[0], etiq.tuboCor[1], etiq.tuboCor[2]);
-        doc.text(etiq.tuboNome, x + cfg.labelWidth - cfg.labelMarginRight - 1.5, y + cfg.labelHeight - cfg.labelMarginBottom, { angle: 90 });
+        doc.text(etiq.tuboNome, x + cfg.posTypeX, y + cfg.posTypeY, { baseline: 'top' });
     });
 
     window.open(URL.createObjectURL(doc.output("blob")));

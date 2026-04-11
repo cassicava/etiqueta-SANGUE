@@ -11,28 +11,38 @@ const inputsCfg = {
     marginRight: document.getElementById('cfgMarginRight'),
     labelWidth: document.getElementById('cfgLabelWidth'),
     labelHeight: document.getElementById('cfgLabelHeight'),
-    labelMarginTop: document.getElementById('cfgLabelMarginTop'),
-    labelMarginBottom: document.getElementById('cfgLabelMarginBottom'),
-    labelMarginLeft: document.getElementById('cfgLabelMarginLeft'),
-    labelMarginRight: document.getElementById('cfgLabelMarginRight'),
+    padTop: document.getElementById('cfgPadTop'),
+    padBottom: document.getElementById('cfgPadBottom'),
+    padLeft: document.getElementById('cfgPadLeft'),
+    padRight: document.getElementById('cfgPadRight'),
     fontName: document.getElementById('cfgFontName'),
     fontDob: document.getElementById('cfgFontDob'),
-    fontType: document.getElementById('cfgFontType')
+    fontType: document.getElementById('cfgFontType'),
+    posNameX: document.getElementById('cfgPosNameX'),
+    posNameY: document.getElementById('cfgPosNameY'),
+    posDobX: document.getElementById('cfgPosDobX'),
+    posDobY: document.getElementById('cfgPosDobY'),
+    posTypeX: document.getElementById('cfgPosTypeX'),
+    posTypeY: document.getElementById('cfgPosTypeY')
 };
 
 const camposConversao = [
     'pageWidth', 'pageHeight', 'gapX', 'gapY',
     'marginTop', 'marginBottom', 'marginLeft', 'marginRight',
     'labelWidth', 'labelHeight', 
-    'labelMarginTop', 'labelMarginBottom', 'labelMarginLeft', 'labelMarginRight'
+    'padTop', 'padBottom', 'padLeft', 'padRight',
+    'posNameX', 'posNameY', 'posDobX', 'posDobY', 'posTypeX', 'posTypeY'
 ];
 
 const previewPage = document.getElementById('previewPage');
 const previewLabel = document.getElementById('previewLabel');
 const previewPageWrapper = document.getElementById('previewPageWrapper');
+const prevPaddingBox = document.getElementById('prevPaddingBox');
 const pName = document.getElementById('prevName');
 const pDob = document.getElementById('prevDob');
 const pType = document.getElementById('prevType');
+
+let moveInterval = null;
 
 function carregarConfiguracoes() {
     const saved = localStorage.getItem('sangue_config_impressao');
@@ -40,6 +50,13 @@ function carregarConfiguracoes() {
         try {
             configImpresso = { ...configImpresso, ...JSON.parse(saved) };
         } catch(e) {}
+    }
+
+    if (configImpresso.padTop < 1) {
+        configImpresso.padTop *= 10;
+        configImpresso.padBottom *= 10;
+        configImpresso.padLeft *= 10;
+        configImpresso.padRight *= 10;
     }
 
     for (let key in inputsCfg) {
@@ -51,7 +68,55 @@ function carregarConfiguracoes() {
             }
         }
     }
+    garantirLimites();
     atualizarPreview();
+}
+
+function garantirLimites() {
+    let maxW = (parseFloat(inputsCfg.labelWidth.value) || 0) * 10;
+    let maxH = (parseFloat(inputsCfg.labelHeight.value) || 0) * 10;
+    let pT = (parseFloat(inputsCfg.padTop.value) || 0) * 10;
+    let pB = (parseFloat(inputsCfg.padBottom.value) || 0) * 10;
+    let pL = (parseFloat(inputsCfg.padLeft.value) || 0) * 10;
+    let pR = (parseFloat(inputsCfg.padRight.value) || 0) * 10;
+
+    const pt2mm = 0.3527;
+    let fName = (parseFloat(inputsCfg.fontName.value) || 10) * pt2mm;
+    let fDob = (parseFloat(inputsCfg.fontDob.value) || 10) * pt2mm;
+    let fType = (parseFloat(inputsCfg.fontType.value) || 10) * pt2mm;
+
+    let nameX = (parseFloat(inputsCfg.posNameX.value) || 0) * 10;
+    let nameY = (parseFloat(inputsCfg.posNameY.value) || 0) * 10;
+    if (nameX > maxW - pR - 10) nameX = maxW - pR - 10;
+    if (nameX < pL) nameX = pL;
+    if (nameY > maxH - pB - (fName * 2.0)) nameY = maxH - pB - (fName * 2.0);
+    if (nameY < pT) nameY = pT;
+    inputsCfg.posNameX.value = (nameX / 10).toFixed(1);
+    inputsCfg.posNameY.value = (nameY / 10).toFixed(1);
+    configImpresso.posNameX = nameX;
+    configImpresso.posNameY = nameY;
+
+    let dobX = (parseFloat(inputsCfg.posDobX.value) || 0) * 10;
+    let dobY = (parseFloat(inputsCfg.posDobY.value) || 0) * 10;
+    if (dobX > maxW - pR - (fDob * 5.5)) dobX = maxW - pR - (fDob * 5.5);
+    if (dobX < pL) dobX = pL;
+    if (dobY > maxH - pB - fDob) dobY = maxH - pB - fDob;
+    if (dobY < pT) dobY = pT;
+    inputsCfg.posDobX.value = (dobX / 10).toFixed(1);
+    inputsCfg.posDobY.value = (dobY / 10).toFixed(1);
+    configImpresso.posDobX = dobX;
+    configImpresso.posDobY = dobY;
+
+    let typeX = (parseFloat(inputsCfg.posTypeX.value) || 0) * 10;
+    let typeY = (parseFloat(inputsCfg.posTypeY.value) || 0) * 10;
+    if (typeX > maxW - pR - (fType * 5.5)) typeX = maxW - pR - (fType * 5.5);
+    if (typeX < pL) typeX = pL;
+    if (typeY > maxH - pB - fType) typeY = maxH - pB - fType;
+    if (typeY < pT) typeY = pT;
+    inputsCfg.posTypeX.value = (typeX / 10).toFixed(1);
+    inputsCfg.posTypeY.value = (typeY / 10).toFixed(1);
+    configImpresso.posTypeX = typeX;
+    configImpresso.posTypeY = typeY;
 }
 
 function atualizarPreview() {
@@ -87,24 +152,41 @@ function atualizarPreview() {
         }
     });
 
-    const scaleLabel = 3.5; 
+    const previewBox = document.querySelector('.preview-label-box');
+    const maxW = previewBox.clientWidth - 20;
+    const maxH = previewBox.clientHeight - 20;
+    
+    let scaleLabel = Math.min(maxW / cfgUser.labelWidth, maxH / cfgUser.labelHeight);
+    
+    if (isNaN(scaleLabel) || scaleLabel <= 0 || !isFinite(scaleLabel)) scaleLabel = 3;
+
     previewLabel.style.width = `${cfgUser.labelWidth * scaleLabel}px`;
     previewLabel.style.height = `${cfgUser.labelHeight * scaleLabel}px`;
     
-    const fontScale = 1.35; 
+    if (prevPaddingBox) {
+        prevPaddingBox.style.top = `${cfgUser.padTop * scaleLabel}px`;
+        prevPaddingBox.style.left = `${cfgUser.padLeft * scaleLabel}px`;
+        prevPaddingBox.style.width = `${(cfgUser.labelWidth - cfgUser.padLeft - cfgUser.padRight) * scaleLabel}px`;
+        prevPaddingBox.style.height = `${(cfgUser.labelHeight - cfgUser.padTop - cfgUser.padBottom) * scaleLabel}px`;
+    }
+
+    const fontScale = scaleLabel * 0.35; 
     
     pName.style.fontSize = `${cfgUser.fontName * fontScale}px`;
-    pName.style.top = `${cfgUser.labelMarginTop * scaleLabel}px`;
-    pName.style.left = `${cfgUser.labelMarginLeft * scaleLabel}px`;
-    pName.style.width = `${(cfgUser.labelWidth - cfgUser.labelMarginLeft - cfgUser.labelMarginRight) * scaleLabel - 30}px`;
+    pName.style.top = `${cfgUser.posNameY * scaleLabel}px`;
+    pName.style.left = `${cfgUser.posNameX * scaleLabel}px`;
+    pName.style.width = `${(cfgUser.labelWidth - cfgUser.padRight - cfgUser.posNameX) * scaleLabel}px`;
+    pName.style.padding = '0';
 
     pDob.style.fontSize = `${cfgUser.fontDob * fontScale}px`;
-    pDob.style.bottom = `${cfgUser.labelMarginBottom * scaleLabel}px`;
-    pDob.style.left = `${cfgUser.labelMarginLeft * scaleLabel}px`;
+    pDob.style.top = `${cfgUser.posDobY * scaleLabel}px`;
+    pDob.style.left = `${cfgUser.posDobX * scaleLabel}px`;
+    pDob.style.padding = '0';
 
     pType.style.fontSize = `${cfgUser.fontType * fontScale}px`;
-    pType.style.bottom = `${cfgUser.labelMarginBottom * scaleLabel}px`;
-    pType.style.right = `${cfgUser.labelMarginRight * scaleLabel}px`;
+    pType.style.left = `${cfgUser.posTypeX * scaleLabel}px`;
+    pType.style.top = `${cfgUser.posTypeY * scaleLabel}px`;
+    pType.style.padding = '0';
 
     const wrapperHeight = previewPageWrapper.offsetHeight - 20; 
     let pageScale = wrapperHeight / cfgUser.pageHeight;
@@ -138,10 +220,97 @@ for (let key in inputsCfg) {
     if (inputsCfg[key]) {
         inputsCfg[key].addEventListener('input', (e) => {
             if (parseFloat(e.target.value) < 0) e.target.value = 0;
+            
+            const trigerKeys = ['labelWidth', 'labelHeight', 'padTop', 'padBottom', 'padLeft', 'padRight', 'fontName', 'fontDob', 'fontType'];
+            if (trigerKeys.includes(key)) {
+                garantirLimites();
+            }
+            
             atualizarPreview();
         });
     }
 }
+
+function processarMovimento(target, axis, dir) {
+    const key = `pos${target}${axis}`;
+    let currentVal = (parseFloat(inputsCfg[key].value) || 0) * 10;
+    currentVal += (dir * 1);
+    
+    const pt2mm = 0.3527;
+    const fontSize = parseFloat(inputsCfg[`font${target}`].value) || 10;
+    const fontMm = fontSize * pt2mm;
+
+    const maxW = (parseFloat(inputsCfg.labelWidth.value) || 0) * 10;
+    const maxH = (parseFloat(inputsCfg.labelHeight.value) || 0) * 10;
+    
+    const pT = (parseFloat(inputsCfg.padTop.value) || 0) * 10;
+    const pB = (parseFloat(inputsCfg.padBottom.value) || 0) * 10;
+    const pL = (parseFloat(inputsCfg.padLeft.value) || 0) * 10;
+    const pR = (parseFloat(inputsCfg.padRight.value) || 0) * 10;
+
+    if (target === 'Name') {
+        if (axis === 'X') {
+            if (currentVal < pL) currentVal = pL;
+            if (currentVal > maxW - pR - 10) currentVal = maxW - pR - 10;
+        } else {
+            if (currentVal < pT) currentVal = pT;
+            if (currentVal > maxH - pB - (fontMm * 2.0)) currentVal = maxH - pB - (fontMm * 2.0);
+        }
+    } else if (target === 'Dob') {
+        if (axis === 'X') {
+            if (currentVal < pL) currentVal = pL;
+            if (currentVal > maxW - pR - (fontMm * 5.5)) currentVal = maxW - pR - (fontMm * 5.5);
+        } else {
+            if (currentVal < pT) currentVal = pT;
+            if (currentVal > maxH - pB - fontMm) currentVal = maxH - pB - fontMm;
+        }
+    } else if (target === 'Type') {
+        if (axis === 'X') {
+            const textLengthMm = fontMm * 6.5;
+            if (currentVal < pL) currentVal = pL;
+            if (currentVal > maxW - pR - textLengthMm) currentVal = maxW - pR - textLengthMm;
+        } else {
+            if (currentVal < pT) currentVal = pT;
+            if (currentVal > maxH - pB - fontMm) currentVal = maxH - pB - fontMm;
+        }
+    }
+
+    configImpresso[key] = currentVal;
+    inputsCfg[key].value = (currentVal / 10).toFixed(1);
+    atualizarPreview();
+}
+
+function iniciarMovimento(e) {
+    e.preventDefault();
+    if (moveInterval) clearInterval(moveInterval);
+    
+    const target = e.target.getAttribute('data-target');
+    const axis = e.target.getAttribute('data-axis');
+    const dir = parseInt(e.target.getAttribute('data-dir'));
+    
+    processarMovimento(target, axis, dir);
+    
+    moveInterval = setInterval(() => {
+        processarMovimento(target, axis, dir);
+    }, 50);
+}
+
+function pararMovimento() {
+    if (moveInterval) {
+        clearInterval(moveInterval);
+        moveInterval = null;
+    }
+}
+
+document.querySelectorAll('.dpad-btn').forEach(btn => {
+    btn.addEventListener('mousedown', iniciarMovimento);
+    btn.addEventListener('touchstart', iniciarMovimento, { passive: false });
+    
+    btn.addEventListener('mouseup', pararMovimento);
+    btn.addEventListener('mouseleave', pararMovimento);
+    btn.addEventListener('touchend', pararMovimento);
+    btn.addEventListener('touchcancel', pararMovimento);
+});
 
 if (btnConfigPrint) {
     btnConfigPrint.addEventListener('click', () => {
