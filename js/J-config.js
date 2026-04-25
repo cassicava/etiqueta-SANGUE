@@ -82,8 +82,6 @@ function garantirLimites() {
 
     const pt2mm = 0.3527;
     let fName = (parseFloat(inputsCfg.fontName.value) || 10) * pt2mm;
-    let fDob = (parseFloat(inputsCfg.fontDob.value) || 10) * pt2mm;
-    let fType = (parseFloat(inputsCfg.fontType.value) || 10) * pt2mm;
 
     let nameX = (parseFloat(inputsCfg.posNameX.value) || 0) * 10;
     let nameY = (parseFloat(inputsCfg.posNameY.value) || 0) * 10;
@@ -98,10 +96,6 @@ function garantirLimites() {
 
     let dobX = (parseFloat(inputsCfg.posDobX.value) || 0) * 10;
     let dobY = (parseFloat(inputsCfg.posDobY.value) || 0) * 10;
-    if (dobX > maxW - pR - (fDob * 5.5)) dobX = maxW - pR - (fDob * 5.5);
-    if (dobX < pL) dobX = pL;
-    if (dobY > maxH - pB - fDob) dobY = maxH - pB - fDob;
-    if (dobY < pT) dobY = pT;
     inputsCfg.posDobX.value = (dobX / 10).toFixed(1);
     inputsCfg.posDobY.value = (dobY / 10).toFixed(1);
     configImpresso.posDobX = dobX;
@@ -109,10 +103,6 @@ function garantirLimites() {
 
     let typeX = (parseFloat(inputsCfg.posTypeX.value) || 0) * 10;
     let typeY = (parseFloat(inputsCfg.posTypeY.value) || 0) * 10;
-    if (typeX > maxW - pR - (fType * 5.5)) typeX = maxW - pR - (fType * 5.5);
-    if (typeX < pL) typeX = pL;
-    if (typeY > maxH - pB - fType) typeY = maxH - pB - fType;
-    if (typeY < pT) typeY = pT;
     inputsCfg.posTypeX.value = (typeX / 10).toFixed(1);
     inputsCfg.posTypeY.value = (typeY / 10).toFixed(1);
     configImpresso.posTypeX = typeX;
@@ -139,16 +129,18 @@ function atualizarPreview() {
     const heightInputs = [inputsCfg.pageHeight, inputsCfg.rows, inputsCfg.labelHeight, inputsCfg.gapY, inputsCfg.marginTop, inputsCfg.marginBottom];
 
     widthInputs.forEach(input => {
-        if (input) {
-            if (widthOverflow) input.classList.add('input-error-pulse');
-            else input.classList.remove('input-error-pulse');
+        if (input && typeof input.closest === 'function') {
+            const control = input.closest('.number-control');
+            if (widthOverflow) (control || input).classList.add('input-error-pulse');
+            else (control || input).classList.remove('input-error-pulse');
         }
     });
 
     heightInputs.forEach(input => {
-        if (input) {
-            if (heightOverflow) input.classList.add('input-error-pulse');
-            else input.classList.remove('input-error-pulse');
+        if (input && typeof input.closest === 'function') {
+            const control = input.closest('.number-control');
+            if (heightOverflow) (control || input).classList.add('input-error-pulse');
+            else (control || input).classList.remove('input-error-pulse');
         }
     });
 
@@ -157,7 +149,6 @@ function atualizarPreview() {
     const maxH = previewBox.clientHeight - 20;
     
     let scaleLabel = Math.min(maxW / cfgUser.labelWidth, maxH / cfgUser.labelHeight);
-    
     if (isNaN(scaleLabel) || scaleLabel <= 0 || !isFinite(scaleLabel)) scaleLabel = 3;
 
     previewLabel.style.width = `${cfgUser.labelWidth * scaleLabel}px`;
@@ -176,17 +167,14 @@ function atualizarPreview() {
     pName.style.top = `${cfgUser.posNameY * scaleLabel}px`;
     pName.style.left = `${cfgUser.posNameX * scaleLabel}px`;
     pName.style.width = `${(cfgUser.labelWidth - cfgUser.padRight - cfgUser.posNameX) * scaleLabel}px`;
-    pName.style.padding = '0';
 
     pDob.style.fontSize = `${cfgUser.fontDob * fontScale}px`;
     pDob.style.top = `${cfgUser.posDobY * scaleLabel}px`;
     pDob.style.left = `${cfgUser.posDobX * scaleLabel}px`;
-    pDob.style.padding = '0';
 
     pType.style.fontSize = `${cfgUser.fontType * fontScale}px`;
     pType.style.left = `${cfgUser.posTypeX * scaleLabel}px`;
     pType.style.top = `${cfgUser.posTypeY * scaleLabel}px`;
-    pType.style.padding = '0';
 
     const wrapperHeight = previewPageWrapper.offsetHeight - 20; 
     let pageScale = wrapperHeight / cfgUser.pageHeight;
@@ -216,16 +204,33 @@ function atualizarPreview() {
     }
 }
 
+document.querySelectorAll('.number-control').forEach(control => {
+    const input = control.querySelector('input');
+    const btnDec = control.querySelector('.dec');
+    const btnInc = control.querySelector('.inc');
+
+    const updateValue = (delta) => {
+        let val = parseFloat(input.value) || 0;
+        let step = parseFloat(input.getAttribute('step')) || 1;
+        let min = parseFloat(input.getAttribute('min'));
+        
+        let newVal = val + (delta * step);
+        if (!isNaN(min) && newVal < min) newVal = min;
+        
+        input.value = newVal.toFixed(step < 1 ? 1 : 0);
+        input.dispatchEvent(new Event('input'));
+    };
+
+    btnDec.addEventListener('click', () => updateValue(-1));
+    btnInc.addEventListener('click', () => updateValue(1));
+});
+
 for (let key in inputsCfg) {
     if (inputsCfg[key]) {
         inputsCfg[key].addEventListener('input', (e) => {
             if (parseFloat(e.target.value) < 0) e.target.value = 0;
-            
             const trigerKeys = ['labelWidth', 'labelHeight', 'padTop', 'padBottom', 'padLeft', 'padRight', 'fontName', 'fontDob', 'fontType'];
-            if (trigerKeys.includes(key)) {
-                garantirLimites();
-            }
-            
+            if (trigerKeys.includes(key)) garantirLimites();
             atualizarPreview();
         });
     }
@@ -236,45 +241,6 @@ function processarMovimento(target, axis, dir) {
     let currentVal = (parseFloat(inputsCfg[key].value) || 0) * 10;
     currentVal += (dir * 1);
     
-    const pt2mm = 0.3527;
-    const fontSize = parseFloat(inputsCfg[`font${target}`].value) || 10;
-    const fontMm = fontSize * pt2mm;
-
-    const maxW = (parseFloat(inputsCfg.labelWidth.value) || 0) * 10;
-    const maxH = (parseFloat(inputsCfg.labelHeight.value) || 0) * 10;
-    
-    const pT = (parseFloat(inputsCfg.padTop.value) || 0) * 10;
-    const pB = (parseFloat(inputsCfg.padBottom.value) || 0) * 10;
-    const pL = (parseFloat(inputsCfg.padLeft.value) || 0) * 10;
-    const pR = (parseFloat(inputsCfg.padRight.value) || 0) * 10;
-
-    if (target === 'Name') {
-        if (axis === 'X') {
-            if (currentVal < pL) currentVal = pL;
-            if (currentVal > maxW - pR - 10) currentVal = maxW - pR - 10;
-        } else {
-            if (currentVal < pT) currentVal = pT;
-            if (currentVal > maxH - pB - (fontMm * 2.0)) currentVal = maxH - pB - (fontMm * 2.0);
-        }
-    } else if (target === 'Dob') {
-        if (axis === 'X') {
-            if (currentVal < pL) currentVal = pL;
-            if (currentVal > maxW - pR - (fontMm * 5.5)) currentVal = maxW - pR - (fontMm * 5.5);
-        } else {
-            if (currentVal < pT) currentVal = pT;
-            if (currentVal > maxH - pB - fontMm) currentVal = maxH - pB - fontMm;
-        }
-    } else if (target === 'Type') {
-        if (axis === 'X') {
-            const textLengthMm = fontMm * 6.5;
-            if (currentVal < pL) currentVal = pL;
-            if (currentVal > maxW - pR - textLengthMm) currentVal = maxW - pR - textLengthMm;
-        } else {
-            if (currentVal < pT) currentVal = pT;
-            if (currentVal > maxH - pB - fontMm) currentVal = maxH - pB - fontMm;
-        }
-    }
-
     configImpresso[key] = currentVal;
     inputsCfg[key].value = (currentVal / 10).toFixed(1);
     atualizarPreview();
@@ -283,16 +249,11 @@ function processarMovimento(target, axis, dir) {
 function iniciarMovimento(e) {
     e.preventDefault();
     if (moveInterval) clearInterval(moveInterval);
-    
     const target = e.target.getAttribute('data-target');
     const axis = e.target.getAttribute('data-axis');
     const dir = parseInt(e.target.getAttribute('data-dir'));
-    
     processarMovimento(target, axis, dir);
-    
-    moveInterval = setInterval(() => {
-        processarMovimento(target, axis, dir);
-    }, 50);
+    moveInterval = setInterval(() => processarMovimento(target, axis, dir), 50);
 }
 
 function pararMovimento() {
@@ -305,7 +266,6 @@ function pararMovimento() {
 document.querySelectorAll('.dpad-btn').forEach(btn => {
     btn.addEventListener('mousedown', iniciarMovimento);
     btn.addEventListener('touchstart', iniciarMovimento, { passive: false });
-    
     btn.addEventListener('mouseup', pararMovimento);
     btn.addEventListener('mouseleave', pararMovimento);
     btn.addEventListener('touchend', pararMovimento);
@@ -343,9 +303,7 @@ document.getElementById('btnSalvarConfig').addEventListener('click', () => {
 });
 
 window.addEventListener('resize', () => {
-    if (!configPrintOverlay.classList.contains('app-hidden')) {
-        atualizarPreview();
-    }
+    if (!configPrintOverlay.classList.contains('app-hidden')) atualizarPreview();
 });
 
 carregarConfiguracoes();

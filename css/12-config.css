@@ -30,9 +30,9 @@
         "folha etiqueta preview"
         "botoes botoes preview";
     gap: 15px 30px;
-    width: 100%;
-    max-width: 1600px; 
-    height: 95vh;
+    width: 98vw;
+    max-width: 98vw; 
+    height: 98vh;
     background-color: var(--modal-bg);
     border: 1px solid var(--glass-border);
     border-radius: 30px;
@@ -146,23 +146,60 @@
     text-align: center; 
 }
 
-.config-input-box input {
-    width: 100%; 
-    padding: 6px 10px;
-    border-radius: 8px;
-    border: 1px solid var(--header-border);
+.number-control {
+    display: flex;
+    align-items: center;
     background-color: var(--modal-bg);
+    border: 1px solid var(--header-border);
+    border-radius: 8px;
+    overflow: hidden;
+    width: 100%;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.number-control:focus-within {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.number-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    font-size: 1.2rem;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    flex-shrink: 0;
+    user-select: none;
+}
+
+.number-btn:hover {
+    background-color: var(--glass-hover);
+    color: var(--primary-color);
+}
+
+.number-control input {
+    width: 100%;
+    border: none;
+    background: transparent;
     color: var(--text-color);
     font-size: 0.95rem;
     font-weight: bold;
+    text-align: center;
     outline: none;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    text-align: center; 
+    appearance: textfield;
+    -moz-appearance: textfield;
 }
 
-.config-input-box input:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+.number-control input::-webkit-outer-spin-button,
+.number-control input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 .pos-controls-container {
