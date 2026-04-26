@@ -148,4 +148,18 @@
     termosOverlay.addEventListener('click', (e) => {
         if (e.target === termosOverlay) termosOverlay.classList.remove('open');
     });
+
+    if (btnDicas && dicasOverlay && btnFecharDicas) {
+        btnDicas.addEventListener('click', () => {
+            dicasOverlay.classList.add('open');
+        });
+
+        btnFecharDicas.addEventListener('click', () => {
+            dicasOverlay.classList.remove('open');
+        });
+
+        dicasOverlay.addEventListener('click', (e) => {
+            if (e.target === dicasOverlay) dicasOverlay.classList.remove('open');
+        });
+    }
 })();

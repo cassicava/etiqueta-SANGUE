@@ -1,7 +1,7 @@
 .icon-btn {
     background: transparent;
     border: none;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     outline: none;
@@ -29,6 +29,7 @@
     transform: translateY(20px);
     transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     flex-grow: 1;
+    box-sizing: border-box;
 }
 
 .separador-painel {
@@ -143,6 +144,8 @@
     gap: 15px;
     margin-top: auto;
     align-items: center;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .btn-enviar {
@@ -156,6 +159,11 @@
     flex-grow: 1;
     cursor: pointer;
     transition: all 0.3s ease;
+    text-align: center;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .btn-enviar:hover {
@@ -193,27 +201,42 @@
 @media (max-width: 992px) {
     .botoes-fixos {
         flex-direction: row;
-        gap: 15px;
+        gap: 10px;
+        margin-top: 10px;
     }
 
     .btn-enviar {
-        width: auto;
-        font-size: 1.1rem;
-        padding: 12px 0;
+        font-size: 1rem;
+        padding: 12px 10px;
     }
 
     .btn-excluir {
-        width: 50px;
-        height: 50px;
+        width: 45px;
+        height: 45px;
+        font-size: 1.2rem;
+    }
+
+    .contadores-individuais {
+        gap: 6px;
     }
 
     .cont-item {
-        padding: 8px 15px;
-        font-size: 1.05rem;
+        padding: 5px 12px;
+        font-size: 1rem;
     }
 
     .contador-total {
-        font-size: 1.5rem;
-        padding-bottom: 10px;
+        font-size: 1.3rem;
+        padding-bottom: 5px;
+        margin: 0;
+    }
+
+    .pacientes-destaque {
+        font-size: 1.4rem;
+        margin: 0;
+    }
+
+    .separador-painel {
+        margin: 3px 0;
     }
 }

@@ -18,6 +18,9 @@ const btnTheme = document.getElementById('btnTheme');
 const btnOrdenar = document.getElementById('btnOrdenar');
 const btnConfigPrint = document.getElementById('btnConfigPrint');
 const configPrintOverlay = document.getElementById('configPrintOverlay');
+const btnDicas = document.getElementById('btnDicas');
+const dicasOverlay = document.getElementById('dicasOverlay');
+const btnFecharDicas = document.getElementById('btnFecharDicas');
 
 let state = {
     dataArquivo: "--/--/----",

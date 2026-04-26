@@ -38,6 +38,7 @@
         <div class="header-actions" id="headerActions">
             <button id="btnTheme" class="icon-btn" title="Alternar Tema">☀️</button>
             <button id="btnTermos" class="icon-btn" title="Termos de Uso">⚖️</button>
+            <button id="btnDicas" class="icon-btn hide-until-login" title="Dicas de Uso">💡</button>
             <button id="btnConfigPrint" class="icon-btn hide-until-login" title="Configurar Impressão">⚙️</button>
             <button id="btnSair" class="icon-btn hide-until-login" title="Sair do Sistema">⏻</button>
         </div>
@@ -155,14 +156,14 @@
                 <div class="termo-text">
                     <hr>
                     <h4>1. Natureza do Software</h4>
-                    <p>O Sangue é uma aplicação que opera exclusivamente rodando no seu computador.</p>
-                    <p>Todos os dados inseridos são lidos em tempo real e descartados quando a aba é fechada ou o arquivo é excluído.</p>
+                    <p>O sistema é uma aplicação ágil que opera exclusivamente de forma local no seu computador. Isso garante maior velocidade e independência de conexões externas contínuas durante o processamento.</p>
+                    <p>Todos os dados inseridos são lidos em tempo real e descartados imediatamente quando a aba é fechada ou o arquivo é excluído da tela.</p>
                     <hr>
                     <h4>2. Responsabilidade do Utilizador</h4>
-                    <p>É da responsabilidade do utilizador garantir que as etiquetas geradas pertencem aos pacientes corretos e que a triagem respeita os padrões exigidos.</p>
+                    <p>É de extrema responsabilidade do utilizador garantir que as etiquetas geradas pertencem aos pacientes corretos. A triagem e a conferência dos tubos devem sempre respeitar os padrões e protocolos exigidos.</p>
                     <hr>
                     <h4>3. Isenção de Garantias</h4>
-                    <p>O Software é fornecido para auxiliar a produtividade. O utilizador deve conferir as informações extraídas do PDF antes da impressão.</p>
+                    <p>O Software é fornecido como uma ferramenta de apoio para maximizar a produtividade diária. O utilizador deve sempre realizar a conferência visual das informações extraídas do documento antes de prosseguir com a impressão.</p>
                 </div>
             </div>
             
@@ -171,14 +172,44 @@
                 <div class="termo-text">
                     <hr>
                     <h4>1. Princípio Fundamental</h4>
-                    <p>O Sangue foi desenvolvido com o princípio de privacidade total:</p>
+                    <p>O sistema foi idealizado e desenvolvido com o princípio inegociável de privacidade e sigilo total dos dados sensíveis:</p>
                     <ul>
-                        <li>Nenhum dado é coletado, armazenado ou transmitido remotamente.</li>
-                        <li>Tudo o que o sistema lê do PDF permanece apenas na memória viva do seu dispositivo.</li>
+                        <li>Nenhum dado é coletado, armazenado em banco de dados ou transmitido remotamente para servidores externos.</li>
+                        <li>Tudo o que o sistema lê do PDF permanece apenas na memória viva e temporária do seu próprio dispositivo.</li>
                     </ul>
                     <hr>
                     <h4>2. Segurança dos Dados</h4>
-                    <p>Como o processamento é 100% local, a segurança das informações médicas depende diretamente da proteção do seu computador.</p>
+                    <p>Como o processamento é 100% local (no seu navegador), a segurança das informações médicas depende diretamente da proteção e das boas práticas de uso do seu computador e rede interna.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="dicasOverlay" class="termos-overlay">
+        <button class="btn-fechar-overlay" id="btnFecharDicas" title="Fechar">✖</button>
+        <div class="termos-cards-wrapper">
+            <div class="termo-card">
+                <h3 class="termo-title">💡 DICAS DE PREENCHIMENTO</h3>
+                <div class="termo-text">
+                    <hr>
+                    <h4>1. Conferência de Dados</h4>
+                    <p>Sempre verifique se os nomes extraídos do PDF correspondem exatamente aos pacientes do dia. Em caso de necessidade, você pode adicionar pacientes manualmente clicando no botão de "Novo Paciente" no final da lista.</p>
+                    <hr>
+                    <h4>2. Medidas Precisas</h4>
+                    <p>Utilize uma régua escolar para medir a sua folha de etiquetas físicas. Insira as medidas exatas em centímetros (cm) nas configurações de impressão (ícone da engrenagem no topo). Lembre-se de medir com extrema precisão os espaçamentos entre uma etiqueta e outra, bem como as margens laterais.</p>
+                </div>
+            </div>
+            
+            <div class="termo-card">
+                <h3 class="termo-title">🖨️ DICAS DE IMPRESSÃO</h3>
+                <div class="termo-text">
+                    <hr>
+                    <h4>1. Escala da Impressão (MUITO IMPORTANTE)</h4>
+                    <p><strong style="color: var(--error-text);">Atenção:</strong> Na tela de impressão do navegador ou do leitor de PDF, certifique-se de que a opção de <strong>Escala</strong> esteja definida rigorosamente como <strong>"Padrão"</strong>, <strong>"Tamanho Real"</strong> ou <strong>"100%"</strong>.</p>
+                    <p>Muitos navegadores aplicam a opção "Ajustar à Área de Impressão" automaticamente, o que encolhe a página criando bordas falsas e faz com que a impressão saia totalmente desalinhada das etiquetas físicas.</p>
+                    <hr>
+                    <h4>2. Qualidade de Impressão</h4>
+                    <p>Nas propriedades da sua impressora, altere a qualidade de impressão para "Alta" ou "Ótima". Isso evita que textos pequenos (como o nome do tubo e a data de nascimento) fiquem borrados ou difíceis de ler, especialmente se estiver usando impressoras mais antigas.</p>
                 </div>
             </div>
         </div>
@@ -186,278 +217,298 @@
 
     <div id="configPrintOverlay" class="config-overlay app-hidden">
         <div class="config-modal">
-            <div class="config-coluna col-folha">
-                <h3 class="config-titulo">📄 Folha</h3>
+            
+            <div class="config-sidebar">
+                <div class="pill-menu">
+                    <div class="pill-indicator" id="pillIndicator"></div>
+                    <button class="pill-btn active" id="tabFolha">Folha</button>
+                    <button class="pill-btn" id="tabEtiqueta">Etiqueta</button>
+                    <button class="pill-btn" id="tabTexto">Texto</button>
+                </div>
                 
-                <div class="config-grupo">
-                    <h4>Tamanho da Folha</h4>
-                    <div class="config-grupo-linha">
-                        <div class="config-input-box">
-                            <label>Largura (cm)</label>
-                            <div class="number-control">
-                                <button class="number-btn dec" tabindex="-1">-</button>
-                                <input type="number" id="cfgPageWidth" step="0.1" min="0">
-                                <button class="number-btn inc" tabindex="-1">+</button>
+                <div class="config-panels-container">
+                    
+                    <div class="config-panel active" id="panelFolha">
+                        <div class="config-grupo">
+                            <h4>Tamanho da Folha</h4>
+                            <div class="config-grupo-linha">
+                                <div class="config-input-box">
+                                    <label>Largura (cm)</label>
+                                    <div class="number-control">
+                                        <button class="number-btn dec" tabindex="-1">-</button>
+                                        <input type="number" id="cfgPageWidth" step="0.1" min="0">
+                                        <button class="number-btn inc" tabindex="-1">+</button>
+                                    </div>
+                                </div>
+                                <div class="config-input-box">
+                                    <label>Altura (cm)</label>
+                                    <div class="number-control">
+                                        <button class="number-btn dec" tabindex="-1">-</button>
+                                        <input type="number" id="cfgPageHeight" step="0.1" min="0">
+                                        <button class="number-btn inc" tabindex="-1">+</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="config-input-box">
-                            <label>Altura (cm)</label>
-                            <div class="number-control">
-                                <button class="number-btn dec" tabindex="-1">-</button>
-                                <input type="number" id="cfgPageHeight" step="0.1" min="0">
-                                <button class="number-btn inc" tabindex="-1">+</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="config-grupo">
-                    <h4>Grade de Etiquetas</h4>
-                    <div class="config-grupo-linha">
-                        <div class="config-input-box">
-                            <label>Colunas</label>
-                            <div class="number-control">
-                                <button class="number-btn dec" tabindex="-1">-</button>
-                                <input type="number" id="cfgCols" step="1" min="1">
-                                <button class="number-btn inc" tabindex="-1">+</button>
+                        <div class="config-grupo">
+                            <h4>Grade de Etiquetas</h4>
+                            <div class="config-grupo-linha">
+                                <div class="config-input-box">
+                                    <label>Colunas</label>
+                                    <div class="number-control">
+                                        <button class="number-btn dec" tabindex="-1">-</button>
+                                        <input type="number" id="cfgCols" step="1" min="1">
+                                        <button class="number-btn inc" tabindex="-1">+</button>
+                                    </div>
+                                </div>
+                                <div class="config-input-box">
+                                    <label>Linhas</label>
+                                    <div class="number-control">
+                                        <button class="number-btn dec" tabindex="-1">-</button>
+                                        <input type="number" id="cfgRows" step="1" min="1">
+                                        <button class="number-btn inc" tabindex="-1">+</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="config-input-box">
-                            <label>Linhas</label>
-                            <div class="number-control">
-                                <button class="number-btn dec" tabindex="-1">-</button>
-                                <input type="number" id="cfgRows" step="1" min="1">
-                                <button class="number-btn inc" tabindex="-1">+</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="config-grupo">
-                    <h4>Espaçamento entre Etiquetas</h4>
-                    <div class="config-grupo-linha">
-                        <div class="config-input-box">
-                            <label>Horizontal (cm)</label>
-                            <div class="number-control">
-                                <button class="number-btn dec" tabindex="-1">-</button>
-                                <input type="number" id="cfgGapX" step="0.1" min="0">
-                                <button class="number-btn inc" tabindex="-1">+</button>
+                        <div class="config-grupo">
+                            <h4>Espaçamento entre Etiquetas</h4>
+                            <div class="config-grupo-linha">
+                                <div class="config-input-box">
+                                    <label>Horizontal (cm)</label>
+                                    <div class="number-control">
+                                        <button class="number-btn dec" tabindex="-1">-</button>
+                                        <input type="number" id="cfgGapX" step="0.1" min="0">
+                                        <button class="number-btn inc" tabindex="-1">+</button>
+                                    </div>
+                                </div>
+                                <div class="config-input-box">
+                                    <label>Vertical (cm)</label>
+                                    <div class="number-control">
+                                        <button class="number-btn dec" tabindex="-1">-</button>
+                                        <input type="number" id="cfgGapY" step="0.1" min="0">
+                                        <button class="number-btn inc" tabindex="-1">+</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="config-input-box">
-                            <label>Vertical (cm)</label>
-                            <div class="number-control">
-                                <button class="number-btn dec" tabindex="-1">-</button>
-                                <input type="number" id="cfgGapY" step="0.1" min="0">
-                                <button class="number-btn inc" tabindex="-1">+</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="config-grupo">
-                    <h4>Margens da Folha</h4>
-                    <div class="config-grupo-linha">
-                        <div class="config-input-box">
-                            <label>Superior (cm)</label>
-                            <div class="number-control">
-                                <button class="number-btn dec" tabindex="-1">-</button>
-                                <input type="number" id="cfgMarginTop" step="0.1" min="0">
-                                <button class="number-btn inc" tabindex="-1">+</button>
+                        <div class="config-grupo">
+                            <h4>Margens da Folha</h4>
+                            <div class="config-grupo-linha">
+                                <div class="config-input-box">
+                                    <label>Superior (cm)</label>
+                                    <div class="number-control">
+                                        <button class="number-btn dec" tabindex="-1">-</button>
+                                        <input type="number" id="cfgMarginTop" step="0.1" min="0">
+                                        <button class="number-btn inc" tabindex="-1">+</button>
+                                    </div>
+                                </div>
+                                <div class="config-input-box">
+                                    <label>Inferior (cm)</label>
+                                    <div class="number-control">
+                                        <button class="number-btn dec" tabindex="-1">-</button>
+                                        <input type="number" id="cfgMarginBottom" step="0.1" min="0">
+                                        <button class="number-btn inc" tabindex="-1">+</button>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="config-input-box">
-                            <label>Inferior (cm)</label>
-                            <div class="number-control">
-                                <button class="number-btn dec" tabindex="-1">-</button>
-                                <input type="number" id="cfgMarginBottom" step="0.1" min="0">
-                                <button class="number-btn inc" tabindex="-1">+</button>
+                            <div class="config-grupo-linha" style="margin-top: 10px;">
+                                <div class="config-input-box">
+                                    <label>Esquerda (cm)</label>
+                                    <div class="number-control">
+                                        <button class="number-btn dec" tabindex="-1">-</button>
+                                        <input type="number" id="cfgMarginLeft" step="0.1" min="0">
+                                        <button class="number-btn inc" tabindex="-1">+</button>
+                                    </div>
+                                </div>
+                                <div class="config-input-box">
+                                    <label>Direita (cm)</label>
+                                    <div class="number-control">
+                                        <button class="number-btn dec" tabindex="-1">-</button>
+                                        <input type="number" id="cfgMarginRight" step="0.1" min="0">
+                                        <button class="number-btn inc" tabindex="-1">+</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="config-grupo-linha" style="margin-top: 10px;">
-                        <div class="config-input-box">
-                            <label>Esquerda (cm)</label>
-                            <div class="number-control">
-                                <button class="number-btn dec" tabindex="-1">-</button>
-                                <input type="number" id="cfgMarginLeft" step="0.1" min="0">
-                                <button class="number-btn inc" tabindex="-1">+</button>
+
+                    
+                    <div class="config-panel panel-right" id="panelEtiqueta">
+                        <div class="config-grupo">
+                            <h4>Tamanho</h4>
+                            <div class="config-grupo-linha">
+                                <div class="config-input-box">
+                                    <label>Largura (cm)</label>
+                                    <div class="number-control">
+                                        <button class="number-btn dec" tabindex="-1">-</button>
+                                        <input type="number" id="cfgLabelWidth" step="0.1" min="0">
+                                        <button class="number-btn inc" tabindex="-1">+</button>
+                                    </div>
+                                </div>
+                                <div class="config-input-box">
+                                    <label>Altura (cm)</label>
+                                    <div class="number-control">
+                                        <button class="number-btn dec" tabindex="-1">-</button>
+                                        <input type="number" id="cfgLabelHeight" step="0.1" min="0">
+                                        <button class="number-btn inc" tabindex="-1">+</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="config-input-box">
-                            <label>Direita (cm)</label>
-                            <div class="number-control">
-                                <button class="number-btn dec" tabindex="-1">-</button>
-                                <input type="number" id="cfgMarginRight" step="0.1" min="0">
-                                <button class="number-btn inc" tabindex="-1">+</button>
+
+                        <div class="config-grupo">
+                            <h4>Margens Internas (Limites) em cm</h4>
+                            <div class="config-grupo-linha">
+                                <div class="config-input-box">
+                                    <label>Superior</label>
+                                    <div class="number-control">
+                                        <button class="number-btn dec" tabindex="-1">-</button>
+                                        <input type="number" id="cfgPadTop" step="0.1" min="0">
+                                        <button class="number-btn inc" tabindex="-1">+</button>
+                                    </div>
+                                </div>
+                                <div class="config-input-box">
+                                    <label>Inferior</label>
+                                    <div class="number-control">
+                                        <button class="number-btn dec" tabindex="-1">-</button>
+                                        <input type="number" id="cfgPadBottom" step="0.1" min="0">
+                                        <button class="number-btn inc" tabindex="-1">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="config-grupo-linha" style="margin-top: 10px;">
+                                <div class="config-input-box">
+                                    <label>Esquerda</label>
+                                    <div class="number-control">
+                                        <button class="number-btn dec" tabindex="-1">-</button>
+                                        <input type="number" id="cfgPadLeft" step="0.1" min="0">
+                                        <button class="number-btn inc" tabindex="-1">+</button>
+                                    </div>
+                                </div>
+                                <div class="config-input-box">
+                                    <label>Direita</label>
+                                    <div class="number-control">
+                                        <button class="number-btn dec" tabindex="-1">-</button>
+                                        <input type="number" id="cfgPadRight" step="0.1" min="0">
+                                        <button class="number-btn inc" tabindex="-1">+</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                    </div>
+
+                    
+                    <div class="config-panel panel-right" id="panelTexto">
+                        
+                        <div class="config-grupo-card">
+                            <span class="card-header-label">Nome</span>
+                            <div class="card-content-layout">
+                                <div class="config-input-box">
+                                    <label>Tam. (pt)</label>
+                                    <div class="number-control">
+                                        <button class="number-btn dec" tabindex="-1">-</button>
+                                        <input type="number" id="cfgFontName" step="0.5" min="0">
+                                        <button class="number-btn inc" tabindex="-1">+</button>
+                                    </div>
+                                </div>
+                                <div class="dpad">
+                                    <button class="dpad-btn dpad-up" data-target="Name" data-axis="Y" data-dir="-1">▲</button>
+                                    <button class="dpad-btn dpad-left" data-target="Name" data-axis="X" data-dir="-1">◀</button>
+                                    <button class="dpad-btn dpad-right" data-target="Name" data-axis="X" data-dir="1">▶</button>
+                                    <button class="dpad-btn dpad-down" data-target="Name" data-axis="Y" data-dir="1">▼</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div class="config-grupo-card">
+                            <span class="card-header-label">Data Nasc.</span>
+                            <div class="card-content-layout">
+                                <div class="config-input-box">
+                                    <label>Tam. (pt)</label>
+                                    <div class="number-control">
+                                        <button class="number-btn dec" tabindex="-1">-</button>
+                                        <input type="number" id="cfgFontDob" step="0.5" min="0">
+                                        <button class="number-btn inc" tabindex="-1">+</button>
+                                    </div>
+                                </div>
+                                <div class="dpad">
+                                    <button class="dpad-btn dpad-up" data-target="Dob" data-axis="Y" data-dir="-1">▲</button>
+                                    <button class="dpad-btn dpad-left" data-target="Dob" data-axis="X" data-dir="-1">◀</button>
+                                    <button class="dpad-btn dpad-right" data-target="Dob" data-axis="X" data-dir="1">▶</button>
+                                    <button class="dpad-btn dpad-down" data-target="Dob" data-axis="Y" data-dir="1">▼</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div class="config-grupo-card">
+                            <span class="card-header-label">Cor/Tubo</span>
+                            <div class="card-content-layout">
+                                <div class="config-input-box">
+                                    <label>Tam. (pt)</label>
+                                    <div class="number-control">
+                                        <button class="number-btn dec" tabindex="-1">-</button>
+                                        <input type="number" id="cfgFontType" step="0.5" min="0">
+                                        <button class="number-btn inc" tabindex="-1">+</button>
+                                    </div>
+                                </div>
+                                <div class="dpad">
+                                    <button class="dpad-btn dpad-up" data-target="Type" data-axis="Y" data-dir="-1">▲</button>
+                                    <button class="dpad-btn dpad-left" data-target="Type" data-axis="X" data-dir="-1">◀</button>
+                                    <button class="dpad-btn dpad-right" data-target="Type" data-axis="X" data-dir="1">▶</button>
+                                    <button class="dpad-btn dpad-down" data-target="Type" data-axis="Y" data-dir="1">▼</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <input type="hidden" id="cfgPosNameX">
+                        <input type="hidden" id="cfgPosNameY">
+                        <input type="hidden" id="cfgPosDobX">
+                        <input type="hidden" id="cfgPosDobY">
+                        <input type="hidden" id="cfgPosTypeX">
+                        <input type="hidden" id="cfgPosTypeY">
+
                     </div>
                 </div>
             </div>
 
-            <div class="config-coluna col-etiqueta">
-                <h3 class="config-titulo">🏷️ Etiqueta</h3>
-                
-                <div class="config-grupo">
-                    <h4>Tamanho</h4>
-                    <div class="config-grupo-linha">
-                        <div class="config-input-box">
-                            <label>Largura (cm)</label>
-                            <div class="number-control">
-                                <button class="number-btn dec" tabindex="-1">-</button>
-                                <input type="number" id="cfgLabelWidth" step="0.1" min="0">
-                                <button class="number-btn inc" tabindex="-1">+</button>
-                            </div>
-                        </div>
-                        <div class="config-input-box">
-                            <label>Altura (cm)</label>
-                            <div class="number-control">
-                                <button class="number-btn dec" tabindex="-1">-</button>
-                                <input type="number" id="cfgLabelHeight" step="0.1" min="0">
-                                <button class="number-btn inc" tabindex="-1">+</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="config-grupo">
-                    <h4>Tamanhos de Fonte (pt)</h4>
-                    <div class="config-grupo-linha">
-                        <div class="config-input-box">
-                            <label>Nome</label>
-                            <div class="number-control">
-                                <button class="number-btn dec" tabindex="-1">-</button>
-                                <input type="number" id="cfgFontName" step="0.5" min="0">
-                                <button class="number-btn inc" tabindex="-1">+</button>
-                            </div>
-                        </div>
-                        <div class="config-input-box">
-                            <label>Nascimento</label>
-                            <div class="number-control">
-                                <button class="number-btn dec" tabindex="-1">-</button>
-                                <input type="number" id="cfgFontDob" step="0.5" min="0">
-                                <button class="number-btn inc" tabindex="-1">+</button>
-                            </div>
-                        </div>
-                        <div class="config-input-box">
-                            <label>Cor/Tubo</label>
-                            <div class="number-control">
-                                <button class="number-btn dec" tabindex="-1">-</button>
-                                <input type="number" id="cfgFontType" step="0.5" min="0">
-                                <button class="number-btn inc" tabindex="-1">+</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="config-grupo">
-                    <h4>Margens Internas (Limites) em cm</h4>
-                    <div class="config-grupo-linha">
-                        <div class="config-input-box">
-                            <label>Superior</label>
-                            <div class="number-control">
-                                <button class="number-btn dec" tabindex="-1">-</button>
-                                <input type="number" id="cfgPadTop" step="0.1" min="0">
-                                <button class="number-btn inc" tabindex="-1">+</button>
-                            </div>
-                        </div>
-                        <div class="config-input-box">
-                            <label>Inferior</label>
-                            <div class="number-control">
-                                <button class="number-btn dec" tabindex="-1">-</button>
-                                <input type="number" id="cfgPadBottom" step="0.1" min="0">
-                                <button class="number-btn inc" tabindex="-1">+</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="config-grupo-linha" style="margin-top: 10px;">
-                        <div class="config-input-box">
-                            <label>Esquerda</label>
-                            <div class="number-control">
-                                <button class="number-btn dec" tabindex="-1">-</button>
-                                <input type="number" id="cfgPadLeft" step="0.1" min="0">
-                                <button class="number-btn inc" tabindex="-1">+</button>
-                            </div>
-                        </div>
-                        <div class="config-input-box">
-                            <label>Direita</label>
-                            <div class="number-control">
-                                <button class="number-btn dec" tabindex="-1">-</button>
-                                <input type="number" id="cfgPadRight" step="0.1" min="0">
-                                <button class="number-btn inc" tabindex="-1">+</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="config-grupo">
-                    <h4>Posicionamento Individual</h4>
-                    <div class="pos-controls-container">
-                        <div class="dpad-wrapper">
-                            <span class="dpad-label">Nome</span>
-                            <div class="dpad">
-                                <button class="dpad-btn dpad-up" data-target="Name" data-axis="Y" data-dir="-1">▲</button>
-                                <button class="dpad-btn dpad-left" data-target="Name" data-axis="X" data-dir="-1">◀</button>
-                                <button class="dpad-btn dpad-right" data-target="Name" data-axis="X" data-dir="1">▶</button>
-                                <button class="dpad-btn dpad-down" data-target="Name" data-axis="Y" data-dir="1">▼</button>
-                            </div>
-                        </div>
-                        <div class="dpad-wrapper">
-                            <span class="dpad-label">Data Nasc.</span>
-                            <div class="dpad">
-                                <button class="dpad-btn dpad-up" data-target="Dob" data-axis="Y" data-dir="-1">▲</button>
-                                <button class="dpad-btn dpad-left" data-target="Dob" data-axis="X" data-dir="-1">◀</button>
-                                <button class="dpad-btn dpad-right" data-target="Dob" data-axis="X" data-dir="1">▶</button>
-                                <button class="dpad-btn dpad-down" data-target="Dob" data-axis="Y" data-dir="1">▼</button>
-                            </div>
-                        </div>
-                        <div class="dpad-wrapper">
-                            <span class="dpad-label">Cor/Tubo</span>
-                            <div class="dpad">
-                                <button class="dpad-btn dpad-up" data-target="Type" data-axis="Y" data-dir="-1">▲</button>
-                                <button class="dpad-btn dpad-left" data-target="Type" data-axis="X" data-dir="-1">◀</button>
-                                <button class="dpad-btn dpad-right" data-target="Type" data-axis="X" data-dir="1">▶</button>
-                                <button class="dpad-btn dpad-down" data-target="Type" data-axis="Y" data-dir="1">▼</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <input type="hidden" id="cfgPosNameX">
-                    <input type="hidden" id="cfgPosNameY">
-                    <input type="hidden" id="cfgPosDobX">
-                    <input type="hidden" id="cfgPosDobY">
-                    <input type="hidden" id="cfgPosTypeX">
-                    <input type="hidden" id="cfgPosTypeY">
-                </div>
-            </div>
-
-            <div class="config-coluna col-preview">
-                <h3 class="config-titulo">👁️ Preview da Folha e Etiqueta</h3>
-                
-                <div class="preview-container">
+            
+            <div class="config-main">
+                <div class="preview-page-col">
                     <div id="previewPageWrapper" class="preview-page-wrapper">
                         <div id="previewPage"></div>
                     </div>
                 </div>
 
-                <div class="preview-label-box">
-                    <div class="preview-label-wrapper">
-                        <div id="previewLabel">
-                            <div id="prevPaddingBox"></div>
-                            <div id="prevName">MARIA APARECIDA SILVA SANTOS</div>
-                            <div id="prevDob">01/01/1990</div>
-                            <div id="prevType">AMARELO</div>
+                <div class="preview-label-col">
+                    <div class="config-dica">
+                        <strong>💡 Dica</strong>
+                        Meça com uma régua os limites reais da sua etiqueta e ajuste aqui os posicionamentos para um encaixe perfeito.
+                    </div>
+                    
+                    <div class="preview-label-box">
+                        <div class="preview-label-wrapper">
+                            <div id="previewLabel">
+                                <div id="prevPaddingBox"></div>
+                                <div id="prevName">MARIA APARECIDA SILVA SANTOS</div>
+                                <div id="prevDob">01/01/1990</div>
+                                <div id="prevType">AMARELO</div>
+                            </div>
                         </div>
+                    </div>
+
+                    <div class="config-botoes-vert">
+                        <button id="btnSalvarConfig" class="btn-salvar-cfg">Salvar Configurações</button>
+                        <button id="btnFecharConfig" class="btn-cancelar-cfg">Cancelar</button>
                     </div>
                 </div>
             </div>
 
-            <div class="col-botoes">
-                <hr class="separador-botoes-config">
-                <div class="config-botoes">
-                    <button id="btnFecharConfig" class="btn-cancelar-cfg">Cancelar</button>
-                    <button id="btnSalvarConfig" class="btn-salvar-cfg">Salvar Configurações</button>
-                </div>
-            </div>
         </div>
     </div>
 

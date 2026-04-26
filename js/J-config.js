@@ -42,7 +42,35 @@ const pName = document.getElementById('prevName');
 const pDob = document.getElementById('prevDob');
 const pType = document.getElementById('prevType');
 
-let moveInterval = null;
+const tabs = [
+    { btn: document.getElementById('tabFolha'), panel: document.getElementById('panelFolha') },
+    { btn: document.getElementById('tabEtiqueta'), panel: document.getElementById('panelEtiqueta') },
+    { btn: document.getElementById('tabTexto'), panel: document.getElementById('panelTexto') }
+];
+const pillIndicator = document.getElementById('pillIndicator');
+
+tabs.forEach((tab, index) => {
+    if (tab.btn) {
+        tab.btn.addEventListener('click', () => {
+            tabs.forEach((t, i) => {
+                if (t.btn) t.btn.classList.remove('active');
+                if (t.panel) {
+                    if (i < index) {
+                        t.panel.className = 'config-panel panel-left';
+                    } else if (i > index) {
+                        t.panel.className = 'config-panel panel-right';
+                    } else {
+                        t.panel.className = 'config-panel active';
+                    }
+                }
+            });
+            tab.btn.classList.add('active');
+            if (pillIndicator) {
+                pillIndicator.style.transform = `translateX(${index * 100}%)`;
+            }
+        });
+    }
+});
 
 function carregarConfiguracoes() {
     const saved = localStorage.getItem('sangue_config_impressao');
@@ -204,6 +232,32 @@ function atualizarPreview() {
     }
 }
 
+function makeHoldable(btn, action) {
+    let timeout;
+    let interval;
+
+    const clearTimers = () => {
+        clearTimeout(timeout);
+        clearInterval(interval);
+    };
+
+    const start = (e) => {
+        if (e.cancelable && e.type === 'touchstart') e.preventDefault();
+        clearTimers();
+        action();
+        timeout = setTimeout(() => {
+            interval = setInterval(action, 150);
+        }, 400);
+    };
+
+    btn.addEventListener('mousedown', start);
+    btn.addEventListener('touchstart', start, { passive: false });
+    window.addEventListener('mouseup', clearTimers); 
+    btn.addEventListener('mouseleave', clearTimers);
+    btn.addEventListener('touchend', clearTimers);
+    btn.addEventListener('touchcancel', clearTimers);
+}
+
 document.querySelectorAll('.number-control').forEach(control => {
     const input = control.querySelector('input');
     const btnDec = control.querySelector('.dec');
@@ -221,8 +275,26 @@ document.querySelectorAll('.number-control').forEach(control => {
         input.dispatchEvent(new Event('input'));
     };
 
-    btnDec.addEventListener('click', () => updateValue(-1));
-    btnInc.addEventListener('click', () => updateValue(1));
+    makeHoldable(btnDec, () => updateValue(-1));
+    makeHoldable(btnInc, () => updateValue(1));
+});
+
+function processarMovimento(target, axis, dir) {
+    const key = `pos${target}${axis}`;
+    let currentVal = (parseFloat(inputsCfg[key].value) || 0) * 10;
+    currentVal += (dir * 1);
+    
+    configImpresso[key] = currentVal;
+    inputsCfg[key].value = (currentVal / 10).toFixed(1);
+    atualizarPreview();
+}
+
+document.querySelectorAll('.dpad-btn').forEach(btn => {
+    const target = btn.getAttribute('data-target');
+    const axis = btn.getAttribute('data-axis');
+    const dir = parseInt(btn.getAttribute('data-dir'));
+    
+    makeHoldable(btn, () => processarMovimento(target, axis, dir));
 });
 
 for (let key in inputsCfg) {
@@ -236,46 +308,15 @@ for (let key in inputsCfg) {
     }
 }
 
-function processarMovimento(target, axis, dir) {
-    const key = `pos${target}${axis}`;
-    let currentVal = (parseFloat(inputsCfg[key].value) || 0) * 10;
-    currentVal += (dir * 1);
-    
-    configImpresso[key] = currentVal;
-    inputsCfg[key].value = (currentVal / 10).toFixed(1);
-    atualizarPreview();
-}
-
-function iniciarMovimento(e) {
-    e.preventDefault();
-    if (moveInterval) clearInterval(moveInterval);
-    const target = e.target.getAttribute('data-target');
-    const axis = e.target.getAttribute('data-axis');
-    const dir = parseInt(e.target.getAttribute('data-dir'));
-    processarMovimento(target, axis, dir);
-    moveInterval = setInterval(() => processarMovimento(target, axis, dir), 50);
-}
-
-function pararMovimento() {
-    if (moveInterval) {
-        clearInterval(moveInterval);
-        moveInterval = null;
-    }
-}
-
-document.querySelectorAll('.dpad-btn').forEach(btn => {
-    btn.addEventListener('mousedown', iniciarMovimento);
-    btn.addEventListener('touchstart', iniciarMovimento, { passive: false });
-    btn.addEventListener('mouseup', pararMovimento);
-    btn.addEventListener('mouseleave', pararMovimento);
-    btn.addEventListener('touchend', pararMovimento);
-    btn.addEventListener('touchcancel', pararMovimento);
-});
-
 if (btnConfigPrint) {
     btnConfigPrint.addEventListener('click', () => {
         carregarConfiguracoes(); 
         configPrintOverlay.classList.remove('app-hidden');
+        
+        if(tabs[0].btn) {
+            tabs[0].btn.click(); 
+        }
+
         setTimeout(atualizarPreview, 50); 
     });
 }
