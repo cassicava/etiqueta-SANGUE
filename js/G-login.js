@@ -36,6 +36,10 @@
         loginWrapper.style.display = 'none';
         appContainer.classList.remove('app-hidden');
 
+        if (typeof iniciarOnboardingSeNecessario === 'function') {
+            iniciarOnboardingSeNecessario();
+        }
+
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 appHeader.style.transition = '';
@@ -96,6 +100,11 @@
                 }, 800);
 
                 appContainer.classList.remove('app-hidden');
+
+                if (typeof iniciarOnboardingSeNecessario === 'function') {
+                    iniciarOnboardingSeNecessario();
+                }
+
             }, 600);
         } else {
             loginCard.classList.remove('login-error');

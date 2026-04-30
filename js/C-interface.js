@@ -22,26 +22,23 @@ window.fecharAlerta = function() {
 };
 
 function atualizarContador() {
-    let tVermelho = 0, tAmarelo = 0, tRoxo = 0, tCinza = 0, tAzul = 0, tFrasco = 0;
+    let totalGeral = 0;
     
-    state.pacientes.forEach(p => {
-        tVermelho += p.vermelho;
-        tAmarelo += p.amarelo;
-        tRoxo += p.roxo;
-        tCinza += p.cinza;
-        tAzul += p.azul;
-        tFrasco += p.frasco;
+    tubosConfig.forEach(t => {
+        let totalTubo = 0;
+        state.pacientes.forEach(p => {
+            totalTubo += p[t.id];
+        });
+        
+        const elTotal = document.getElementById(`total-${t.id}`);
+        if (elTotal) elTotal.innerText = totalTubo;
+        
+        if (tubosAtivos.includes(t.id)) {
+            totalGeral += totalTubo;
+        }
     });
     
-    document.getElementById('total-vermelho').innerText = tVermelho;
-    document.getElementById('total-amarelo').innerText = tAmarelo;
-    document.getElementById('total-roxo').innerText = tRoxo;
-    document.getElementById('total-cinza').innerText = tCinza;
-    document.getElementById('total-azul').innerText = tAzul;
-    document.getElementById('total-frasco').innerText = tFrasco;
-    
-    const total = tVermelho + tAmarelo + tRoxo + tCinza + tAzul + tFrasco;
-    contadorTotal.innerText = `Total: ${total}`;
+    contadorTotal.innerText = `Total: ${totalGeral}`;
 }
 
 window.alterarQuantidade = function(id, tipo, delta) {
@@ -97,6 +94,9 @@ function mostrarInfoArquivo() {
             
             state.pacientes.sort((a, b) => a.nome.localeCompare(b.nome));
             renderizarLista();
+            if(typeof atualizarVisibilidadePainelLateral === 'function') {
+                atualizarVisibilidadePainelLateral();
+            }
             
             painelAcoes.style.opacity = '1';
             painelAcoes.style.transform = 'translateY(0)';
@@ -112,42 +112,27 @@ function mostrarInfoArquivo() {
 }
 
 function gerarHTMLCardPaciente(item) {
+    let seletoresHTML = '';
+    
+    tubosConfig.forEach(t => {
+        if (tubosAtivos.includes(t.id)) {
+            seletoresHTML += `
+                <div class="seletor ${t.id}">
+                    <button onclick="alterarQuantidade(${item.id}, '${t.id}', -1)">-</button>
+                    <span class="valor" id="valor-${t.id}-${item.id}">${item[t.id]}</span>
+                    <button onclick="alterarQuantidade(${item.id}, '${t.id}', 1)">+</button>
+                </div>
+            `;
+        }
+    });
+
     return `
         <div class="card-name" title="${item.nome}">
             <span class="patient-name-text">${item.nome}</span>
             <span class="patient-dob">${item.dataNascimento}</span>
         </div>
         <div class="seletores-container">
-            <div class="seletor vermelho">
-                <button onclick="alterarQuantidade(${item.id}, 'vermelho', -1)">-</button>
-                <span class="valor" id="valor-vermelho-${item.id}">${item.vermelho}</span>
-                <button onclick="alterarQuantidade(${item.id}, 'vermelho', 1)">+</button>
-            </div>
-            <div class="seletor amarelo">
-                <button onclick="alterarQuantidade(${item.id}, 'amarelo', -1)">-</button>
-                <span class="valor" id="valor-amarelo-${item.id}">${item.amarelo}</span>
-                <button onclick="alterarQuantidade(${item.id}, 'amarelo', 1)">+</button>
-            </div>
-            <div class="seletor roxo">
-                <button onclick="alterarQuantidade(${item.id}, 'roxo', -1)">-</button>
-                <span class="valor" id="valor-roxo-${item.id}">${item.roxo}</span>
-                <button onclick="alterarQuantidade(${item.id}, 'roxo', 1)">+</button>
-            </div>
-            <div class="seletor cinza">
-                <button onclick="alterarQuantidade(${item.id}, 'cinza', -1)">-</button>
-                <span class="valor" id="valor-cinza-${item.id}">${item.cinza}</span>
-                <button onclick="alterarQuantidade(${item.id}, 'cinza', 1)">+</button>
-            </div>
-            <div class="seletor azul">
-                <button onclick="alterarQuantidade(${item.id}, 'azul', -1)">-</button>
-                <span class="valor" id="valor-azul-${item.id}">${item.azul}</span>
-                <button onclick="alterarQuantidade(${item.id}, 'azul', 1)">+</button>
-            </div>
-            <div class="seletor frasco">
-                <button onclick="alterarQuantidade(${item.id}, 'frasco', -1)">-</button>
-                <span class="valor" id="valor-frasco-${item.id}">${item.frasco}</span>
-                <button onclick="alterarQuantidade(${item.id}, 'frasco', 1)">+</button>
-            </div>
+            ${seletoresHTML}
         </div>
     `;
 }
@@ -177,18 +162,20 @@ window.addEventListener('resize', calcularPosicaoLetraFixa);
 function renderizarLista() {
     contentArea.innerHTML = '';
     
+    let legendaItemsHTML = '';
+    tubosConfig.forEach(t => {
+        if (tubosAtivos.includes(t.id)) {
+            legendaItemsHTML += `<div class="leg-item">${t.icone} ${t.sigla}</div>`;
+        }
+    });
+
     const headerLegenda = document.createElement('div');
     headerLegenda.className = 'legenda-wrapper';
     headerLegenda.innerHTML = `
         <div class="legenda-fixa">
             <div class="legenda-spacer"></div>
             <div class="seletores-container">
-                <div class="leg-item">🔴 Verm</div>
-                <div class="leg-item">🟡 Amar</div>
-                <div class="leg-item">🟣 Roxo</div>
-                <div class="leg-item">⚪ Cinza</div>
-                <div class="leg-item">🔵 Azul</div>
-                <div class="leg-item">🧪 Frasco</div>
+                ${legendaItemsHTML}
             </div>
         </div>
         <div class="legenda-linha"></div>
@@ -317,7 +304,7 @@ window.salvarNovoPaciente = function() {
     }
 
     const nomeFormatado = typeof formatarNomeDinamico === 'function' ? formatarNomeDinamico(nomeVal) : nomeVal;
-    const dataFormatada = dataVal ? dataVal : ""; // REMOVIDO O | AQUI TAMBÉM
+    const dataFormatada = dataVal ? dataVal : "";
 
     let maxId = 0;
     state.pacientes.forEach(p => { if (p.id > maxId) maxId = p.id; });
@@ -326,14 +313,10 @@ window.salvarNovoPaciente = function() {
     const novoPaciente = {
         id: novoId,
         nome: nomeFormatado,
-        dataNascimento: dataFormatada,
-        vermelho: 0,
-        amarelo: 0,
-        roxo: 0,
-        cinza: 0,
-        azul: 0,
-        frasco: 0
+        dataNascimento: dataFormatada
     };
+
+    tubosConfig.forEach(t => { novoPaciente[t.id] = 0; });
 
     state.pacientes.push(novoPaciente);
 

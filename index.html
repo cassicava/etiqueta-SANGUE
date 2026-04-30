@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="css/10-login.css">
     <link rel="stylesheet" href="css/11-termos.css">
     <link rel="stylesheet" href="css/12-config.css">
+    <link rel="stylesheet" href="css/13-tubos.css">
+    <link rel="stylesheet" href="css/14-onboarding.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -51,7 +53,8 @@
             <button id="btnTheme" class="icon-btn" title="Alternar Tema">☀️</button>
             <button id="btnTermos" class="icon-btn" title="Termos de Uso">⚖️</button>
             <button id="btnDicas" class="icon-btn hide-until-login" title="Dicas de Uso">💡</button>
-            <button id="btnConfigPrint" class="icon-btn hide-until-login" title="Configurar Impressão">⚙️</button>
+            <button id="btnConfigTubos" class="icon-btn hide-until-login" title="Configurar Tubos">🧪</button>
+            <button id="btnConfigPrint" class="icon-btn hide-until-login" title="Configurar Folha">⚙️</button>
             <button id="btnSair" class="icon-btn hide-until-login" title="Sair do Sistema">⏻</button>
         </div>
     </header>
@@ -97,8 +100,8 @@
             <div id="painelAcoes" class="painel-acoes app-hidden">
                 <div id="resumoPacientes" class="pacientes-destaque" style="display: none;">Pacientes: 0</div>
                 
-                <div class="contadores-individuais">
-                    <div class="cont-item tubo-hover" data-tubo="vermelho">
+                <div class="contadores-individuais" id="contadoresIndividuais">
+                    <div class="cont-item tubo-hover" data-tubo="vermelho" id="painel-tubo-vermelho">
                         <div class="cont-nome">🔴 Vermelho:</div>
                         <div class="cont-acoes">
                             <button class="btn-lote" onclick="alterarTodos('vermelho', -1)">-</button>
@@ -107,7 +110,7 @@
                         </div>
                         <strong id="total-vermelho">0</strong>
                     </div>
-                    <div class="cont-item tubo-hover" data-tubo="amarelo">
+                    <div class="cont-item tubo-hover" data-tubo="amarelo" id="painel-tubo-amarelo">
                         <div class="cont-nome">🟡 Amarelo:</div>
                         <div class="cont-acoes">
                             <button class="btn-lote" onclick="alterarTodos('amarelo', -1)">-</button>
@@ -116,7 +119,7 @@
                         </div>
                         <strong id="total-amarelo">0</strong>
                     </div>
-                    <div class="cont-item tubo-hover" data-tubo="roxo">
+                    <div class="cont-item tubo-hover" data-tubo="roxo" id="painel-tubo-roxo">
                         <div class="cont-nome">🟣 Roxo:</div>
                         <div class="cont-acoes">
                             <button class="btn-lote" onclick="alterarTodos('roxo', -1)">-</button>
@@ -125,7 +128,7 @@
                         </div>
                         <strong id="total-roxo">0</strong>
                     </div>
-                    <div class="cont-item tubo-hover" data-tubo="cinza">
+                    <div class="cont-item tubo-hover" data-tubo="cinza" id="painel-tubo-cinza">
                         <div class="cont-nome">⚪ Cinza:</div>
                         <div class="cont-acoes">
                             <button class="btn-lote" onclick="alterarTodos('cinza', -1)">-</button>
@@ -134,7 +137,7 @@
                         </div>
                         <strong id="total-cinza">0</strong>
                     </div>
-                    <div class="cont-item tubo-hover" data-tubo="azul">
+                    <div class="cont-item tubo-hover" data-tubo="azul" id="painel-tubo-azul">
                         <div class="cont-nome">🔵 Azul:</div>
                         <div class="cont-acoes">
                             <button class="btn-lote" onclick="alterarTodos('azul', -1)">-</button>
@@ -143,7 +146,16 @@
                         </div>
                         <strong id="total-azul">0</strong>
                     </div>
-                    <div class="cont-item tubo-hover" data-tubo="frasco">
+                    <div class="cont-item tubo-hover" data-tubo="verde" id="painel-tubo-verde">
+                        <div class="cont-nome">🟢 Verde:</div>
+                        <div class="cont-acoes">
+                            <button class="btn-lote" onclick="alterarTodos('verde', -1)">-</button>
+                            <span>Todos</span>
+                            <button class="btn-lote" onclick="alterarTodos('verde', 1)">+</button>
+                        </div>
+                        <strong id="total-verde">0</strong>
+                    </div>
+                    <div class="cont-item tubo-hover" data-tubo="frasco" id="painel-tubo-frasco">
                         <div class="cont-nome">🧪 Frasco:</div>
                         <div class="cont-acoes">
                             <button class="btn-lote" onclick="alterarTodos('frasco', -1)">-</button>
@@ -208,38 +220,64 @@
         <button class="btn-fechar-overlay" id="btnFecharDicas" title="Fechar">✖</button>
         <div class="termos-cards-wrapper">
             <div class="termo-card">
-                <h3 class="termo-title">💡 DICAS DE PREENCHIMENTO</h3>
+                <h3 class="termo-title">📋 Uso Diário</h3>
                 <div class="termo-text">
                     <hr>
-                    <h4>1. Conferência de Dados</h4>
-                    <p>Sempre verifique se os nomes extraídos do PDF correspondem exatamente aos pacientes do dia. Em caso de necessidade, você pode adicionar pacientes manualmente clicando no botão de "Novo Paciente" no final da lista.</p>
+                    <h4>Conferência</h4>
+                    <p>Confirme se os nomes lidos batem com os agendamentos. Se faltou alguém, use o botão "Novo Paciente".</p>
                     <hr>
-                    <h4>2. Medidas Precisas</h4>
-                    <p>Utilize uma régua escolar para medir a sua folha de etiquetas físicas. Insira as medidas exatas em centímetros (cm) nas configurações de impressão (ícone da engrenagem no topo). Lembre-se de medir com extrema precisão os espaçamentos entre uma etiqueta e outra, bem como as margens laterais.</p>
+                    <h4>Medição Exata</h4>
+                    <p>Use uma régua para medir os espaços da sua folha de etiquetas e insira na Configuração de Impressão (⚙️).</p>
                 </div>
             </div>
             
             <div class="termo-card">
-                <h3 class="termo-title">🖨️ DICAS DE IMPRESSÃO</h3>
+                <h3 class="termo-title">🖨️ Impressão Perfeita</h3>
                 <div class="termo-text">
                     <hr>
-                    <h4>1. Escala da Impressão (MUITO IMPORTANTE)</h4>
-                    <p><strong style="color: var(--error-text);">Atenção:</strong> Na tela de impressão do navegador ou do leitor de PDF, certifique-se de que a opção de <strong>Escala</strong> esteja definida rigorosamente como <strong>"Padrão"</strong>, <strong>"Tamanho Real"</strong> ou <strong>"100%"</strong>.</p>
-                    <p>Muitos navegadores aplicam a opção "Ajustar à Área de Impressão" automaticamente, o que encolhe a página criando bordas falsas e faz com que a impressão saia totalmente desalinhada das etiquetas físicas.</p>
+                    <h4>Escala 100% (CRÍTICO)</h4>
+                    <p>Na hora de imprimir, a "Escala" do PDF <strong>deve</strong> estar em "Padrão" ou "100%". Nunca use "Ajustar à página", ou as etiquetas sairão desalinhadas.</p>
                     <hr>
-                    <h4>2. Qualidade de Impressão</h4>
-                    <p>Nas propriedades da sua impressora, altere a qualidade de impressão para "Alta" ou "Ótima". Isso evita que textos pequenos (como o nome do tubo e a data de nascimento) fiquem borrados ou difíceis de ler, especialmente se estiver usando impressoras mais antigas.</p>
+                    <h4>Qualidade</h4>
+                    <p>Mude as propriedades da impressora para qualidade "Alta" para garantir a leitura nítida das datas e nomes.</p>
                 </div>
             </div>
 
             <div class="termo-card">
-                <h3 class="termo-title">📱 USO EM TELAS PEQUENAS</h3>
+                <h3 class="termo-title">🖥️ Telas e Monitores</h3>
                 <div class="termo-text">
                     <hr>
-                    <h4>Possíveis Instabilidades Visuais</h4>
-                    <p>Este sistema foi criado e otimizado para uso em computadores com telas maiores. Em monitores muito pequenos ou ao reduzir drasticamente o tamanho da janela do navegador, você pode notar algumas sobreposições ou redimensionamentos visuais forçados.</p>
-                    <p>Um exemplo é a área de <strong>"Configuração de Impressão" (Preview)</strong>, que pode sofrer cortes se o monitor não oferecer o espaço horizontal e vertical necessário. Tente usar a tela em modo de Ecrã Inteiro (F11) caso sinta dificuldades de preenchimento nesses equipamentos.</p>
+                    <h4>Espaço</h4>
+                    <p>O sistema foi feito para computadores. Se a tela de configuração de folhas ficar espremida ou cortada, pressione <strong>F11</strong> para usar o modo Tela Cheia.</p>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="configTubosOverlay" class="config-overlay app-hidden">
+        <div class="config-modal" style="width: 90vw; max-width: 1000px; height: auto; max-height: 95vh; padding: 20px;">
+            <div style="width: 100%; display: flex; flex-direction: column; gap: 10px; height: 100%;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3 class="termo-title" style="margin: 0; font-size: 1.6rem;">🧪 Configurar Tubos</h3>
+                    <button class="btn-salvar-cfg" id="btnFecharConfigTubos" style="width: auto; padding: 10px 25px; border-radius: 50px; font-size: 1rem; margin: 0;">Salvar e Fechar</button>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0;">
+                    Ative apenas os tubos que a sua clínica utiliza diariamente. Os itens desativados serão ocultados da interface e dos relatórios PDF.
+                </p>
+                <div id="listaTubosConfig" class="tubos-grid-large"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalConfirmarExclusaoOverlay" class="termos-overlay app-hidden">
+        <div class="termo-card alert-card">
+            <h3 class="termo-title" style="color: var(--btn-excluir-color);">🗑️ Fechar Arquivo</h3>
+            <div class="termo-text">
+                Tem certeza que deseja fechar o arquivo atual? Todas as quantidades de tubos que você já preencheu serão perdidas.
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 25px; width: 100%;">
+                <button id="btnCancelarExclusao" class="btn-cancelar-cfg" style="flex: 1;">Cancelar</button>
+                <button id="btnConfirmarExclusao" class="btn-salvar-cfg" style="flex: 1; background-color: var(--btn-excluir-color);">Sim, excluir</button>
             </div>
         </div>
     </div>
@@ -578,8 +616,20 @@
         </div>
     </div>
 
+    <div id="onboardingOverlay" class="onboarding-overlay">
+        <div class="onboarding-card">
+            <div class="onboarding-progress-container" id="onboardingProgressContainer"></div>
+            <div id="onboardingIcon" class="onboarding-icon">✨</div>
+            <h2 id="onboardingTitle" class="onboarding-title">Bem-vindo ao Sistema!</h2>
+            <p id="onboardingText" class="onboarding-text">Vamos fazer um tour rápido pelas ferramentas principais do cabeçalho.</p>
+            <button id="btnOnboardingStart" class="btn-onboarding-start">Começar a Usar</button>
+        </div>
+    </div>
+
     <script src="js/A-estado.js"></script>
     <script src="js/B-tema.js"></script>
+    <script src="js/L-onboarding.js"></script>
+    <script src="js/K-tubos.js"></script>
     <script src="js/C-interface.js"></script>
     <script src="js/D-pdf.js"></script>
     <script src="js/E-botoes.js"></script>

@@ -1,6 +1,10 @@
 window.gerarEtiquetasPDF = function() {
     let totalEtiquetas = 0;
-    state.pacientes.forEach(p => totalEtiquetas += (p.vermelho + p.amarelo + p.roxo + p.cinza + p.azul + p.frasco));
+    state.pacientes.forEach(p => {
+        tubosAtivos.forEach(tId => {
+            totalEtiquetas += p[tId];
+        });
+    });
 
     if (totalEtiquetas === 0) {
         mostrarAlerta("Não existem etiquetas selecionadas. Adicione tubos aos pacientes antes de imprimir.");
@@ -19,23 +23,16 @@ window.gerarEtiquetasPDF = function() {
     let etiquetas = [];
     
     state.pacientes.forEach(p => {
-        const tubos = [
-            { nome: 'VERMELHO', qtd: p.vermelho, cor: [225, 29, 72] },
-            { nome: 'AMARELO', qtd: p.amarelo, cor: [234, 179, 8] },
-            { nome: 'ROXO', qtd: p.roxo, cor: [124, 58, 237] },
-            { nome: 'CINZA', qtd: p.cinza, cor: [75, 85, 99] },
-            { nome: 'AZUL', qtd: p.azul, cor: [37, 99, 235] },
-            { nome: 'FRASCO', qtd: p.frasco, cor: [5, 150, 105] }
-        ];
-
-        tubos.forEach(t => {
-            for (let i = 0; i < t.qtd; i++) {
-                etiquetas.push({
-                    paciente: p.nome,
-                    nascimento: p.dataNascimento.replace('| ', '').trim(),
-                    tuboNome: t.nome,
-                    tuboCor: t.cor
-                });
+        tubosConfig.forEach(t => {
+            if (tubosAtivos.includes(t.id)) {
+                for (let i = 0; i < p[t.id]; i++) {
+                    etiquetas.push({
+                        paciente: p.nome,
+                        nascimento: p.dataNascimento.replace('| ', '').trim(),
+                        tuboNome: t.nome.toUpperCase(),
+                        tuboCor: t.corRGB
+                    });
+                }
             }
         });
     });
@@ -119,38 +116,44 @@ window.gerarListaPDF = function() {
 
     const pacientesOrdenados = [...state.pacientes].sort((a, b) => a.nome.localeCompare(b.nome));
 
-    const bodyData = pacientesOrdenados.map(p => {
-        const totalTubos = p.vermelho + p.amarelo + p.roxo + p.cinza + p.azul + p.frasco;
-        return [
-            p.nome,
-            p.dataNascimento.replace('| ', '').trim(),
-            p.vermelho > 0 ? p.vermelho : '-',
-            p.amarelo > 0 ? p.amarelo : '-',
-            p.roxo > 0 ? p.roxo : '-',
-            p.cinza > 0 ? p.cinza : '-',
-            p.azul > 0 ? p.azul : '-',
-            p.frasco > 0 ? p.frasco : '-',
-            totalTubos > 0 ? totalTubos : '-'
-        ];
+    let colunasDinamicas = ['Paciente', 'Nasc.'];
+    tubosConfig.forEach(t => {
+        if (tubosAtivos.includes(t.id)) colunasDinamicas.push(t.sigla);
     });
+    colunasDinamicas.push('Total');
+
+    const bodyData = pacientesOrdenados.map(p => {
+        let totalTubos = 0;
+        let linha = [p.nome, p.dataNascimento.replace('| ', '').trim()];
+        
+        tubosConfig.forEach(t => {
+            if (tubosAtivos.includes(t.id)) {
+                linha.push(p[t.id] > 0 ? p[t.id] : '-');
+                totalTubos += p[t.id];
+            }
+        });
+        
+        linha.push(totalTubos > 0 ? totalTubos : '-');
+        return linha;
+    });
+
+    let columnStylesConfig = {
+        0: { cellWidth: 60 },
+        1: { halign: 'center', cellWidth: 22 }
+    };
+
+    for (let i = 2; i < colunasDinamicas.length - 1; i++) {
+        columnStylesConfig[i] = { halign: 'center' };
+    }
+    columnStylesConfig[colunasDinamicas.length - 1] = { halign: 'center', fontStyle: 'bold' };
 
     doc.autoTable({
         startY: 28,
-        head: [['Paciente', 'Nasc.', 'Verm', 'Amar', 'Roxo', 'Cinza', 'Azul', 'Frasco', 'Total']],
+        head: [colunasDinamicas],
         body: bodyData,
         theme: 'grid',
         headStyles: { fillColor: [37, 99, 235], halign: 'center', fontSize: 10 },
-        columnStyles: {
-            0: { cellWidth: 60 },
-            1: { halign: 'center', cellWidth: 22 },
-            2: { halign: 'center' },
-            3: { halign: 'center' },
-            4: { halign: 'center' },
-            5: { halign: 'center' },
-            6: { halign: 'center' },
-            7: { halign: 'center' },
-            8: { halign: 'center', fontStyle: 'bold' }
-        },
+        columnStyles: columnStylesConfig,
         styles: { fontSize: 9, cellPadding: 2, textColor: [50, 50, 50] },
         alternateRowStyles: { fillColor: [248, 250, 252] }
     });

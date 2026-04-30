@@ -15,7 +15,10 @@ const contadorTotal = document.getElementById('contadorTotal');
 const mouseShadow = document.getElementById('mouseShadow');
 const appTitle = document.getElementById('appTitle');
 const btnTheme = document.getElementById('btnTheme');
-const btnOrdenar = document.getElementById('btnOrdenar');
+const btnConfigTubos = document.getElementById('btnConfigTubos');
+const configTubosOverlay = document.getElementById('configTubosOverlay');
+const btnFecharConfigTubos = document.getElementById('btnFecharConfigTubos');
+const contadoresIndividuais = document.getElementById('contadoresIndividuais');
 const btnConfigPrint = document.getElementById('btnConfigPrint');
 const configPrintOverlay = document.getElementById('configPrintOverlay');
 const btnDicas = document.getElementById('btnDicas');
@@ -26,6 +29,46 @@ let state = {
     dataArquivo: "--/--/----",
     pacientes: []
 };
+
+let tubosConfig = [
+    { 
+        id: 'vermelho', nome: 'Vermelho', sigla: 'Verm', icone: '🔴', corRGB: [225, 29, 72], 
+        desc: 'Ativador de coágulo', 
+        exames: 'Bioquímica, Sorologia, Imunologia, Hormônios' 
+    },
+    { 
+        id: 'amarelo', nome: 'Amarelo', sigla: 'Amar', icone: '🟡', corRGB: [234, 179, 8], 
+        desc: 'Gel separador e ativador', 
+        exames: 'Bioquímica, Marcadores Tumorais, Hormônios' 
+    },
+    { 
+        id: 'roxo', nome: 'Roxo', sigla: 'Roxo', icone: '🟣', corRGB: [124, 58, 237], 
+        desc: 'Anticoagulante EDTA', 
+        exames: 'Hematologia (Hemograma), HbA1c, Tipagem Sanguínea' 
+    },
+    { 
+        id: 'cinza', nome: 'Cinza', sigla: 'Cinza', icone: '⚪', corRGB: [75, 85, 99], 
+        desc: 'Fluoreto de Sódio + EDTA', 
+        exames: 'Glicemia, Lactato, Teste de Tolerância à Glicose' 
+    },
+    { 
+        id: 'azul', nome: 'Azul', sigla: 'Azul', icone: '🔵', corRGB: [37, 99, 235], 
+        desc: 'Anticoagulante Citrato de Sódio', 
+        exames: 'Coagulação (TAP, TTPA, Fibrinogênio, D-Dímero)' 
+    },
+    { 
+        id: 'verde', nome: 'Verde', sigla: 'Verde', icone: '🟢', corRGB: [34, 197, 94], 
+        desc: 'Anticoagulante Heparina', 
+        exames: 'Bioquímica de Urgência, Gasometria, Troponina' 
+    },
+    { 
+        id: 'frasco', nome: 'Frasco', sigla: 'Frasco', icone: '🧪', corRGB: [5, 150, 105], 
+        desc: 'Recipiente estéril / não estéril', 
+        exames: 'Urina, Fezes, Escarro, Espermograma' 
+    }
+];
+
+let tubosAtivos = JSON.parse(localStorage.getItem('sangue_tubos_ativos')) || tubosConfig.map(t => t.id);
 
 let configImpresso = {
     pageWidth: 195,

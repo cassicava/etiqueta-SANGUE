@@ -149,17 +149,17 @@ async function processarPDFReal(file) {
                 let nomeFormatado = formatarNomeDinamico(nomePossivel);
                 let dataNascimentoStr = `${diaStr}/${mesStr}/${anoStr}`;
 
-                state.pacientes.push({
+                let novoPaciente = {
                     id: pacId++,
                     nome: nomeFormatado,
-                    dataNascimento: dataNascimentoStr,
-                    vermelho: 0,
-                    amarelo: 0,
-                    roxo: 0,
-                    cinza: 0,
-                    azul: 0,
-                    frasco: 0
+                    dataNascimento: dataNascimentoStr
+                };
+
+                tubosConfig.forEach(t => {
+                    novoPaciente[t.id] = 0;
                 });
+
+                state.pacientes.push(novoPaciente);
             }
         }
     }

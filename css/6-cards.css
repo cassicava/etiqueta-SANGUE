@@ -103,6 +103,7 @@
 .seletor.roxo:hover { border-color: var(--tubo-roxo); }
 .seletor.cinza:hover { border-color: var(--tubo-cinza); }
 .seletor.azul:hover { border-color: var(--tubo-azul); }
+.seletor.verde:hover { border-color: var(--tubo-verde); }
 .seletor.frasco:hover { border-color: var(--tubo-frasco); }
 
 .content-area.hover-vermelho .seletor.vermelho { border-color: var(--tubo-vermelho); }
@@ -110,6 +111,7 @@
 .content-area.hover-roxo .seletor.roxo { border-color: var(--tubo-roxo); }
 .content-area.hover-cinza .seletor.cinza { border-color: var(--tubo-cinza); }
 .content-area.hover-azul .seletor.azul { border-color: var(--tubo-azul); }
+.content-area.hover-verde .seletor.verde { border-color: var(--tubo-verde); }
 .content-area.hover-frasco .seletor.frasco { border-color: var(--tubo-frasco); }
 
 .legenda-wrapper {

@@ -66,9 +66,29 @@ fileInput.addEventListener('change', (e) => {
     e.target.value = '';
 });
 
+const modalExclusaoOverlay = document.getElementById('modalConfirmarExclusaoOverlay');
+const btnCancelarExclusao = document.getElementById('btnCancelarExclusao');
+const btnConfirmarExclusao = document.getElementById('btnConfirmarExclusao');
+
 btnExcluir.addEventListener('click', () => {
-    resetarInterface();
+    modalExclusaoOverlay.classList.remove('app-hidden');
+    setTimeout(() => modalExclusaoOverlay.classList.add('open'), 10);
 });
+
+if (btnCancelarExclusao) {
+    btnCancelarExclusao.addEventListener('click', () => {
+        modalExclusaoOverlay.classList.remove('open');
+        setTimeout(() => modalExclusaoOverlay.classList.add('app-hidden'), 400);
+    });
+}
+
+if (btnConfirmarExclusao) {
+    btnConfirmarExclusao.addEventListener('click', () => {
+        modalExclusaoOverlay.classList.remove('open');
+        setTimeout(() => modalExclusaoOverlay.classList.add('app-hidden'), 400);
+        resetarInterface();
+    });
+}
 
 btnImprimir.addEventListener('click', () => {
     if (typeof window.gerarEtiquetasPDF === 'function') {
