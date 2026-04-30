@@ -24,7 +24,7 @@ dropZone.addEventListener('dragleave', (e) => {
 
 dropZone.addEventListener('drop', (e) => {
     if (hasDocument) {
-        alert("Por favor, exclua o arquivo atual antes de inserir um novo.");
+        mostrarAlerta("Por favor, exclua o arquivo atual antes de inserir um novo.");
         return;
     }
     
@@ -39,7 +39,7 @@ dropZone.addEventListener('drop', (e) => {
         hasDocument = true;
         iniciarProcessamentoAnimacao(files[0]);
     } else {
-        alert("Por favor, solte apenas arquivos PDF.");
+        mostrarAlerta("Por favor, solte apenas arquivos PDF.");
     }
 });
 
@@ -60,7 +60,7 @@ fileInput.addEventListener('change', (e) => {
         hasDocument = true;
         iniciarProcessamentoAnimacao(files[0]);
     } else if (files.length > 0) {
-        alert("Por favor, selecione apenas arquivos PDF.");
+        mostrarAlerta("Por favor, selecione apenas arquivos PDF.");
     }
     
     e.target.value = '';
@@ -76,16 +76,25 @@ btnImprimir.addEventListener('click', () => {
     }
 });
 
+const btnImprimirLista = document.getElementById('btnImprimirLista');
+if (btnImprimirLista) {
+    btnImprimirLista.addEventListener('click', () => {
+        if (typeof window.gerarListaPDF === 'function') {
+            window.gerarListaPDF();
+        }
+    });
+}
+
 const tubosHover = document.querySelectorAll('.cont-item[data-tubo]');
 
 tubosHover.forEach(item => {
     item.addEventListener('mouseenter', () => {
-        const tipo = item.getAttribute('data-tubo');
-        contentArea.classList.add(`hover-${tipo}`);
+        const corHov = item.getAttribute('data-tubo');
+        contentArea.classList.add(`hover-${corHov}`);
     });
     
     item.addEventListener('mouseleave', () => {
-        const tipo = item.getAttribute('data-tubo');
-        contentArea.classList.remove(`hover-${tipo}`);
+        const corHov = item.getAttribute('data-tubo');
+        contentArea.classList.remove(`hover-${corHov}`);
     });
 });

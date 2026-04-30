@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,6 +20,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
@@ -42,6 +43,7 @@
         <div class="header-center-area" id="headerCenterArea">
             <div class="header-divider left-divider"></div>
             <span id="headerDataArquivo" class="header-data"></span>
+            <button id="btnExcluir" class="btn-excluir-header" title="Fechar/Excluir Arquivo">✖</button>
             <div class="header-divider right-divider"></div>
         </div>
 
@@ -93,13 +95,20 @@
             </div>
             
             <div id="painelAcoes" class="painel-acoes app-hidden">
-                <div id="resumoPacientes" class="pacientes-destaque">Pacientes: 0</div>
+                <div id="resumoPacientes" class="pacientes-destaque" style="display: none;">Pacientes: 0</div>
                 
-                <hr class="separador-painel">
-
                 <div class="contadores-individuais">
+                    <div class="cont-item tubo-hover" data-tubo="vermelho">
+                        <div class="cont-nome">🔴 Vermelho:</div>
+                        <div class="cont-acoes">
+                            <button class="btn-lote" onclick="alterarTodos('vermelho', -1)">-</button>
+                            <span>Todos</span>
+                            <button class="btn-lote" onclick="alterarTodos('vermelho', 1)">+</button>
+                        </div>
+                        <strong id="total-vermelho">0</strong>
+                    </div>
                     <div class="cont-item tubo-hover" data-tubo="amarelo">
-                        <div class="cont-nome">🟡 Amarelo/Verm:</div>
+                        <div class="cont-nome">🟡 Amarelo:</div>
                         <div class="cont-acoes">
                             <button class="btn-lote" onclick="alterarTodos('amarelo', -1)">-</button>
                             <span>Todos</span>
@@ -148,9 +157,9 @@
                 <h3 id="contadorTotal" class="contador-total">Total: 0</h3>
                 <hr class="separador-painel">
                 
-                <div class="botoes-fixos">
-                    <button id="btnExcluir" class="btn-excluir" title="Excluir">🗑️</button>
-                    <button id="btnImprimir" class="btn-enviar">Imprimir 🖨️</button>
+                <div class="botoes-painel-wrapper">
+                    <button id="btnImprimir" class="btn-enviar">Imprimir Etiquetas 🖨️</button>
+                    <button id="btnImprimirLista" class="btn-secundario">Lista de Pacientes 🧾</button>
                 </div>
             </div>
         </div>
@@ -220,6 +229,16 @@
                     <hr>
                     <h4>2. Qualidade de Impressão</h4>
                     <p>Nas propriedades da sua impressora, altere a qualidade de impressão para "Alta" ou "Ótima". Isso evita que textos pequenos (como o nome do tubo e a data de nascimento) fiquem borrados ou difíceis de ler, especialmente se estiver usando impressoras mais antigas.</p>
+                </div>
+            </div>
+
+            <div class="termo-card">
+                <h3 class="termo-title">📱 USO EM TELAS PEQUENAS</h3>
+                <div class="termo-text">
+                    <hr>
+                    <h4>Possíveis Instabilidades Visuais</h4>
+                    <p>Este sistema foi criado e otimizado para uso em computadores com telas maiores. Em monitores muito pequenos ou ao reduzir drasticamente o tamanho da janela do navegador, você pode notar algumas sobreposições ou redimensionamentos visuais forçados.</p>
+                    <p>Um exemplo é a área de <strong>"Configuração de Impressão" (Preview)</strong>, que pode sofrer cortes se o monitor não oferecer o espaço horizontal e vertical necessário. Tente usar a tela em modo de Ecrã Inteiro (F11) caso sinta dificuldades de preenchimento nesses equipamentos.</p>
                 </div>
             </div>
         </div>
@@ -348,6 +367,16 @@
 
                     
                     <div class="config-panel panel-right" id="panelEtiqueta">
+                        
+                        <div class="config-grupo">
+                            <h4>Borda de Recorte</h4>
+                            <div class="pill-menu" style="width: 100%; max-width: 250px; height: 40px; margin: 0 auto;">
+                                <div class="pill-indicator" id="borderIndicator" style="width: calc(50% - 5px);"></div>
+                                <button class="pill-btn active" id="btnBordaOff">Sem Borda</button>
+                                <button class="pill-btn" id="btnBordaOn">Com Borda</button>
+                            </div>
+                        </div>
+
                         <div class="config-grupo">
                             <h4>Tamanho</h4>
                             <div class="config-grupo-linha">
@@ -496,9 +525,15 @@
                 </div>
 
                 <div class="preview-label-col">
+                    
+                    <button id="btnSalvarConfig" class="btn-salvar-cfg">Salvar Configurações</button>
+
                     <div class="config-dica">
                         <strong>💡 Dica</strong>
                         Meça com uma régua os limites reais da sua etiqueta e ajuste aqui os posicionamentos para um encaixe perfeito.
+                        <div id="avisoBorda" class="app-hidden" style="margin-top: 10px; color: var(--tubo-vermelho); font-weight: 800; font-size: 0.9rem;">
+                            ⚠️ A borda aparece em vermelho no preview apenas para visualização. Ela será impressa na cor PRETA.
+                        </div>
                     </div>
                     
                     <div class="preview-label-box">
@@ -512,13 +547,34 @@
                         </div>
                     </div>
 
-                    <div class="config-botoes-vert">
-                        <button id="btnSalvarConfig" class="btn-salvar-cfg">Salvar Configurações</button>
+                    <div class="config-botoes-linha">
+                        <button id="btnRestaurarConfig" class="btn-restaurar-cfg">Restaurar Padrões</button>
                         <button id="btnFecharConfig" class="btn-cancelar-cfg">Cancelar</button>
                     </div>
                 </div>
             </div>
 
+        </div>
+    </div>
+
+    <div id="modalConfirmacaoOverlay" class="termos-overlay app-hidden">
+        <div class="termo-card alert-card">
+            <h3 class="termo-title" style="color: var(--error-text);">⚠️ Restaurar Padrões</h3>
+            <div class="termo-text">
+                Tem certeza que deseja apagar todas as suas configurações e voltar aos tamanhos originais de fábrica?
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 25px; width: 100%;">
+                <button id="btnCancelarRestaurar" class="btn-cancelar-cfg" style="flex: 1;">Cancelar</button>
+                <button id="btnConfirmarRestaurar" class="btn-salvar-cfg" style="flex: 1; background-color: var(--btn-excluir-color);">Sim, restaurar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="customAlertOverlay" class="termos-overlay">
+        <div class="termo-card alert-card">
+            <h3 class="termo-title">⚠️ Aviso</h3>
+            <div class="termo-text" id="customAlertMessage"></div>
+            <button id="btnFecharAlerta" class="btn-alerta" onclick="fecharAlerta()">Entendi</button>
         </div>
     </div>
 

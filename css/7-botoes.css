@@ -138,12 +138,11 @@
     margin: 5px 0;
 }
 
-.botoes-fixos {
+.botoes-painel-wrapper {
     display: flex;
-    flex-direction: row;
-    gap: 15px;
+    flex-direction: column;
+    gap: 12px;
     margin-top: auto;
-    align-items: center;
     width: 100%;
     box-sizing: border-box;
 }
@@ -156,11 +155,10 @@
     padding: 14px 28px;
     font-weight: bold;
     font-size: 1.15rem;
-    flex-grow: 1;
+    width: 100%;
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: center;
-    min-width: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -173,47 +171,39 @@
     box-shadow: 0 4px 12px var(--shadow-color);
 }
 
-.btn-excluir {
+.btn-secundario {
     background-color: transparent;
-    color: var(--btn-excluir-color);
-    border: 2px solid var(--btn-excluir-color);
-    border-radius: 50%;
-    width: 55px;
-    height: 55px;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    color: var(--tubo-frasco);
+    border: 2px solid var(--tubo-frasco);
+    border-radius: 50px;
+    padding: 14px 28px;
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 1.15rem;
+    width: 100%;
     cursor: pointer;
     transition: all 0.3s ease;
-    flex-shrink: 0;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.btn-excluir:hover {
-    background-color: var(--error-bg);
-    color: var(--btn-excluir-color);
+.btn-secundario:hover {
+    background-color: var(--tubo-frasco);
+    color: #ffffff;
+    transform: translateY(-2px);
     box-shadow: 0 4px 12px var(--shadow-color);
-    transform: scale(1.1) rotate(-10deg);
 }
 
-@media (max-width: 992px) {
-    .botoes-fixos {
-        flex-direction: row;
+@media (max-width: 1300px), (max-height: 800px) {
+    .botoes-painel-wrapper {
         gap: 10px;
-        margin-top: 10px;
     }
 
-    .btn-enviar {
-        font-size: 1rem;
-        padding: 12px 10px;
-    }
-
-    .btn-excluir {
-        width: 45px;
-        height: 45px;
-        font-size: 1.2rem;
+    .btn-enviar,
+    .btn-secundario {
+        font-size: 1.05rem;
+        padding: 12px 15px;
     }
 
     .contadores-individuais {
@@ -221,14 +211,13 @@
     }
 
     .cont-item {
-        padding: 5px 12px;
-        font-size: 1rem;
+        padding: 8px 16px;
+        font-size: 1.1rem;
     }
 
     .contador-total {
-        font-size: 1.3rem;
-        padding-bottom: 5px;
-        margin: 0;
+        font-size: 1.6rem;
+        margin: 4px 0;
     }
 
     .pacientes-destaque {
@@ -237,6 +226,6 @@
     }
 
     .separador-painel {
-        margin: 3px 0;
+        margin: 4px 0;
     }
 }

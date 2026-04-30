@@ -1,7 +1,31 @@
+window.addEventListener('beforeunload', (e) => {
+    if (typeof hasDocument !== 'undefined' && hasDocument) {
+        e.preventDefault();
+        e.returnValue = '';
+    }
+});
+
+window.mostrarAlerta = function(mensagem) {
+    const alertOverlay = document.getElementById('customAlertOverlay');
+    const alertMsg = document.getElementById('customAlertMessage');
+    if(alertOverlay && alertMsg) {
+        alertMsg.innerText = mensagem;
+        alertOverlay.classList.add('open');
+    }
+};
+
+window.fecharAlerta = function() {
+    const alertOverlay = document.getElementById('customAlertOverlay');
+    if(alertOverlay) {
+        alertOverlay.classList.remove('open');
+    }
+};
+
 function atualizarContador() {
-    let tAmarelo = 0, tRoxo = 0, tCinza = 0, tAzul = 0, tFrasco = 0;
+    let tVermelho = 0, tAmarelo = 0, tRoxo = 0, tCinza = 0, tAzul = 0, tFrasco = 0;
     
     state.pacientes.forEach(p => {
+        tVermelho += p.vermelho;
         tAmarelo += p.amarelo;
         tRoxo += p.roxo;
         tCinza += p.cinza;
@@ -9,13 +33,14 @@ function atualizarContador() {
         tFrasco += p.frasco;
     });
     
+    document.getElementById('total-vermelho').innerText = tVermelho;
     document.getElementById('total-amarelo').innerText = tAmarelo;
     document.getElementById('total-roxo').innerText = tRoxo;
     document.getElementById('total-cinza').innerText = tCinza;
     document.getElementById('total-azul').innerText = tAzul;
     document.getElementById('total-frasco').innerText = tFrasco;
     
-    const total = tAmarelo + tRoxo + tCinza + tAzul + tFrasco;
+    const total = tVermelho + tAmarelo + tRoxo + tCinza + tAzul + tFrasco;
     contadorTotal.innerText = `Total: ${total}`;
 }
 
@@ -53,8 +78,6 @@ function mostrarInfoArquivo() {
         dropSubtitle.style.display = 'none';
     });
 
-    document.getElementById('resumoPacientes').innerText = `Pacientes: ${state.pacientes.length}`;
-
     setTimeout(() => {
         appContainer.style.transition = 'opacity 0.4s ease';
         appContainer.style.opacity = '0';
@@ -91,9 +114,15 @@ function mostrarInfoArquivo() {
 function gerarHTMLCardPaciente(item) {
     return `
         <div class="card-name" title="${item.nome}">
-            ${item.nome} <span class="patient-dob">${item.dataNascimento}</span>
+            <span class="patient-name-text">${item.nome}</span>
+            <span class="patient-dob">${item.dataNascimento}</span>
         </div>
         <div class="seletores-container">
+            <div class="seletor vermelho">
+                <button onclick="alterarQuantidade(${item.id}, 'vermelho', -1)">-</button>
+                <span class="valor" id="valor-vermelho-${item.id}">${item.vermelho}</span>
+                <button onclick="alterarQuantidade(${item.id}, 'vermelho', 1)">+</button>
+            </div>
             <div class="seletor amarelo">
                 <button onclick="alterarQuantidade(${item.id}, 'amarelo', -1)">-</button>
                 <span class="valor" id="valor-amarelo-${item.id}">${item.amarelo}</span>
@@ -152,9 +181,10 @@ function renderizarLista() {
     headerLegenda.className = 'legenda-wrapper';
     headerLegenda.innerHTML = `
         <div class="legenda-fixa">
-            <div style="flex-grow: 1; padding-right: 15px;"></div>
+            <div class="legenda-spacer"></div>
             <div class="seletores-container">
-                <div class="leg-item">🟡 Ama/Ver</div>
+                <div class="leg-item">🔴 Verm</div>
+                <div class="leg-item">🟡 Amar</div>
                 <div class="leg-item">🟣 Roxo</div>
                 <div class="leg-item">⚪ Cinza</div>
                 <div class="leg-item">🔵 Azul</div>
@@ -282,12 +312,12 @@ window.salvarNovoPaciente = function() {
         dataInput.classList.add('login-error');
         setTimeout(() => { dataInput.classList.remove('login-error'); dataInput.style.borderColor = ''; }, 500);
         dataInput.focus();
-        alert("Por favor, insira uma data de nascimento válida.");
+        mostrarAlerta("Por favor, insira uma data de nascimento válida.");
         return;
     }
 
     const nomeFormatado = typeof formatarNomeDinamico === 'function' ? formatarNomeDinamico(nomeVal) : nomeVal;
-    const dataFormatada = dataVal ? `| ${dataVal}` : "";
+    const dataFormatada = dataVal ? dataVal : ""; // REMOVIDO O | AQUI TAMBÉM
 
     let maxId = 0;
     state.pacientes.forEach(p => { if (p.id > maxId) maxId = p.id; });
@@ -297,6 +327,7 @@ window.salvarNovoPaciente = function() {
         id: novoId,
         nome: nomeFormatado,
         dataNascimento: dataFormatada,
+        vermelho: 0,
         amarelo: 0,
         roxo: 0,
         cinza: 0,
@@ -305,7 +336,6 @@ window.salvarNovoPaciente = function() {
     };
 
     state.pacientes.push(novoPaciente);
-    document.getElementById('resumoPacientes').innerText = `Pacientes: ${state.pacientes.length}`;
 
     state.pacientes.sort((a, b) => a.nome.localeCompare(b.nome));
     renderizarLista();

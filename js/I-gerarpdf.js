@@ -1,9 +1,9 @@
 window.gerarEtiquetasPDF = function() {
     let totalEtiquetas = 0;
-    state.pacientes.forEach(p => totalEtiquetas += (p.amarelo + p.roxo + p.cinza + p.azul + p.frasco));
+    state.pacientes.forEach(p => totalEtiquetas += (p.vermelho + p.amarelo + p.roxo + p.cinza + p.azul + p.frasco));
 
     if (totalEtiquetas === 0) {
-        alert("Não existem etiquetas selecionadas. Adicione tubos aos pacientes antes de imprimir.");
+        mostrarAlerta("Não existem etiquetas selecionadas. Adicione tubos aos pacientes antes de imprimir.");
         return;
     }
 
@@ -20,7 +20,8 @@ window.gerarEtiquetasPDF = function() {
     
     state.pacientes.forEach(p => {
         const tubos = [
-            { nome: 'AMARELO', qtd: p.amarelo, cor: [225, 29, 72] },
+            { nome: 'VERMELHO', qtd: p.vermelho, cor: [225, 29, 72] },
+            { nome: 'AMARELO', qtd: p.amarelo, cor: [234, 179, 8] },
             { nome: 'ROXO', qtd: p.roxo, cor: [124, 58, 237] },
             { nome: 'CINZA', qtd: p.cinza, cor: [75, 85, 99] },
             { nome: 'AZUL', qtd: p.azul, cor: [37, 99, 235] },
@@ -55,6 +56,13 @@ window.gerarEtiquetasPDF = function() {
         const x = cfg.marginLeft + col * (cfg.labelWidth + cfg.gapX);
         const y = cfg.marginTop + row * (cfg.labelHeight + cfg.gapY);
 
+        if (cfg.imprimirBorda) {
+            doc.setDrawColor(0, 0, 0);
+            const espessuraLinha = 0.3;
+            doc.setLineWidth(espessuraLinha);
+            doc.rect(x + (espessuraLinha / 2), y + (espessuraLinha / 2), cfg.labelWidth - espessuraLinha, cfg.labelHeight - espessuraLinha);
+        }
+
         const fnNameMm = cfg.fontName * pt2mm;
         const fnDobMm = cfg.fontDob * pt2mm;
         const fnTypeMm = cfg.fontType * pt2mm;
@@ -81,5 +89,72 @@ window.gerarEtiquetasPDF = function() {
         doc.text(etiq.tuboNome, x + cfg.posTypeX, y + cfg.posTypeY, { baseline: 'top' });
     });
 
-    window.open(URL.createObjectURL(doc.output("blob")));
+    const hoje = new Date();
+    const dia = String(hoje.getDate()).padStart(2, '0');
+    const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+    const ano = hoje.getFullYear();
+    const nomePdf = `coleta dia ${dia}-${mes}-${ano} etiquetas.pdf`;
+    
+    doc.save(nomePdf);
+};
+
+window.gerarListaPDF = function() {
+    if (!state.pacientes || state.pacientes.length === 0) {
+        mostrarAlerta("Não existem pacientes para gerar a lista.");
+        return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+
+    let dataColeta = state.dataArquivo;
+    if (!dataColeta || dataColeta === "--/--/----") {
+        const hoje = new Date();
+        dataColeta = `${String(hoje.getDate()).padStart(2, '0')}/${String(hoje.getMonth() + 1).padStart(2, '0')}/${hoje.getFullYear()}`;
+    }
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(16);
+    doc.text(`Coleta ${dataColeta}`, 14, 20);
+
+    const pacientesOrdenados = [...state.pacientes].sort((a, b) => a.nome.localeCompare(b.nome));
+
+    const bodyData = pacientesOrdenados.map(p => {
+        const totalTubos = p.vermelho + p.amarelo + p.roxo + p.cinza + p.azul + p.frasco;
+        return [
+            p.nome,
+            p.dataNascimento.replace('| ', '').trim(),
+            p.vermelho > 0 ? p.vermelho : '-',
+            p.amarelo > 0 ? p.amarelo : '-',
+            p.roxo > 0 ? p.roxo : '-',
+            p.cinza > 0 ? p.cinza : '-',
+            p.azul > 0 ? p.azul : '-',
+            p.frasco > 0 ? p.frasco : '-',
+            totalTubos > 0 ? totalTubos : '-'
+        ];
+    });
+
+    doc.autoTable({
+        startY: 28,
+        head: [['Paciente', 'Nasc.', 'Verm', 'Amar', 'Roxo', 'Cinza', 'Azul', 'Frasco', 'Total']],
+        body: bodyData,
+        theme: 'grid',
+        headStyles: { fillColor: [37, 99, 235], halign: 'center', fontSize: 10 },
+        columnStyles: {
+            0: { cellWidth: 60 },
+            1: { halign: 'center', cellWidth: 22 },
+            2: { halign: 'center' },
+            3: { halign: 'center' },
+            4: { halign: 'center' },
+            5: { halign: 'center' },
+            6: { halign: 'center' },
+            7: { halign: 'center' },
+            8: { halign: 'center', fontStyle: 'bold' }
+        },
+        styles: { fontSize: 9, cellPadding: 2, textColor: [50, 50, 50] },
+        alternateRowStyles: { fillColor: [248, 250, 252] }
+    });
+
+    const nomePdf = `lista_coleta_${dataColeta.replace(/\//g, '-')}.pdf`;
+    doc.save(nomePdf);
 };

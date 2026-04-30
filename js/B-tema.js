@@ -1,6 +1,9 @@
 function initConfig() {
     const savedTheme = localStorage.getItem('themeSangue');
-    if (savedTheme === 'dark') {
+    if (savedTheme === 'light') {
+        document.documentElement.removeAttribute('data-theme');
+        btnTheme.innerText = '☀️';
+    } else {
         document.documentElement.setAttribute('data-theme', 'dark');
         btnTheme.innerText = '🌙';
     }

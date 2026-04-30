@@ -1,7 +1,7 @@
 function formatarNomeDinamico(nomeBruto) {
     const excecoes = ['da', 'de', 'do', 'das', 'dos', 'e'];
-    return nomeBruto.toLowerCase().split(' ').map(palavra => {
-        if (excecoes.includes(palavra)) return palavra;
+    return nomeBruto.toLowerCase().split(' ').map((palavra, index) => {
+        if (index > 0 && excecoes.includes(palavra)) return palavra;
         return palavra.charAt(0).toUpperCase() + palavra.slice(1);
     }).join(' ');
 }
@@ -147,12 +147,13 @@ async function processarPDFReal(file) {
                 let anoStr = dtNasc.getFullYear();
 
                 let nomeFormatado = formatarNomeDinamico(nomePossivel);
-                let dataNascimentoStr = `| ${diaStr}/${mesStr}/${anoStr}`;
+                let dataNascimentoStr = `${diaStr}/${mesStr}/${anoStr}`;
 
                 state.pacientes.push({
                     id: pacId++,
                     nome: nomeFormatado,
                     dataNascimento: dataNascimentoStr,
+                    vermelho: 0,
                     amarelo: 0,
                     roxo: 0,
                     cinza: 0,

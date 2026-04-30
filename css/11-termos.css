@@ -9,11 +9,15 @@
     -webkit-backdrop-filter: blur(8px);
     z-index: 9999;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.4s ease, visibility 0.4s;
+    padding-top: 80px; 
+    padding-bottom: 20px;
+    box-sizing: border-box;
 }
 
 .termos-overlay.open {
@@ -49,9 +53,10 @@
 .termos-cards-wrapper {
     display: flex;
     gap: 32px;
-    width: 90vw;
-    max-width: 1300px;
-    height: 82vh;
+    width: 96vw;
+    max-width: 1800px;
+    height: 100%;
+    max-height: 85vh;
 }
 
 .termo-card {
@@ -75,6 +80,10 @@
 
 .termos-overlay.open .termo-card:nth-child(2) {
     transition-delay: 0.15s;
+}
+
+.termos-overlay.open .termo-card:nth-child(3) {
+    transition-delay: 0.3s;
 }
 
 .termo-title {
@@ -123,10 +132,45 @@
 .termo-text::-webkit-scrollbar-thumb { background: var(--header-border); border-radius: 4px; }
 .termo-text::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
-@media (max-width: 992px) {
+.alert-card {
+    flex: none;
+    width: 90%;
+    max-width: 400px;
+    height: auto;
+    min-height: 200px;
+    margin: auto;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-alerta {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    border: none;
+    border-radius: 50px;
+    padding: 10px 30px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.btn-alerta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+@media (max-width: 1060px) {
+    .termos-overlay {
+        padding-top: 70px;
+    }
+
     .termos-cards-wrapper {
         flex-direction: column;
-        height: 85vh;
+        width: 96vw;
+        height: 100%;
         gap: 20px;
         overflow-y: auto;
         padding: 10px;
