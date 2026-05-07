@@ -68,52 +68,42 @@ window.alterarTodos = function(tipo, delta) {
 }
 
 function mostrarInfoArquivo() {
-    aplicarFadeTextos(() => {
-        dropZone.classList.remove('processing');
-        dropZone.classList.add('success');
-        dropTitle.innerHTML = `<span style="font-size: 4rem;">✅</span>`;
-        dropSubtitle.style.display = 'none';
-    });
-
+    appContainer.style.transition = 'opacity 0.4s ease';
+    appContainer.style.opacity = '0';
+    
     setTimeout(() => {
-        appContainer.style.transition = 'opacity 0.4s ease';
-        appContainer.style.opacity = '0';
+        dropZone.classList.add('app-hidden');
+        dropZone.classList.remove('success', 'processing', 'warning-state', 'success-state'); 
         
-        setTimeout(() => {
-            dropZone.classList.add('app-hidden');
-            dropZone.classList.remove('success'); 
-            
-            appContainer.classList.add('active-layout');
-            leftPanel.classList.add('active');
-            
-            document.getElementById('headerDataArquivo').innerText = state.dataArquivo;
-            document.getElementById('headerCenterArea').classList.add('active');
-            
-            painelAcoes.classList.remove('app-hidden');
-            contentArea.classList.add('active');
-            
-            state.pacientes.sort((a, b) => a.nome.localeCompare(b.nome));
-            renderizarLista();
-            if(typeof atualizarVisibilidadePainelLateral === 'function') {
-                atualizarVisibilidadePainelLateral();
-            }
-            
-            painelAcoes.style.opacity = '1';
-            painelAcoes.style.transform = 'translateY(0)';
-            
-            requestAnimationFrame(() => {
-                appContainer.style.opacity = '1';
-                setTimeout(() => {
-                    appContainer.style.transition = ''; 
-                }, 400);
-            });
-        }, 400); 
-    }, 1000); 
+        appContainer.classList.add('active-layout');
+        leftPanel.classList.add('active');
+        
+        document.getElementById('headerDataArquivo').innerText = state.dataArquivo;
+        document.getElementById('headerCenterArea').classList.add('active');
+        
+        painelAcoes.classList.remove('app-hidden');
+        contentArea.classList.add('active');
+        
+        state.pacientes.sort((a, b) => a.nome.localeCompare(b.nome));
+        renderizarLista();
+        if(typeof atualizarVisibilidadePainelLateral === 'function') {
+            atualizarVisibilidadePainelLateral();
+        }
+        
+        painelAcoes.style.opacity = '1';
+        painelAcoes.style.transform = 'translateY(0)';
+        
+        requestAnimationFrame(() => {
+            appContainer.style.opacity = '1';
+            setTimeout(() => {
+                appContainer.style.transition = ''; 
+            }, 400);
+        });
+    }, 400); 
 }
 
 function gerarHTMLCardPaciente(item) {
     let seletoresHTML = '';
-    
     tubosConfig.forEach(t => {
         if (tubosAtivos.includes(t.id)) {
             seletoresHTML += `
@@ -126,15 +116,80 @@ function gerarHTMLCardPaciente(item) {
         }
     });
 
+    const alertaHTML = item.alertaData ? `<span title="Incerteza no cálculo. Confira com o pedido!" style="cursor:help; margin-left:8px; font-size:1.2rem;">⚠️</span>` : '';
+
     return `
         <div class="card-name" title="${item.nome}">
-            <span class="patient-name-text">${item.nome}</span>
+            <div class="nome-e-editar">
+                <span class="patient-name-text">${item.nome}</span>
+                <button class="btn-editar-paciente" onclick="mostrarFormularioEdicaoPaciente(${item.id})" title="Editar Paciente">✏️</button>
+                ${alertaHTML}
+            </div>
             <span class="patient-dob">${item.dataNascimento}</span>
         </div>
         <div class="seletores-container">
             ${seletoresHTML}
         </div>
     `;
+}
+
+window.mostrarFormularioEdicaoPaciente = function(id) {
+    const paciente = state.pacientes.find(p => p.id === id);
+    if (!paciente) return;
+
+    const card = document.getElementById(`paciente-${id}`);
+    card.classList.add('card-form-mode');
+    card.onclick = null;
+
+    card.innerHTML = `
+        <div class="form-inputs">
+            <input type="text" id="editNome-${id}" value="${paciente.nome}" maxlength="40" autocomplete="off" style="flex-grow: 1;">
+            <input type="text" id="editData-${id}" value="${paciente.dataNascimento}" placeholder="DD/MM/AAAA" maxlength="10" oninput="mascaraData(this)" autocomplete="off" style="width: 190px; text-align: center;">
+        </div>
+        <div class="form-actions">
+            <button class="btn-action btn-cancelar" onclick="cancelarEdicaoPaciente()" title="Cancelar">✖</button>
+            <button class="btn-action btn-salvar" onclick="salvarEdicaoPaciente(${id})" title="Salvar">✔</button>
+        </div>
+    `;
+
+    setTimeout(() => document.getElementById(`editNome-${id}`).focus(), 100);
+}
+
+window.cancelarEdicaoPaciente = function() {
+    renderizarLista();
+}
+
+window.salvarEdicaoPaciente = function(id) {
+    const nomeInput = document.getElementById(`editNome-${id}`);
+    const dataInput = document.getElementById(`editData-${id}`);
+    const nomeVal = nomeInput.value.trim();
+    const dataVal = dataInput.value.trim();
+
+    if (!nomeVal) {
+        nomeInput.style.borderColor = 'var(--error-text)';
+        nomeInput.classList.add('login-error');
+        setTimeout(() => { nomeInput.classList.remove('login-error'); nomeInput.style.borderColor = ''; }, 500);
+        nomeInput.focus();
+        return;
+    }
+
+    if (dataVal && !isDataValida(dataVal)) {
+        dataInput.style.borderColor = 'var(--error-text)';
+        dataInput.classList.add('login-error');
+        setTimeout(() => { dataInput.classList.remove('login-error'); dataInput.style.borderColor = ''; }, 500);
+        dataInput.focus();
+        mostrarAlerta("Por favor, insira uma data de nascimento válida.");
+        return;
+    }
+
+    const paciente = state.pacientes.find(p => p.id === id);
+    if (paciente) {
+        paciente.nome = typeof formatarNomeDinamico === 'function' ? formatarNomeDinamico(nomeVal) : nomeVal;
+        paciente.dataNascimento = dataVal;
+    }
+
+    state.pacientes.sort((a, b) => a.nome.localeCompare(b.nome));
+    renderizarLista();
 }
 
 function adicionarCardNovoPaciente(delayIndex) {
@@ -271,12 +326,7 @@ window.mostrarFormularioNovoPaciente = function() {
 }
 
 window.cancelarNovoPaciente = function() {
-    const addCard = document.getElementById('addPatientCard');
-    addCard.className = 'card card-add';
-    addCard.innerHTML = `<span>➕ Novo Paciente</span>`;
-    setTimeout(() => {
-        addCard.onclick = () => mostrarFormularioNovoPaciente();
-    }, 50);
+    renderizarLista();
 }
 
 window.salvarNovoPaciente = function() {
@@ -342,7 +392,7 @@ function resetarInterface() {
         
         appContainer.classList.remove('active-layout');
         leftPanel.classList.remove('active');
-        dropZone.classList.remove('active', 'processing', 'error-state', 'success', 'app-hidden');
+        dropZone.classList.remove('active', 'processing', 'error-state', 'success', 'warning-state', 'success-state', 'app-hidden');
         contentArea.classList.remove('active');
         
         contentArea.innerHTML = '';
@@ -358,6 +408,9 @@ function resetarInterface() {
         `;
         dropSubtitle.style.display = 'block';
         dropSubtitle.innerText = 'Arraste o agendamento para cá ou clique no documento';
+        
+        const progress = document.getElementById('dropProgress');
+        if (progress) progress.style.display = 'none';
 
         requestAnimationFrame(() => {
             appContainer.style.opacity = '1';

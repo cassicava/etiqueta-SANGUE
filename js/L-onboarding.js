@@ -2,6 +2,7 @@ const onboardingData = [
     { icone: '✨', titulo: 'Bem-vindo ao Sistema!', texto: 'Vamos fazer um tour rápido pelas ferramentas principais do cabeçalho.' },
     { icone: '☀️', titulo: 'Modo Claro / Escuro', texto: 'Alterne as cores da tela para o que for mais confortável para os seus olhos durante o plantão.' },
     { icone: '🧪', titulo: 'Filtro de Tubos', texto: 'Ative apenas os tubos que sua unidade usa. O sistema oculta o resto para limpar a sua tela.' },
+    { icone: '📅', titulo: 'Prova Real de Datas', texto: 'O sistema realiza 3 checagens automáticas para calcular a data de nascimento. Se houver incerteza, um aviso (⚠️) aparecerá no card para que você confira e ajuste manualmente.' },
     { icone: '⚙️', titulo: 'Configuração de Folha', texto: 'Configure as margens e os tamanhos exatos da sua folha física para um encaixe de impressão perfeito.' },
     { icone: '💡', titulo: 'Dúvidas Rápidas', texto: 'Esqueceu como ajustar a impressora? As Dicas e os Termos de Uso (⚖️) estão sempre aqui para ajudar.' },
     { icone: '⏻', titulo: 'Segurança', texto: 'O sistema desloga sozinho após inatividade, mas você sempre pode encerrar a sessão manualmente aqui.' },
@@ -32,8 +33,10 @@ function atualizarConteudoVisuais() {
     for (let i = 0; i < onboardingData.length; i++) {
         const bar = document.createElement('div');
         bar.className = 'onboarding-progress-bar';
-        if (i < onboardingCurrentStep) bar.classList.add('completed');
-        else if (i === onboardingCurrentStep) {
+        
+        if (i < onboardingCurrentStep) {
+            bar.classList.add('completed');
+        } else if (i === onboardingCurrentStep) {
             bar.classList.add('active');
         }
         
@@ -49,17 +52,6 @@ function atualizarConteudoVisuais() {
 
     if (onboardingCurrentStep < onboardingData.length - 1) {
         btnStart.classList.remove('visible');
-        
-        requestAnimationFrame(() => {
-            const activeBar = document.querySelector('.onboarding-progress-bar.active .onboarding-progress-fill');
-            if(activeBar) {
-                activeBar.style.width = '0%';
-                requestAnimationFrame(() => {
-                    activeBar.style.width = '100%';
-                });
-            }
-        });
-
         onboardingTimer = setTimeout(() => {
             transicaoProximaDica();
         }, ONBOARDING_DURATION);

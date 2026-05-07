@@ -44,7 +44,7 @@
 
 .onboarding-progress-container {
     display: flex;
-    gap: 5px;
+    gap: 8px;
     width: 100%;
     margin-bottom: 25px;
 }
@@ -68,9 +68,13 @@
     width: 100%;
 }
 
+@keyframes progressFill {
+    from { width: 0%; }
+    to { width: 100%; }
+}
+
 .onboarding-progress-bar.active .onboarding-progress-fill {
-    transition: width 5s linear;
-    width: 100%;
+    animation: progressFill 5s linear forwards;
 }
 
 .onboarding-icon {
@@ -136,4 +140,8 @@
 .btn-onboarding-start.visible {
     display: block;
     animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
 }
