@@ -130,6 +130,7 @@
 .seletor.azul:hover { border-color: var(--tubo-azul); }
 .seletor.verde:hover { border-color: var(--tubo-verde); }
 .seletor.frasco:hover { border-color: var(--tubo-frasco); }
+.seletor.branco:hover { border-color: var(--tubo-branco); }
 
 .content-area.hover-vermelho .seletor.vermelho { border-color: var(--tubo-vermelho); }
 .content-area.hover-amarelo .seletor.amarelo { border-color: var(--tubo-amarelo); }
@@ -138,6 +139,7 @@
 .content-area.hover-azul .seletor.azul { border-color: var(--tubo-azul); }
 .content-area.hover-verde .seletor.verde { border-color: var(--tubo-verde); }
 .content-area.hover-frasco .seletor.frasco { border-color: var(--tubo-frasco); }
+.content-area.hover-branco .seletor.branco { border-color: var(--tubo-branco); }
 
 .legenda-wrapper {
     position: sticky;
@@ -209,6 +211,7 @@
     display: flex;
     gap: 15px;
     flex-grow: 1;
+    margin-left: -12px;
     margin-right: 20px;
     opacity: 0;
     animation: fadeIn 0.5s ease forwards 0.1s;

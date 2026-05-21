@@ -32,39 +32,44 @@ let state = {
 
 let tubosConfig = [
     { 
-        id: 'vermelho', nome: 'Vermelho', sigla: 'Verm', icone: '🔴', corRGB: [225, 29, 72], 
-        desc: 'Ativador de coágulo', 
-        exames: 'Bioquímica, Sorologia, Imunologia, Hormônios' 
+        id: 'frasco', nome: 'Frasco', sigla: 'Frasco', icone: '<span class="icone-bolinha" style="background-color: var(--tubo-frasco);"></span>', corRGB: [5, 150, 105], 
+        desc: 'Recipiente estéril / não estéril', 
+        exames: 'Urina, Fezes, Escarro, Espermograma' 
     },
     { 
-        id: 'amarelo', nome: 'Amarelo', sigla: 'Amar', icone: '🟡', corRGB: [234, 179, 8], 
-        desc: 'Gel separador e ativador', 
-        exames: 'Bioquímica, Marcadores Tumorais, Hormônios' 
-    },
-    { 
-        id: 'roxo', nome: 'Roxo', sigla: 'Roxo', icone: '🟣', corRGB: [124, 58, 237], 
-        desc: 'Anticoagulante EDTA', 
-        exames: 'Hematologia (Hemograma), HbA1c, Tipagem Sanguínea' 
-    },
-    { 
-        id: 'cinza', nome: 'Cinza', sigla: 'Cinza', icone: '⚪', corRGB: [75, 85, 99], 
-        desc: 'Fluoreto de Sódio + EDTA', 
-        exames: 'Glicemia, Lactato, Teste de Tolerância à Glicose' 
-    },
-    { 
-        id: 'azul', nome: 'Azul', sigla: 'Azul', icone: '🔵', corRGB: [37, 99, 235], 
+        id: 'azul', nome: 'Azul', sigla: 'Azul', icone: '<span class="icone-bolinha" style="background-color: var(--tubo-azul);"></span>', corRGB: [37, 99, 235], 
         desc: 'Anticoagulante Citrato de Sódio', 
         exames: 'Coagulação (TAP, TTPA, Fibrinogênio, D-Dímero)' 
     },
     { 
-        id: 'verde', nome: 'Verde', sigla: 'Verde', icone: '🟢', corRGB: [34, 197, 94], 
+        id: 'vermelho', nome: 'Vermelho', sigla: 'Verm', icone: '<span class="icone-bolinha" style="background-color: var(--tubo-vermelho);"></span>', corRGB: [225, 29, 72], 
+        desc: 'Ativador de coágulo', 
+        exames: 'Bioquímica, Sorologia, Imunologia, Hormônios' 
+    },
+    { 
+        id: 'amarelo', nome: 'Amarelo', sigla: 'Amar', icone: '<span class="icone-bolinha" style="background-color: var(--tubo-amarelo);"></span>', corRGB: [234, 179, 8], 
+        desc: 'Gel separador e ativador', 
+        exames: 'Bioquímica, Marcadores Tumorais, Hormônios' 
+    },
+    { 
+        id: 'verde', nome: 'Verde', sigla: 'Verde', icone: '<span class="icone-bolinha" style="background-color: var(--tubo-verde);"></span>', corRGB: [34, 197, 94], 
         desc: 'Anticoagulante Heparina', 
         exames: 'Bioquímica de Urgência, Gasometria, Troponina' 
     },
     { 
-        id: 'frasco', nome: 'Frasco', sigla: 'Frasco', icone: '🧪', corRGB: [5, 150, 105], 
-        desc: 'Recipiente estéril / não estéril', 
-        exames: 'Urina, Fezes, Escarro, Espermograma' 
+        id: 'roxo', nome: 'Roxo', sigla: 'Roxo', icone: '<span class="icone-bolinha" style="background-color: var(--tubo-roxo);"></span>', corRGB: [124, 58, 237], 
+        desc: 'Anticoagulante EDTA', 
+        exames: 'Hematologia (Hemograma), HbA1c, Tipagem Sanguínea' 
+    },
+    { 
+        id: 'branco', nome: 'Branco', sigla: 'Bran', icone: '<span class="icone-bolinha" style="background-color: var(--tubo-branco);"></span>', corRGB: [226, 232, 240], 
+        desc: 'EDTA com Gel Separador', 
+        exames: 'Biologia Molecular, PCR, Carga Viral' 
+    },
+    { 
+        id: 'cinza', nome: 'Cinza', sigla: 'Cinza', icone: '<span class="icone-bolinha" style="background-color: var(--tubo-cinza);"></span>', corRGB: [75, 85, 99], 
+        desc: 'Fluoreto de Sódio + EDTA', 
+        exames: 'Glicemia, Lactato, Teste de Tolerância à Glicose' 
     }
 ];
 

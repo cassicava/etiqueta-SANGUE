@@ -18,9 +18,23 @@
     animation: pulse-card 1.2s ease-in-out;
 }
 
-@keyframes gear-spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+@keyframes icon-pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.25); }
+    100% { transform: scale(1); }
+}
+
+.pulsing-icon {
+    font-size: 4rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1em; 
+    height: 1em; 
+    animation: icon-pulse 1.5s ease-in-out infinite;
+    margin-bottom: 5px;
+    line-height: 1;
+    transform-origin: center center;
 }
 
 @keyframes flyOut {
@@ -30,19 +44,6 @@
 
 @keyframes slideUp {
     to { opacity: 1; transform: translateY(0); }
-}
-
-.spinning-gear {
-    font-size: 4rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 1em; 
-    height: 1em; 
-    animation: gear-spin 2s linear infinite;
-    margin-bottom: 5px;
-    line-height: 1;
-    transform-origin: center center;
 }
 
 .flying-emoji {

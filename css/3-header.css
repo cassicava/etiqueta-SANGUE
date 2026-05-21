@@ -151,7 +151,7 @@
     transition: all 0.3s ease;
     padding: 0;
     margin: 0;
-    line-height: normal;
+    line-height: 0;
 }
 
 .btn-excluir-header:hover {
@@ -166,12 +166,13 @@
     top: 50%;
     transform: translateY(-50%);
     display: flex;
-    gap: 12px;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-end;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
     transition: opacity 0.6s ease;
+    z-index: 300;
 }
 
 .header-actions.visible {
@@ -180,48 +181,117 @@
     pointer-events: auto;
 }
 
-.icon-btn.hide-until-login {
-    opacity: 0;
-    width: 0;
-    margin-left: -12px; 
-    transform: scale(0.5);
-    pointer-events: none;
-    overflow: hidden;
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease; 
+.btn-perfil {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    padding: 6px 16px;
+    border-radius: 50px;
+    color: var(--text-color);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px var(--shadow-color);
 }
 
-.app-header.logged-in .icon-btn.hide-until-login {
+.btn-perfil:hover {
+    background-color: var(--glass-hover);
+    transform: translateY(-1px);
+}
+
+.btn-perfil.hide-until-login {
+    opacity: 0;
+    transform: scale(0.8);
+    pointer-events: none;
+    transition: all 0.4s ease;
+}
+
+.app-header.logged-in .btn-perfil.hide-until-login {
     opacity: 1;
-    width: 45px; 
-    height: 45px; 
-    font-size: 1.6rem; 
-    margin-left: 0;
     transform: scale(1);
     pointer-events: auto;
 }
 
-.header-actions .icon-btn {
-    padding: 0; 
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background-color: var(--modal-bg);
+    border: 1px solid var(--header-border);
+    border-radius: 20px;
+    width: 240px;
+    box-shadow: 0 15px 35px var(--shadow-color);
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
+}
+
+.dropdown-menu.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.dropdown-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.dropdown-group-title {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    padding-left: 8px;
+}
+
+.dropdown-item {
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: left;
+    padding: 10px 12px;
+    border-radius: 10px;
+    cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: center;
-    line-height: normal;
+    gap: 10px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    width: 100%;
 }
 
-.header-actions .icon-btn:hover {
+.dropdown-item:hover {
     background-color: var(--glass-hover);
-    transform: scale(1.1) rotate(10deg);
+    color: var(--primary-color);
 }
 
-.app-header.logged-in .icon-btn.hide-until-login:hover {
-    transform: scale(1.1) rotate(10deg);
-}
-
-#btnSair {
+.btn-sair-item {
     color: var(--btn-excluir-color);
+    border-top: 1px dashed var(--header-border);
+    border-radius: 0;
+    padding-top: 12px;
+    margin-top: 4px;
 }
 
-#btnSair:hover,
-.app-header.logged-in #btnSair.hide-until-login:hover {
+.btn-sair-item:hover {
     background-color: var(--error-bg);
+    color: var(--error-text);
+    border-radius: 10px;
 }

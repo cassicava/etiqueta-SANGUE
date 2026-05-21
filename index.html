@@ -6,12 +6,12 @@
     <meta name="theme-color" content="#2563EB">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="PEC Etiqueta Sangue">
-    <title>PEC Etiqueta Sangue</title>
+    <meta name="apple-mobile-web-app-title" content="Etiqueta Sangue">
+    <title>Etiqueta Sangue</title>
     
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩸</text></svg>">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩸</text></svg>">
+    <link rel="icon" href="icon.png" type="image/png">
+    <link rel="apple-touch-icon" href="icon.png">
 
     <link rel="stylesheet" href="css/1-variaveis.css">
     <link rel="stylesheet" href="css/2-layout.css">
@@ -43,7 +43,7 @@
     <div class="mouse-shadow" id="mouseShadow"></div>
 
     <header class="app-header" id="appHeader">
-        <h1 id="appTitle" class="animated-brand-text">PEC Etiqueta Sangue</h1>
+        <h1 id="appTitle" class="animated-brand-text">Etiqueta Sangue</h1>
         
         <div id="welcomeMsg" class="welcome-msg">Bem-vindo(a)! ✨</div>
         
@@ -55,12 +55,26 @@
         </div>
 
         <div class="header-actions" id="headerActions">
-            <button id="btnTheme" class="icon-btn" title="Alternar Tema">☀️</button>
-            <button id="btnTermos" class="icon-btn" title="Termos de Uso">⚖️</button>
-            <button id="btnDicas" class="icon-btn hide-until-login" title="Dicas de Uso">💡</button>
-            <button id="btnConfigTubos" class="icon-btn hide-until-login" title="Configurar Tubos">🧪</button>
-            <button id="btnConfigPrint" class="icon-btn hide-until-login" title="Configurar Folha">⚙️</button>
-            <button id="btnSair" class="icon-btn hide-until-login" title="Sair do Sistema">⏻</button>
+            <button id="btnPerfil" class="btn-perfil hide-until-login">
+                <span id="perfilNome">Usuário</span>
+                <span id="perfilEmoji">👤</span>
+            </button>
+            <div id="dropdownMenu" class="dropdown-menu">
+                <div class="dropdown-group">
+                    <div class="dropdown-group-title">Configurações</div>
+                    <button id="btnConfigTubos" class="dropdown-item">🧪 Configurar Tubos</button>
+                    <button id="btnConfigPrint" class="dropdown-item">📄 Configurar Folha</button>
+                    <button id="btnTheme" class="dropdown-item">☀️ Alternar Tema</button>
+                </div>
+                <div class="dropdown-group">
+                    <div class="dropdown-group-title">Suporte</div>
+                    <button id="btnDicas" class="dropdown-item">💡 Dicas de Uso</button>
+                    <button id="btnTermos" class="dropdown-item">⚖️ Termos de Uso</button>
+                </div>
+                <div class="dropdown-group">
+                    <button id="btnSair" class="dropdown-item btn-sair-item">⏻ Sair do Sistema</button>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -81,7 +95,7 @@
             <button id="btnEntrar" class="login-btn-submit">Entrar</button>
             
             <div class="esqueci-container">
-                <button id="btnEsqueci" class="btn-esqueci">Esqueci a senha</button>
+                <button id="btnEsqueci" class="btn-esqueci">Escorreguei a senha</button>
                 <div id="balaoEsqueci" class="balao-esqueci">
                     Esqueceu a senha? <br> Pergunte ao Cassiano!
                 </div>
@@ -109,8 +123,26 @@
                 <div id="resumoPacientes" class="pacientes-destaque" style="display: none;">Pacientes: 0</div>
                 
                 <div class="contadores-individuais" id="contadoresIndividuais">
+                    <div class="cont-item tubo-hover" data-tubo="frasco" id="painel-tubo-frasco">
+                        <div class="cont-nome"><span class="icone-bolinha" style="background-color: var(--tubo-frasco);"></span> Frasco:</div>
+                        <div class="cont-acoes">
+                            <button class="btn-lote" onclick="alterarTodos('frasco', -1)">-</button>
+                            <span>Todos</span>
+                            <button class="btn-lote" onclick="alterarTodos('frasco', 1)">+</button>
+                        </div>
+                        <strong id="total-frasco">0</strong>
+                    </div>
+                    <div class="cont-item tubo-hover" data-tubo="azul" id="painel-tubo-azul">
+                        <div class="cont-nome"><span class="icone-bolinha" style="background-color: var(--tubo-azul);"></span> Azul:</div>
+                        <div class="cont-acoes">
+                            <button class="btn-lote" onclick="alterarTodos('azul', -1)">-</button>
+                            <span>Todos</span>
+                            <button class="btn-lote" onclick="alterarTodos('azul', 1)">+</button>
+                        </div>
+                        <strong id="total-azul">0</strong>
+                    </div>
                     <div class="cont-item tubo-hover" data-tubo="vermelho" id="painel-tubo-vermelho">
-                        <div class="cont-nome">🔴 Vermelho:</div>
+                        <div class="cont-nome"><span class="icone-bolinha" style="background-color: var(--tubo-vermelho);"></span> Vermelho:</div>
                         <div class="cont-acoes">
                             <button class="btn-lote" onclick="alterarTodos('vermelho', -1)">-</button>
                             <span>Todos</span>
@@ -119,7 +151,7 @@
                         <strong id="total-vermelho">0</strong>
                     </div>
                     <div class="cont-item tubo-hover" data-tubo="amarelo" id="painel-tubo-amarelo">
-                        <div class="cont-nome">🟡 Amarelo:</div>
+                        <div class="cont-nome"><span class="icone-bolinha" style="background-color: var(--tubo-amarelo);"></span> Amarelo:</div>
                         <div class="cont-acoes">
                             <button class="btn-lote" onclick="alterarTodos('amarelo', -1)">-</button>
                             <span>Todos</span>
@@ -127,35 +159,8 @@
                         </div>
                         <strong id="total-amarelo">0</strong>
                     </div>
-                    <div class="cont-item tubo-hover" data-tubo="roxo" id="painel-tubo-roxo">
-                        <div class="cont-nome">🟣 Roxo:</div>
-                        <div class="cont-acoes">
-                            <button class="btn-lote" onclick="alterarTodos('roxo', -1)">-</button>
-                            <span>Todos</span>
-                            <button class="btn-lote" onclick="alterarTodos('roxo', 1)">+</button>
-                        </div>
-                        <strong id="total-roxo">0</strong>
-                    </div>
-                    <div class="cont-item tubo-hover" data-tubo="cinza" id="painel-tubo-cinza">
-                        <div class="cont-nome">⚪ Cinza:</div>
-                        <div class="cont-acoes">
-                            <button class="btn-lote" onclick="alterarTodos('cinza', -1)">-</button>
-                            <span>Todos</span>
-                            <button class="btn-lote" onclick="alterarTodos('cinza', 1)">+</button>
-                        </div>
-                        <strong id="total-cinza">0</strong>
-                    </div>
-                    <div class="cont-item tubo-hover" data-tubo="azul" id="painel-tubo-azul">
-                        <div class="cont-nome">🔵 Azul:</div>
-                        <div class="cont-acoes">
-                            <button class="btn-lote" onclick="alterarTodos('azul', -1)">-</button>
-                            <span>Todos</span>
-                            <button class="btn-lote" onclick="alterarTodos('azul', 1)">+</button>
-                        </div>
-                        <strong id="total-azul">0</strong>
-                    </div>
                     <div class="cont-item tubo-hover" data-tubo="verde" id="painel-tubo-verde">
-                        <div class="cont-nome">🟢 Verde:</div>
+                        <div class="cont-nome"><span class="icone-bolinha" style="background-color: var(--tubo-verde);"></span> Verde:</div>
                         <div class="cont-acoes">
                             <button class="btn-lote" onclick="alterarTodos('verde', -1)">-</button>
                             <span>Todos</span>
@@ -163,14 +168,32 @@
                         </div>
                         <strong id="total-verde">0</strong>
                     </div>
-                    <div class="cont-item tubo-hover" data-tubo="frasco" id="painel-tubo-frasco">
-                        <div class="cont-nome">🧪 Frasco:</div>
+                    <div class="cont-item tubo-hover" data-tubo="roxo" id="painel-tubo-roxo">
+                        <div class="cont-nome"><span class="icone-bolinha" style="background-color: var(--tubo-roxo);"></span> Roxo:</div>
                         <div class="cont-acoes">
-                            <button class="btn-lote" onclick="alterarTodos('frasco', -1)">-</button>
+                            <button class="btn-lote" onclick="alterarTodos('roxo', -1)">-</button>
                             <span>Todos</span>
-                            <button class="btn-lote" onclick="alterarTodos('frasco', 1)">+</button>
+                            <button class="btn-lote" onclick="alterarTodos('roxo', 1)">+</button>
                         </div>
-                        <strong id="total-frasco">0</strong>
+                        <strong id="total-roxo">0</strong>
+                    </div>
+                    <div class="cont-item tubo-hover" data-tubo="branco" id="painel-tubo-branco">
+                        <div class="cont-nome"><span class="icone-bolinha" style="background-color: var(--tubo-branco);"></span> Branco:</div>
+                        <div class="cont-acoes">
+                            <button class="btn-lote" onclick="alterarTodos('branco', -1)">-</button>
+                            <span>Todos</span>
+                            <button class="btn-lote" onclick="alterarTodos('branco', 1)">+</button>
+                        </div>
+                        <strong id="total-branco">0</strong>
+                    </div>
+                    <div class="cont-item tubo-hover" data-tubo="cinza" id="painel-tubo-cinza">
+                        <div class="cont-nome"><span class="icone-bolinha" style="background-color: var(--tubo-cinza);"></span> Cinza:</div>
+                        <div class="cont-acoes">
+                            <button class="btn-lote" onclick="alterarTodos('cinza', -1)">-</button>
+                            <span>Todos</span>
+                            <button class="btn-lote" onclick="alterarTodos('cinza', 1)">+</button>
+                        </div>
+                        <strong id="total-cinza">0</strong>
                     </div>
                 </div>
 
@@ -412,7 +435,6 @@
                         </div>
                     </div>
 
-                    
                     <div class="config-panel panel-right" id="panelEtiqueta">
                         
                         <div class="config-grupo">
@@ -487,7 +509,6 @@
                         </div>
                     </div>
 
-                    
                     <div class="config-panel panel-right" id="panelTexto">
                         
                         <div class="config-grupo-card">
@@ -510,7 +531,6 @@
                             </div>
                         </div>
 
-                        
                         <div class="config-grupo-card">
                             <span class="card-header-label">Data Nasc.</span>
                             <div class="card-content-layout">
@@ -531,7 +551,6 @@
                             </div>
                         </div>
 
-                        
                         <div class="config-grupo-card">
                             <span class="card-header-label">Cor/Tubo</span>
                             <div class="card-content-layout">
@@ -563,7 +582,6 @@
                 </div>
             </div>
 
-            
             <div class="config-main">
                 <div class="preview-page-col">
                     <div id="previewPageWrapper" class="preview-page-wrapper">

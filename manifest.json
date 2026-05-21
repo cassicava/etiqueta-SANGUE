@@ -1,6 +1,6 @@
 {
-  "name": "PEC Etiqueta Sangue",
-  "short_name": "EtiquetaSangue",
+  "name": "Etiqueta Sangue",
+  "short_name": "Etiqueta Sangue",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#131314",
@@ -8,14 +8,14 @@
   "description": "Sistema ágil para geração de etiquetas de coleta de sangue.",
   "icons": [
     {
-      "src": "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩸</text></svg>",
+      "src": "icon.png",
       "sizes": "192x192",
-      "type": "image/svg+xml"
+      "type": "image/png"
     },
     {
-      "src": "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩸</text></svg>",
+      "src": "icon.png",
       "sizes": "512x512",
-      "type": "image/svg+xml"
+      "type": "image/png"
     }
   ]
 }

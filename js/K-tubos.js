@@ -78,7 +78,17 @@ if (btnConfigTubos && configTubosOverlay && btnFecharConfigTubos) {
         configTubosOverlay.classList.remove('app-hidden');
     });
 
-    btnFecharConfigTubos.addEventListener('click', fecharModalTubos);
+    btnFecharConfigTubos.addEventListener('click', () => {
+        const textoOriginal = btnFecharConfigTubos.innerText;
+        btnFecharConfigTubos.innerText = 'Salvo! ✔️';
+        btnFecharConfigTubos.classList.add('salvo-sucesso');
+
+        setTimeout(() => {
+            btnFecharConfigTubos.innerText = textoOriginal;
+            btnFecharConfigTubos.classList.remove('salvo-sucesso');
+            fecharModalTubos();
+        }, 800);
+    });
 
     configTubosOverlay.addEventListener('click', (e) => {
         if (e.target === configTubosOverlay) fecharModalTubos();

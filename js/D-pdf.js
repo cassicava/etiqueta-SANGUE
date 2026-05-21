@@ -23,7 +23,7 @@ function aplicarFadeTextos(callback) {
 
 async function iniciarProcessamentoAnimacao(file) {
     aplicarFadeTextos(() => {
-        dropTitle.innerHTML = `<span class="spinning-gear">🔍</span>`;
+        dropTitle.innerHTML = `<span class="pulsing-icon">🔍</span>`;
         dropSubtitle.style.display = 'block';
         dropSubtitle.innerText = 'Analisando documento...';
         dropZone.classList.add('processing');
@@ -55,7 +55,7 @@ async function iniciarProcessamentoAnimacao(file) {
     setTimeout(() => {
         aplicarFadeTextos(() => {
             dropTitle.innerHTML = `<span style="font-size: 3rem;">👥</span>`;
-            dropSubtitle.innerText = `Identificamos ${qtdPacientes} pacientes!`;
+            dropSubtitle.innerHTML = `Identificamos <strong style="color: var(--primary-color); font-size: 1.6rem; margin: 0 4px;">${qtdPacientes}</strong> pacientes!`;
         });
     }, 1200);
 
