@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;700&display=swap');
 
 :root {
+    color-scheme: light;
     --font-sans: 'Figtree', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     
     --gradient-start: #2563EB;
@@ -35,6 +36,7 @@
 }
 
 [data-theme="dark"] {
+    color-scheme: dark;
     --bg-color: #131314;
     --text-color: #e3e3e3;
     --text-muted: #8e8e8e;

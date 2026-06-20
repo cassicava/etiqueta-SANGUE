@@ -68,13 +68,19 @@ window.alterarTodos = function(tipo, delta) {
 }
 
 function mostrarInfoArquivo() {
-    appContainer.style.transition = 'opacity 0.4s ease';
+    appContainer.style.transition = 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
     appContainer.style.opacity = '0';
+    appContainer.style.transform = 'scale(0.98)';
     
     setTimeout(() => {
         dropZone.classList.add('app-hidden');
         dropZone.classList.remove('success', 'processing', 'warning-state', 'success-state'); 
         
+        const manualCard = document.getElementById('manualCard');
+        if (manualCard) {
+            manualCard.classList.add('app-hidden');
+        }
+
         appContainer.classList.add('active-layout');
         leftPanel.classList.add('active');
         
@@ -95,11 +101,12 @@ function mostrarInfoArquivo() {
         
         requestAnimationFrame(() => {
             appContainer.style.opacity = '1';
+            appContainer.style.transform = 'scale(1)';
             setTimeout(() => {
                 appContainer.style.transition = ''; 
-            }, 400);
+            }, 600);
         });
-    }, 400); 
+    }, 600); 
 }
 
 function gerarHTMLCardPaciente(item) {
@@ -116,16 +123,18 @@ function gerarHTMLCardPaciente(item) {
         }
     });
 
-    const alertaHTML = item.alertaData ? `<span title="Incerteza no cálculo. Confira com o pedido!" style="cursor:help; margin-left:8px; font-size:1.2rem;">⚠️</span>` : '';
+    const alertaHTML = item.alertaData ? `<span class="alerta-data" title="Incerteza no cálculo. Confira com o pedido!">⚠️</span>` : '';
 
     return `
         <div class="card-name" title="${item.nome}">
             <div class="nome-e-editar">
                 <span class="patient-name-text">${item.nome}</span>
                 <button class="btn-editar-paciente" onclick="mostrarFormularioEdicaoPaciente(${item.id})" title="Editar Paciente">✏️</button>
+            </div>
+            <div class="data-e-alerta">
+                <span class="patient-dob">${item.dataNascimento}</span>
                 ${alertaHTML}
             </div>
-            <span class="patient-dob">${item.dataNascimento}</span>
         </div>
         <div class="seletores-container">
             ${seletoresHTML}
@@ -379,8 +388,9 @@ window.salvarNovoPaciente = function() {
 }
 
 function resetarInterface() {
-    appContainer.style.transition = 'opacity 0.4s ease';
+    appContainer.style.transition = 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
     appContainer.style.opacity = '0';
+    appContainer.style.transform = 'scale(0.98)';
     document.getElementById('headerCenterArea').classList.remove('active');
 
     hasDocument = false;
@@ -412,12 +422,25 @@ function resetarInterface() {
         const progress = document.getElementById('dropProgress');
         if (progress) progress.style.display = 'none';
 
+        const manualCard = document.getElementById('manualCard');
+        if (manualCard) {
+            const manualCardContent = document.getElementById('manualCardContent');
+            const manualForm = document.getElementById('manualForm');
+            manualCard.classList.remove('app-hidden');
+            manualCard.style.opacity = '1';
+            manualCard.style.transform = 'translateY(0)';
+            manualCard.style.pointerEvents = 'auto';
+            if (manualCardContent) manualCardContent.classList.remove('app-hidden');
+            if (manualForm) manualForm.classList.add('app-hidden');
+        }
+
         requestAnimationFrame(() => {
             appContainer.style.opacity = '1';
+            appContainer.style.transform = 'scale(1)';
             setTimeout(() => {
                 appContainer.style.transition = ''; 
-            }, 400);
+            }, 600);
         });
 
-    }, 400); 
+    }, 600); 
 }

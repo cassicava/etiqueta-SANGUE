@@ -22,6 +22,15 @@ function aplicarFadeTextos(callback) {
 }
 
 async function iniciarProcessamentoAnimacao(file) {
+    const manualCard = document.getElementById('manualCard');
+    if (manualCard) {
+        manualCard.style.transition = 'all 0.4s ease';
+        manualCard.style.opacity = '0';
+        manualCard.style.transform = 'translateY(20px)';
+        manualCard.style.pointerEvents = 'none';
+        setTimeout(() => manualCard.classList.add('app-hidden'), 400);
+    }
+
     aplicarFadeTextos(() => {
         dropTitle.innerHTML = `<span class="pulsing-icon">🔍</span>`;
         dropSubtitle.style.display = 'block';

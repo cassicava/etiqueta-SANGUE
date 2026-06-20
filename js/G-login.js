@@ -30,10 +30,17 @@
         localStorage.setItem('lf_sessao_expira_sangue', now + (TEMPO_SESSAO_MINUTOS * 60 * 1000));
         const generoSalvo = localStorage.getItem('lf_genero_usuario') || 'M';
         const nomeSalvo = localStorage.getItem('lf_nome_usuario') || 'Usuário';
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
         
         welcomeMsg.innerText = generoSalvo === 'F' ? 'Bem-vinda! ✨' : 'Bem-vindo! ✨';
         if (perfilNome) perfilNome.innerText = nomeSalvo.charAt(0).toUpperCase() + nomeSalvo.slice(1);
-        if (perfilEmoji) perfilEmoji.innerText = generoSalvo === 'F' ? '👩' : '👨';
+        if (perfilEmoji) {
+            if (generoSalvo === 'F') {
+                perfilEmoji.innerText = isDark ? '👱🏻‍♀️' : '👩🏻';
+            } else {
+                perfilEmoji.innerText = isDark ? '👱🏻‍♂️' : '👨🏻';
+            }
+        }
 
         appHeader.style.transition = 'none';
         headerActions.style.transition = 'none'; 
@@ -90,9 +97,17 @@
             localStorage.setItem('lf_genero_usuario', usuarioValido.genero);
             localStorage.setItem('lf_nome_usuario', usuarioValido.usuario);
 
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
             welcomeMsg.innerText = usuarioValido.genero === 'F' ? 'Bem-vinda! ✨' : 'Bem-vindo! ✨';
             if (perfilNome) perfilNome.innerText = usuarioValido.usuario.charAt(0).toUpperCase() + usuarioValido.usuario.slice(1);
-            if (perfilEmoji) perfilEmoji.innerText = usuarioValido.genero === 'F' ? '👩' : '👨';
+            if (perfilEmoji) {
+                if (usuarioValido.genero === 'F') {
+                    perfilEmoji.innerText = isDark ? '👱🏻‍♀️' : '👩🏻';
+                } else {
+                    perfilEmoji.innerText = isDark ? '👱🏻‍♂️' : '👨🏻';
+                }
+            }
 
             loginWrapper.style.opacity = '0';
             loginWrapper.style.pointerEvents = 'none';

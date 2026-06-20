@@ -102,7 +102,7 @@ window.gerarListaPDF = function() {
     }
 
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+    const doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' });
 
     let dataColeta = state.dataArquivo;
     if (!dataColeta || dataColeta === "--/--/----") {
@@ -112,7 +112,11 @@ window.gerarListaPDF = function() {
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(16);
-    doc.text(`Coleta ${dataColeta}`, 14, 20);
+    doc.text(`Lista de Pacientes da coleta do dia ${dataColeta}`, 10, 15);
+
+    doc.setDrawColor(180, 180, 180);
+    doc.setLineWidth(0.5);
+    doc.line(10, 19, 287, 19);
 
     const pacientesOrdenados = [...state.pacientes].sort((a, b) => a.nome.localeCompare(b.nome));
 
@@ -138,8 +142,8 @@ window.gerarListaPDF = function() {
     });
 
     let columnStylesConfig = {
-        0: { cellWidth: 60 },
-        1: { halign: 'center', cellWidth: 22 }
+        0: { cellWidth: 80 },
+        1: { halign: 'center', cellWidth: 25 }
     };
 
     for (let i = 2; i < colunasDinamicas.length - 1; i++) {
@@ -148,11 +152,12 @@ window.gerarListaPDF = function() {
     columnStylesConfig[colunasDinamicas.length - 1] = { halign: 'center', fontStyle: 'bold' };
 
     doc.autoTable({
-        startY: 28,
+        startY: 24,
+        margin: { left: 10, right: 10 },
         head: [colunasDinamicas],
         body: bodyData,
         theme: 'grid',
-        headStyles: { fillColor: [37, 99, 235], halign: 'center', fontSize: 10 },
+        headStyles: { fillColor: [37, 99, 235], textColor: [255, 255, 255], halign: 'center', fontSize: 10 },
         columnStyles: columnStylesConfig,
         styles: { fontSize: 9, cellPadding: 2, textColor: [50, 50, 50] },
         alternateRowStyles: { fillColor: [248, 250, 252] }

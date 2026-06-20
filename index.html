@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="css/12-config.css">
     <link rel="stylesheet" href="css/13-tubos.css">
     <link rel="stylesheet" href="css/14-onboarding.css">
+    <link rel="stylesheet" href="css/15-manual.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -34,13 +35,17 @@
 
     <div id="mobileBlock" class="mobile-block">
         <div class="mobile-content">
-            <span class="mobile-icon">🖥️</span>
-            <h1>Disponível apenas para Computadores</h1>
-            <p>Para que tudo funcione perfeitamente, por favor, acesse este sistema pelo seu computador. Te esperamos lá! ✨</p>
+            <div class="resize-icon-container">
+                <span class="resize-icon-center">🪟</span>
+                <span class="resize-arrow arrow-tl">↖</span>
+                <span class="resize-arrow arrow-tr">↗</span>
+                <span class="resize-arrow arrow-bl">↙</span>
+                <span class="resize-arrow arrow-br">↘</span>
+            </div>
+            <h1>Aumente o tamanho da tela</h1>
+            <p>A janela está muito pequena. O sistema precisa de mais espaço para funcionar. Por favor, maximize a janela ou use uma tela maior.</p>
         </div>
     </div>
-
-    <div class="mouse-shadow" id="mouseShadow"></div>
 
     <header class="app-header" id="appHeader">
         <h1 id="appTitle" class="animated-brand-text">Etiqueta Sangue</h1>
@@ -95,7 +100,7 @@
             <button id="btnEntrar" class="login-btn-submit">Entrar</button>
             
             <div class="esqueci-container">
-                <button id="btnEsqueci" class="btn-esqueci">Escorreguei a senha</button>
+                <button id="btnEsqueci" class="btn-esqueci">Esqueci a senha</button>
                 <div id="balaoEsqueci" class="balao-esqueci">
                     Esqueceu a senha? <br> Pergunte ao Cassiano!
                 </div>
@@ -118,13 +123,24 @@
                 </div>
                 <input type="file" id="fileInput" accept="application/pdf" style="display: none;">
             </div>
+
+            <div id="manualCard" class="manual-card">
+                <div id="manualCardContent" class="manual-card-content">
+                    <span class="manual-icon">✍️</span>
+                    <span>Iniciar sem PDF</span>
+                </div>
+                <div id="manualForm" class="manual-form app-hidden">
+                    <input type="date" id="inputManualData">
+                    <button id="btnConfirmarManual">➔</button>
+                </div>
+            </div>
             
             <div id="painelAcoes" class="painel-acoes app-hidden">
                 <div id="resumoPacientes" class="pacientes-destaque" style="display: none;">Pacientes: 0</div>
                 
                 <div class="contadores-individuais" id="contadoresIndividuais">
                     <div class="cont-item tubo-hover" data-tubo="frasco" id="painel-tubo-frasco">
-                        <div class="cont-nome"><span class="icone-bolinha" style="background-color: var(--tubo-frasco);"></span> Frasco:</div>
+                        <div class="cont-nome">🧪 Frasco:</div>
                         <div class="cont-acoes">
                             <button class="btn-lote" onclick="alterarTodos('frasco', -1)">-</button>
                             <span>Todos</span>
@@ -665,5 +681,6 @@
     <script src="js/J-config.js"></script>
     <script src="js/I-gerarpdf.js"></script>
     <script src="js/G-login.js"></script>
+    <script src="js/M-manual.js"></script>
 </body>
 </html>

@@ -1,13 +1,8 @@
-document.addEventListener('mousemove', (e) => {
-    mouseShadow.style.left = e.clientX + 'px';
-    mouseShadow.style.top = e.clientY + 'px';
-});
-
 appTitle.addEventListener('click', (e) => {
     currentClicks++;
     
     if (currentClicks >= clicksNeeded) {
-        const easterEmojis = ['🩸', '💉', '💩', '✨', '🔬', '🥳', '🧪'];
+        const easterEmojis = ['✨', '🚀', '🧪', '🩸', '📄', '💻', '🖨️'];
         
         for (let i = 0; i < 12; i++) {
             setTimeout(() => {
@@ -27,7 +22,7 @@ appTitle.addEventListener('click', (e) => {
                 
                 document.body.appendChild(el);
                 
-                setTimeout(() => el.remove(), 1500);
+                setTimeout(() => el.remove(), 1000);
             }, i * 50);
         }
         

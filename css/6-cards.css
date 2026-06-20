@@ -53,7 +53,8 @@
     font-size: 1.1rem;
     opacity: 0.5;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    padding: 2px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -63,15 +64,33 @@
 .btn-editar-paciente:hover {
     opacity: 1;
     transform: scale(1.15) rotate(-10deg);
+    animation: pulse-edit-bg 1.2s infinite;
+}
+
+@keyframes pulse-edit-bg {
+    0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.3); background-color: rgba(37, 99, 235, 0.1); }
+    70% { box-shadow: 0 0 0 6px rgba(37, 99, 235, 0); background-color: rgba(37, 99, 235, 0.2); }
+    100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); background-color: rgba(37, 99, 235, 0.1); }
+}
+
+.data-e-alerta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 2px;
 }
 
 .patient-dob {
-    display: block;
     color: var(--text-muted);
     font-weight: 500;
     font-size: 0.95rem;
-    margin-top: 2px;
     white-space: nowrap;
+}
+
+.alerta-data {
+    cursor: help;
+    font-size: 1.05rem;
+    line-height: 1;
 }
 
 .seletores-container {

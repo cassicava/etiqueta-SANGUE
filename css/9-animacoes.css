@@ -4,23 +4,23 @@
 
 @keyframes pulse-card {
     0% { transform: scale(1); box-shadow: 0 4px 15px var(--shadow-color); }
-    50% { transform: scale(1.03); box-shadow: 0 8px 25px rgba(37, 99, 235, 0.2); }
+    50% { transform: scale(1.015); box-shadow: 0 8px 25px rgba(37, 99, 235, 0.2); }
     100% { transform: scale(1); box-shadow: 0 4px 15px var(--shadow-color); }
 }
 
 @keyframes pulse-bg {
     0% { background-color: var(--glass-bg); box-shadow: 0 4px 15px var(--shadow-color); transform: scale(1); }
-    50% { background-color: rgba(37, 99, 235, 0.15); box-shadow: 0 0 35px rgba(37, 99, 235, 0.4); transform: scale(1.03); }
+    50% { background-color: rgba(37, 99, 235, 0.15); box-shadow: 0 0 35px rgba(37, 99, 235, 0.4); transform: scale(1.015); }
     100% { background-color: var(--glass-bg); box-shadow: 0 4px 15px var(--shadow-color); transform: scale(1); }
 }
 
 .drop-zone.pulse-once {
-    animation: pulse-card 1.2s ease-in-out;
+    animation: pulse-card 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes icon-pulse {
     0% { transform: scale(1); }
-    50% { transform: scale(1.25); }
+    50% { transform: scale(1.15); }
     100% { transform: scale(1); }
 }
 
@@ -31,26 +31,35 @@
     justify-content: center;
     width: 1em; 
     height: 1em; 
-    animation: icon-pulse 1.5s ease-in-out infinite;
-    margin-bottom: 5px;
-    line-height: 1;
-    transform-origin: center center;
-}
-
-@keyframes flyOut {
-    0% { transform: translate(-50%, -50%) scale(0.5) rotate(0deg); opacity: 1; }
-    100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.5) rotate(var(--rot)); opacity: 0; }
+    animation: icon-pulse 1.5s cubic-bezier(0.16, 1, 0.3, 1) infinite;
 }
 
 @keyframes slideUp {
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .flying-emoji {
     position: fixed;
-    font-size: 3.5rem;
+    font-size: 2rem;
     pointer-events: none;
     z-index: 9999;
-    transform: translate(-50%, -50%) scale(0.5) rotate(0deg);
-    animation: flyOut 1.5s ease-out forwards;
+    animation: fly-out 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fly-out {
+    0% {
+        transform: translate(0, 0) scale(0.5) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(1.5) rotate(var(--rot));
+        opacity: 0;
+    }
 }

@@ -1,0 +1,114 @@
+.left-panel:not(.active) {
+    height: auto !important;
+}
+
+.manual-card {
+    width: 350px;
+    padding: 15px 20px;
+    background-color: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 2px dashed var(--header-border);
+    border-radius: 20px;
+    box-shadow: 0 4px 15px var(--shadow-color);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.manual-card:hover {
+    border-color: var(--primary-color);
+    background-color: var(--glass-hover);
+    transform: translateY(-2px);
+}
+
+.manual-card-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-color);
+    transition: opacity 0.3s ease;
+}
+
+.manual-icon {
+    font-size: 1.4rem;
+}
+
+.manual-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    animation: fadeIn 0.4s ease forwards;
+}
+
+.manual-form input {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 12px;
+    border: 2px solid var(--header-border);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-size: 1rem;
+    font-weight: 600;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.manual-form input:focus {
+    border-color: var(--primary-color);
+}
+
+.manual-form button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.manual-form button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+}
+
+.btn-deletar-paciente {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    opacity: 0.5;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: var(--btn-excluir-color);
+}
+
+.btn-deletar-paciente:hover {
+    opacity: 1;
+    transform: scale(1.15) rotate(10deg);
+    animation: pulse-delete-bg 1.2s infinite;
+}
+
+@keyframes pulse-delete-bg {
+    0% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.3); background-color: rgba(229, 62, 62, 0.1); }
+    70% { box-shadow: 0 0 0 6px rgba(229, 62, 62, 0); background-color: rgba(229, 62, 62, 0.2); }
+    100% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0); background-color: rgba(229, 62, 62, 0.1); }
+}

@@ -12,7 +12,6 @@ const dropSubtitle = document.getElementById('dropSubtitle');
 const btnExcluir = document.getElementById('btnExcluir');
 const btnImprimir = document.getElementById('btnImprimir');
 const contadorTotal = document.getElementById('contadorTotal');
-const mouseShadow = document.getElementById('mouseShadow');
 const appTitle = document.getElementById('appTitle');
 const btnTheme = document.getElementById('btnTheme');
 const btnConfigTubos = document.getElementById('btnConfigTubos');
@@ -32,7 +31,7 @@ let state = {
 
 let tubosConfig = [
     { 
-        id: 'frasco', nome: 'Frasco', sigla: 'Frasco', icone: '<span class="icone-bolinha" style="background-color: var(--tubo-frasco);"></span>', corRGB: [5, 150, 105], 
+        id: 'frasco', nome: 'Frasco', sigla: 'Frasco', icone: '🧪', corRGB: [5, 150, 105], 
         desc: 'Recipiente estéril / não estéril', 
         exames: 'Urina, Fezes, Escarro, Espermograma' 
     },
