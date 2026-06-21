@@ -184,76 +184,68 @@
                         </div>
                         <strong id="total-cinza">0</strong>
                     </div>
-
-                    <button id="btnToggleEspec" class="btn-sanfona-painel" onclick="document.getElementById('painelEspec').classList.toggle('app-hidden'); this.classList.toggle('active');">
-                        <span>➕ Ver Específicos</span>
-                        <span class="seta">▼</span>
-                    </button>
-
-                    <div id="painelEspec" class="contadores-especificos app-hidden">
-                        <div class="cont-item tubo-hover" data-tubo="azul" id="painel-tubo-azul">
-                            <div class="cont-nome"><span class="icone-bolinha" style="background-color: var(--tubo-azul);"></span> Azul:</div>
-                            <div class="cont-acoes">
-                                <button class="btn-lote" onclick="alterarTodos('azul', -1)">-</button>
-                                <span>Todos</span>
-                                <button class="btn-lote" onclick="alterarTodos('azul', 1)">+</button>
-                            </div>
-                            <strong id="total-azul">0</strong>
+                    <div class="cont-item tubo-hover" data-tubo="azul" id="painel-tubo-azul">
+                        <div class="cont-nome"><span class="icone-bolinha" style="background-color: var(--tubo-azul);"></span> Azul:</div>
+                        <div class="cont-acoes">
+                            <button class="btn-lote" onclick="alterarTodos('azul', -1)">-</button>
+                            <span>Todos</span>
+                            <button class="btn-lote" onclick="alterarTodos('azul', 1)">+</button>
                         </div>
-                        <div class="cont-item tubo-hover" data-tubo="verde" id="painel-tubo-verde">
-                            <div class="cont-nome"><span class="icone-bolinha" style="background-color: var(--tubo-verde);"></span> Verde:</div>
-                            <div class="cont-acoes">
-                                <button class="btn-lote" onclick="alterarTodos('verde', -1)">-</button>
-                                <span>Todos</span>
-                                <button class="btn-lote" onclick="alterarTodos('verde', 1)">+</button>
-                            </div>
-                            <strong id="total-verde">0</strong>
+                        <strong id="total-azul">0</strong>
+                    </div>
+                    <div class="cont-item tubo-hover" data-tubo="verde" id="painel-tubo-verde">
+                        <div class="cont-nome"><span class="icone-bolinha" style="background-color: var(--tubo-verde);"></span> Verde:</div>
+                        <div class="cont-acoes">
+                            <button class="btn-lote" onclick="alterarTodos('verde', -1)">-</button>
+                            <span>Todos</span>
+                            <button class="btn-lote" onclick="alterarTodos('verde', 1)">+</button>
                         </div>
-                        <div class="cont-item tubo-hover" data-tubo="branco" id="painel-tubo-branco">
-                            <div class="cont-nome"><span class="icone-bolinha" style="background-color: var(--tubo-branco);"></span> Branco:</div>
-                            <div class="cont-acoes">
-                                <button class="btn-lote" onclick="alterarTodos('branco', -1)">-</button>
-                                <span>Todos</span>
-                                <button class="btn-lote" onclick="alterarTodos('branco', 1)">+</button>
-                            </div>
-                            <strong id="total-branco">0</strong>
+                        <strong id="total-verde">0</strong>
+                    </div>
+                    <div class="cont-item tubo-hover" data-tubo="branco" id="painel-tubo-branco">
+                        <div class="cont-nome"><span class="icone-bolinha" style="background-color: var(--tubo-branco);"></span> Branco:</div>
+                        <div class="cont-acoes">
+                            <button class="btn-lote" onclick="alterarTodos('branco', -1)">-</button>
+                            <span>Todos</span>
+                            <button class="btn-lote" onclick="alterarTodos('branco', 1)">+</button>
                         </div>
-                        <div class="cont-item tubo-hover" data-tubo="rosa" id="painel-tubo-rosa">
-                            <div class="cont-nome"><span class="icone-bolinha" style="background-color: var(--tubo-rosa);"></span> Rosa:</div>
-                            <div class="cont-acoes">
-                                <button class="btn-lote" onclick="alterarTodos('rosa', -1)">-</button>
-                                <span>Todos</span>
-                                <button class="btn-lote" onclick="alterarTodos('rosa', 1)">+</button>
-                            </div>
-                            <strong id="total-rosa">0</strong>
+                        <strong id="total-branco">0</strong>
+                    </div>
+                    <div class="cont-item tubo-hover" data-tubo="rosa" id="painel-tubo-rosa">
+                        <div class="cont-nome"><span class="icone-bolinha" style="background-color: var(--tubo-rosa);"></span> Rosa:</div>
+                        <div class="cont-acoes">
+                            <button class="btn-lote" onclick="alterarTodos('rosa', -1)">-</button>
+                            <span>Todos</span>
+                            <button class="btn-lote" onclick="alterarTodos('rosa', 1)">+</button>
                         </div>
-                        <div class="cont-item tubo-hover" data-tubo="preto" id="painel-tubo-preto">
-                            <div class="cont-nome"><span class="icone-bolinha" style="background-color: var(--tubo-preto);"></span> Preto:</div>
-                            <div class="cont-acoes">
-                                <button class="btn-lote" onclick="alterarTodos('preto', -1)">-</button>
-                                <span>Todos</span>
-                                <button class="btn-lote" onclick="alterarTodos('preto', 1)">+</button>
-                            </div>
-                            <strong id="total-preto">0</strong>
+                        <strong id="total-rosa">0</strong>
+                    </div>
+                    <div class="cont-item tubo-hover" data-tubo="preto" id="painel-tubo-preto">
+                        <div class="cont-nome"><span class="icone-bolinha" style="background-color: var(--tubo-preto);"></span> Preto:</div>
+                        <div class="cont-acoes">
+                            <button class="btn-lote" onclick="alterarTodos('preto', -1)">-</button>
+                            <span>Todos</span>
+                            <button class="btn-lote" onclick="alterarTodos('preto', 1)">+</button>
                         </div>
-                        <div class="cont-item tubo-hover" data-tubo="azulescuro" id="painel-tubo-azulescuro">
-                            <div class="cont-nome"><span class="icone-bolinha" style="background-color: var(--tubo-azulescuro);"></span> Azul Esc.:</div>
-                            <div class="cont-acoes">
-                                <button class="btn-lote" onclick="alterarTodos('azulescuro', -1)">-</button>
-                                <span>Todos</span>
-                                <button class="btn-lote" onclick="alterarTodos('azulescuro', 1)">+</button>
-                            </div>
-                            <strong id="total-azulescuro">0</strong>
+                        <strong id="total-preto">0</strong>
+                    </div>
+                    <div class="cont-item tubo-hover" data-tubo="azulescuro" id="painel-tubo-azulescuro">
+                        <div class="cont-nome"><span class="icone-bolinha" style="background-color: var(--tubo-azulescuro);"></span> Azul Esc.:</div>
+                        <div class="cont-acoes">
+                            <button class="btn-lote" onclick="alterarTodos('azulescuro', -1)">-</button>
+                            <span>Todos</span>
+                            <button class="btn-lote" onclick="alterarTodos('azulescuro', 1)">+</button>
                         </div>
-                        <div class="cont-item tubo-hover" data-tubo="laranja" id="painel-tubo-laranja">
-                            <div class="cont-nome"><span class="icone-bolinha" style="background-color: var(--tubo-laranja);"></span> Laranja:</div>
-                            <div class="cont-acoes">
-                                <button class="btn-lote" onclick="alterarTodos('laranja', -1)">-</button>
-                                <span>Todos</span>
-                                <button class="btn-lote" onclick="alterarTodos('laranja', 1)">+</button>
-                            </div>
-                            <strong id="total-laranja">0</strong>
+                        <strong id="total-azulescuro">0</strong>
+                    </div>
+                    <div class="cont-item tubo-hover" data-tubo="laranja" id="painel-tubo-laranja">
+                        <div class="cont-nome"><span class="icone-bolinha" style="background-color: var(--tubo-laranja);"></span> Laranja:</div>
+                        <div class="cont-acoes">
+                            <button class="btn-lote" onclick="alterarTodos('laranja', -1)">-</button>
+                            <span>Todos</span>
+                            <button class="btn-lote" onclick="alterarTodos('laranja', 1)">+</button>
                         </div>
+                        <strong id="total-laranja">0</strong>
                     </div>
                 </div>
 

@@ -54,6 +54,11 @@ window.alterarQuantidade = function(id, tipo, delta) {
 }
 
 window.alterarTodos = function(tipo, delta) {
+    if (state.pacientes.length === 0) {
+        mostrarAlerta("Adicione um paciente antes de alterar as quantidades.");
+        return;
+    }
+
     let alterouAlgo = false;
     state.pacientes.forEach(p => {
         const novoValor = p[tipo] + delta;
