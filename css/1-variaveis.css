@@ -33,6 +33,10 @@
     --tubo-verde: #22c55e;
     --tubo-frasco: #059669;
     --tubo-branco: #ffffff;
+    --tubo-rosa: #ec4899;
+    --tubo-preto: #000000;
+    --tubo-azulescuro: #1e3a8a;
+    --tubo-laranja: #f97316;
 }
 
 [data-theme="dark"] {
@@ -62,6 +66,10 @@
     --tubo-verde: #22c55e;
     --tubo-frasco: #10B981;
     --tubo-branco: #ffffff;
+    --tubo-rosa: #f472b6;
+    --tubo-preto: #111111;
+    --tubo-azulescuro: #3b82f6;
+    --tubo-laranja: #fb923c;
 }
 
 * {
